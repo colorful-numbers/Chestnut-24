@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+    html, body, #__next {
+        min-height: 100%;
+    }
+    body {
+        @apply dark:bg-gray-800 bg-white;
+    }
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        @apply dark:bg-black dark:bg-opacity-20 bg-white bg-opacity-10;
+        z-index: -1;
+    }
+    .bg-primary{
+        @apply dark:bg-gray-800 dark:bg-opacity-90 bg-white bg-opacity-90
+    }
+    .bg-secondary {
+        @apply dark:bg-gray-700 dark:bg-opacity-70 bg-gray-200 bg-opacity-70
+    }
+    .text-secondary {
+        @apply dark:text-gray-400 text-gray-600
+    }
+    /*button colors*/
+    .button-info {
+        @apply dark:bg-blue-600 dark:bg-opacity-70 bg-blue-600 bg-opacity-70
+    }
+    .button-info:hover {
+        @apply dark:bg-blue-700 dark:bg-opacity-70 bg-blue-300 bg-opacity-70
+    }
+    .button-warning {
+        @apply dark:bg-red-600 dark:bg-opacity-70 bg-red-600 bg-opacity-70
+    }
+    .button-warning:hover {
+        @apply dark:bg-red-700 dark:bg-opacity-70 bg-red-300 bg-opacity-70
+    }
+    .button-success {
+        @apply dark:bg-green-600 dark:bg-opacity-70 bg-green-600 bg-opacity-70
+    }
+    .button-success:hover {
+        @apply dark:bg-green-700 dark:bg-opacity-70 bg-green-300 bg-opacity-70
+    }
+    /*elements background colors*/
+    .shadow-md{
+        @apply dark:bg-gray-700 dark:bg-opacity-90 bg-white bg-opacity-90
+    }
+    /*main background colors*/
+    main {
+        @apply dark:bg-gray-500 dark:bg-opacity-40 bg-gray-200 bg-opacity-30
+    }
+    /*title colors*/
+    .inv-title {
+        @apply dark:text-gray-700 text-gray-500 
+    }
+    /*input background colors*/
+    input {
+        @apply dark:bg-gray-800 bg-gray-100
+    }
+    textarea {
+        @apply dark:bg-gray-800 bg-gray-100
+    }
+    select {
+        @apply dark:bg-gray-800 bg-gray-100
+    }
+    .app-shell {
+        position: relative;
+        min-height: 100vh;
+    }
+    .app-background {
+        position: fixed;
+        inset: 0;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: -3;
+    }
+    .app-background-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.9);
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+        z-index: -2;
+    }
+    .app-content {
+        position: relative;
+        min-height: 100vh;
+        z-index: 0;
+    }
+}
