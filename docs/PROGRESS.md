@@ -29,7 +29,7 @@ Work completed in this round:
 - Updated the story carousel to use horizontal scroll snap with 80% width cards, following the CSS carousel direction from Chrome's carousel guidance.
 - Added side-story `time` values and rendered time on each story card.
 - Removed the hero side panel, current-time status panel, and SVG signal diagram from the homepage.
-- Converted the hero to a full-width background-image section using `public/story-media/hero-sylph.svg`.
+- Converted the hero to a full-width background-image section using `public/story-media/hero-sylph.png`.
 - Created `components/CharacterDisplay.jsx` for a simple game-dialog-style character widget.
 - Added the first character demo under `data/characters/qi/`, with media under `public/characters/qi/`.
 - Added predefined Qi conversation choices about waking, the white blade, and walking toward the convenience store.
@@ -43,7 +43,7 @@ The site goal is now an interactive visual fictional novel rather than an archiv
 
 Work completed in this round:
 
-- Renamed the site to `栗世界` in Chinese and `chestnut set` in English.
+- Renamed the site to `栗世界` in Chinese and `Set of Chestnut` in English.
 - Revised `README.md` to describe the visual novel goal and side-story publishing flow.
 - Added `data/sideStories/` for publishable side-story fragments.
 - Added placeholder media under `public/story-media/` for fragment cards and character cards.

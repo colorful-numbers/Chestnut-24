@@ -63,10 +63,10 @@ export default function CharacterDisplay({ character, locale, definitions = [] }
         aria-label={copy.openLabel}
       >
         <img loading="lazy" className="character-display__main" src={character.mainCg} alt={copy.mainAlt} />
-        <img loading="lazy" className="character-display__portrait" src={expression} alt={state.expressionAlt} />
+        {/* <img loading="lazy" className="character-display__portrait" src={expression} alt={state.expressionAlt} />
         {!isOpen && (
           <span className="character-display__prompt">{copy.openLabel}</span>
-        )}
+        )} */}
       </button>
 
       {isOpen && (

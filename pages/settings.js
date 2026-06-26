@@ -604,7 +604,7 @@ export default function Settings() {
             <h2 className="text-xl font-semibold mb-4">About This Project</h2>
             <div className="space-y-4">
               <p>
-                This project is the companion settings area for 栗世界 / chestnut set. Preferences stay in the browser where possible, while the public homepage remains focused on the interactive visual novel.
+                This project is the companion settings area for 栗世界 / Set of Chestnut. Preferences stay in the browser where possible, while the public homepage remains focused on the interactive visual novel.
               </p>
             </div>
           </div>

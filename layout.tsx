@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: '栗世界 / chestnut set',
+  title: '栗世界 / Set of Chestnut',
   description: 'Interactive visual fictional novel about the post-Miracle Sylph Corridor world',
 }
  

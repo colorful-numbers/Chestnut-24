@@ -37,7 +37,7 @@ export const siteCopy = {
     hero: {
       kicker: 'INTERACTIVE VISUAL FICTION',
       title: '栗世界',
-      media: '/story-media/hero-sylph.svg',
+      media: '/story-media/hero-sylph.png',
       subtitle: '在无限智能之后，人们如何确认自己仍然真实地活着。',
       body: '二十一世纪中叶的【奇迹】之后，绝大多数人类进入平流层中的【精灵回廊】。气象气球组成新的天空网络，冬眠舱保留肉体，自动化维持城市，而少数醒着的人在过于安逸的世界里继续寻找生活的意义。',
       primary: '阅读随机碎片',
@@ -54,8 +54,8 @@ export const siteCopy = {
     },
     system: {
       label: 'CHARACTER CARDS',
-      title: '角色与核心矛盾',
-      body: '这些角色把破碎叙事连接成可以交互的场景：醒来的人、被记忆养大的 AI、便利店里等待的人，以及是否继续前往未来的选择。',
+      title: '角色',
+      body: '醒来的人、被记忆养大的 AI、便利店里等待的人，以及是否继续前往未来的选择。',
       cards: [
         {
           title: '器',
@@ -69,21 +69,9 @@ export const siteCopy = {
           media: '/story-media/character-101.svg',
           body: '一个由记忆拼凑、由人类养大的独立 AI。她像预言，也像参考答案，可能消失在沉默世界里，也可能继续以近似人类的方式旅行。',
         },
-        {
-          title: '售货员小姐',
-          label: 'CLERK',
-          media: '/story-media/character-clerk.svg',
-          body: '十年前水果店的老板娘，如今在便利店中清点货物。她可能只是偶然回来，也可能是回廊温柔安排的观察者。',
-        },
-        {
-          title: '选择',
-          label: 'PURPOSE',
-          media: '/story-media/character-choice.svg',
-          body: '继续冬眠前往未知未来，还是在这个时代与越来越少的知己一起生活。作为系统备份的责任，和作为人的生活权利，构成器的两难。',
-        },
       ],
     },
-    footer: '交互式视觉小说 / 精灵回廊 / 栗世界',
+    footer: '交互式视觉小说 / 栗世界',
     footerMenu: {
       lab: 'Colorful numbers Lab',
       oldIndex: '旧主页',
@@ -92,9 +80,9 @@ export const siteCopy = {
     },
   },
   en: {
-    metaTitle: 'chestnut set',
+    metaTitle: 'Set of Chestnut',
     metaDescription: 'An interactive visual fictional novel about life after the Miracle and the Sylph Corridor.',
-    brand: 'chestnut set',
+    brand: 'Set of Chestnut',
     nav: {
       overview: 'World',
       defn: 'defn',
@@ -107,8 +95,8 @@ export const siteCopy = {
     },
     hero: {
       kicker: 'INTERACTIVE VISUAL FICTION',
-      title: 'chestnut set',
-      media: '/story-media/hero-sylph.svg',
+      title: 'Set of Chestnut',
+      media: '/story-media/hero-sylph.png',
       subtitle: 'After unlimited intelligence, people still need proof that they are really alive.',
       body: 'After the 【Miracle】 in the mid twenty-first century, most humans entered the 【Sylph Corridor】 in the stratosphere. Weather balloons became the new sky network, hibernation pods preserved bodies, automation maintained cities, and the few who stayed awake kept searching for purpose inside a world made too comfortable.',
       primary: 'Read random fragments',
@@ -125,8 +113,8 @@ export const siteCopy = {
     },
     system: {
       label: 'CHARACTER CARDS',
-      title: 'Cast and Core Tension',
-      body: 'These characters connect fragmented narration into interactive scenes: the person who wakes, the AI raised by memory, the clerk waiting in the store, and the choice of whether to keep moving toward the future.',
+      title: 'Cast',
+      body: 'The person who wakes, the AI raised by memory, the clerk waiting in the store, and the choice of whether to keep moving toward the future.',
       cards: [
         {
           title: 'Qi',
@@ -140,21 +128,9 @@ export const siteCopy = {
           media: '/story-media/character-101.svg',
           body: 'An independent AI assembled from memory and raised in a human-like environment. She is part prophecy, part answer key, and may have vanished into the silent world or continued traveling as something close to human.',
         },
-        {
-          title: 'The Clerk',
-          label: 'CLERK',
-          media: '/story-media/character-clerk.svg',
-          body: 'The fruit-shop owner from ten years ago, now counting goods in a convenience store. Her return may be chance, or a gentle act of observation arranged by the Corridor.',
-        },
-        {
-          title: 'The Choice',
-          label: 'PURPOSE',
-          media: '/story-media/character-choice.svg',
-          body: 'Sleep again and move toward an unknown future, or remain in this age with the few companions who still wake. Qi stands between the duty of a system backup and the right to live as a person.',
-        },
       ],
     },
-    footer: 'interactive visual fiction / Sylph Corridor / chestnut set',
+    footer: 'interactive visual fiction / Set of Chestnut',
     footerMenu: {
       lab: 'Colorful numbers Lab',
       oldIndex: 'old index',

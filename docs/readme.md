@@ -1,6 +1,6 @@
 # Project Overview
 
-栗世界 / chestnut set is a bilingual interactive visual fictional novel about the post-Miracle world, the Sylph Corridor, hibernation, forgetting as a profession, and people who remain awake inside an abundant but quiet age.
+栗世界 / Set of Chestnut is a bilingual interactive visual fictional novel about the post-Miracle world, the Sylph Corridor, hibernation, forgetting as a profession, and people who remain awake inside an abundant but quiet age.
 
 The public homepage should prioritize:
 

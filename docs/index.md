@@ -1,4 +1,4 @@
-# 栗世界 / chestnut set Docs
+# 栗世界 / Set of Chestnut Docs
 
 栗世界 is an interactive visual fictional novel site. The homepage is built from visual widgets: a full-bleed hero, random side-story carousel cards, and character dialogue displays.
 

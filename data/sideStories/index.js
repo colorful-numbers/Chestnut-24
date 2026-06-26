@@ -2,7 +2,7 @@ export const sideStories = [
   {
     id: 'miracle-measure',
     time: '2056',
-    media: '/story-media/fragment-01.svg',
+    media: '/story-media/fragment-compute.png',
     zh: {
       kicker: '奇迹',
       title: '智能当量',
@@ -17,7 +17,7 @@ export const sideStories = [
   {
     id: 'sylph-corridor',
     time: '2067',
-    media: '/story-media/fragment-02.svg',
+    media: '/story-media/fragment-ballons.png',
     zh: {
       kicker: '精灵回廊',
       title: '平流层网络',
@@ -32,7 +32,7 @@ export const sideStories = [
   {
     id: 'ten-year-waking',
     time: '2283.06.05 06:05',
-    media: '/story-media/fragment-03.svg',
+    media: '/story-media/fragment-awake.png',
     zh: {
       kicker: '冬眠',
       title: '十年一次的醒来',
@@ -45,24 +45,9 @@ export const sideStories = [
     },
   },
   {
-    id: 'forgetting-work',
-    time: 'after the Miracle',
-    media: '/story-media/fragment-04.svg',
-    zh: {
-      kicker: '职业',
-      title: '遗忘痛苦的人',
-      body: '未来出现了一种帮助人忘记痛苦的职业。他们不像心理医生那样寻找解药，而是让人忘记问题本身，也忘记自己为何必须继续活着。',
-    },
-    en: {
-      kicker: 'Profession',
-      title: 'The Work of Forgetting',
-      body: 'A future profession helps people forget pain. They do not offer a cure like therapists; they remove the question itself, even the question of why one should keep living.',
-    },
-  },
-  {
     id: 'silent-city',
     time: '2283.06.05 18:40',
-    media: '/story-media/fragment-05.svg',
+    media: '/story-media/fragment-street.png',
     zh: {
       kicker: '城市',
       title: '富足而沉默',
@@ -77,7 +62,7 @@ export const sideStories = [
   {
     id: 'white-blade',
     time: '2283.06.05 dusk',
-    media: '/story-media/fragment-06.svg',
+    media: '/story-media/fragment-blade.png',
     zh: {
       kicker: '器',
       title: '白色的刀',
