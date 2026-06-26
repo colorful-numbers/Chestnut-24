@@ -604,9 +604,7 @@ export default function Settings() {
             <h2 className="text-xl font-semibold mb-4">About This Project</h2>
             <div className="space-y-4">
               <p>
-                This is a personal dashboard built with Next.js and Tailwind CSS, developed with Cursor and use Maintainable AI generated code. It provides a customizable homepage with all the variables stored by the user. Our goal is to return the rights of data to the user.
-
-                This project is now maintained as an independent information site with a utility area. The homepage is for notices and high-level information first; utility pages are preserved as standalone tools.
+                This project is the companion settings area for 栗世界 / chestnut set. Preferences stay in the browser where possible, while the public homepage remains focused on the interactive visual novel.
               </p>
             </div>
           </div>

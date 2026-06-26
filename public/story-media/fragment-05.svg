@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="empty media placeholder">
+  <rect width="1200" height="720" fill="#101010"/>
+  <path d="M120 560 H1080" stroke="#d8d8d3" opacity=".18"/>
+  <path d="M180 560 V260 H340 V560 M430 560 V180 H620 V560 M720 560 V300 H980 V560" fill="none" stroke="#d8d8d3" opacity=".22"/>
+  <text x="72" y="96" fill="#aaa" font-family="Arial, sans-serif" font-size="24">MEDIA PLACEHOLDER</text>
+</svg>

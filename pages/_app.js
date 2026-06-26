@@ -3,6 +3,7 @@ import '../styles/world-archive.css'
 import { useEffect, useState } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { useTheme } from 'next-themes'
+import { I18nProvider } from '../lib/i18n'
 
 const SETTINGS_EVENT = 'index-settings-changed'
 const BRIGHTNESS_THRESHOLD = 160
@@ -123,7 +124,9 @@ function AppFrame({ Component, pageProps }) {
 export default function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange scriptProps={{ 'data-cfasync': 'false' }}>
-      <AppFrame Component={Component} pageProps={pageProps} />
+      <I18nProvider>
+        <AppFrame Component={Component} pageProps={pageProps} />
+      </I18nProvider>
     </ThemeProvider>
   )
 }

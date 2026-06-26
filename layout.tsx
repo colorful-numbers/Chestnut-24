@@ -4,8 +4,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Chestnut-24',
-  description: 'Independent information site with utility tools',
+  title: '栗世界 / chestnut set',
+  description: 'Interactive visual fictional novel about the post-Miracle Sylph Corridor world',
 }
  
 export default function RootLayout({

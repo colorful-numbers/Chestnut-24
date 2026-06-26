@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-label="Work 101 main CG placeholder">
+  <rect width="1400" height="900" fill="#f1f1ee"/>
+  <circle cx="700" cy="420" r="210" fill="none" stroke="#222" opacity=".18"/>
+  <path d="M240 260 H1160 M240 420 H1160 M240 580 H1160" stroke="#222" opacity=".16"/>
+  <text x="72" y="96" fill="#555" font-family="Arial, sans-serif" font-size="24">WORK 101 CG PLACEHOLDER</text>
+</svg>

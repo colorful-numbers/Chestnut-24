@@ -1,0 +1,68 @@
+{
+  "label": "CHARACTER DISPLAY",
+  "title": "Qi: Before the Convenience Store",
+  "speaker": "Qi",
+  "choiceLabel": "Choose a conversation topic",
+  "controlsLabel": "Dialogue controls",
+  "openLabel": "Click the CG to start",
+  "body": "She wakes in the ruins before entering the corner convenience store. The white blade, the signal tower, and dusk form the first memory of this stop.",
+  "mainAlt": "Placeholder scene of Qi waking in the ruins at dusk",
+  "controls": {
+    "back": "Back to last choice",
+    "auto": "Auto play",
+    "reset": "Back to start",
+    "skip": "Skip typing",
+    "next": "Skip to next choice"
+  },
+  "states": {
+    "waking": {
+      "title": "Waking",
+      "expression": "uncertain",
+      "expressionAlt": "Placeholder portrait of Qi looking uncertain",
+      "response": "I remember that I am supposed to wake once every ten years. This time the city is quieter than memory, as if someone removed the voices and the crowd but left the power, the signal tower, and this white blade.",
+      "choices": [
+        { "label": "Look at the white blade", "next": "blade" },
+        { "label": "Check the signal tower", "next": "tower" }
+      ]
+    },
+    "blade": {
+      "title": "White Edge",
+      "expression": "focused",
+      "expressionAlt": "Placeholder portrait of Qi looking focused",
+      "response": "Maybe it began as something I made by hand before hibernation. A few centuries of real time make it look like a relic, but its real weight comes from the story I forgot.",
+      "choices": [
+        { "label": "Remember Work 101", "next": "work101" },
+        { "label": "Observe the city again", "next": "tower" }
+      ]
+    },
+    "tower": {
+      "title": "Signal Tower",
+      "expression": "neutral",
+      "expressionAlt": "Placeholder portrait of Qi looking calm",
+      "response": "At dusk, the signal tower still blinks red in a steady rhythm. If flights still need to avoid it, the city is not completely dead. The corner convenience store may answer whether this stop is safe enough to stay.",
+      "choices": [
+        { "label": "Walk to the store", "next": "shop" },
+        { "label": "Recall why you woke", "next": "waking" }
+      ]
+    },
+    "work101": {
+      "title": "Work 101",
+      "expression": "uncertain",
+      "expressionAlt": "Placeholder portrait of Qi hesitating",
+      "response": "101 would know why this blade matters. She always turns what I forget into a story, as if she is the one who has lived for me many times.",
+      "choices": [
+        { "label": "Sheathe the blade", "next": "tower" },
+        { "label": "Stay still", "next": "waking" }
+      ]
+    },
+    "shop": {
+      "title": "The Corner",
+      "expression": "focused",
+      "expressionAlt": "Placeholder portrait of Qi preparing to move",
+      "response": "The convenience store is still lit. It is not a welcome or an order, only the gentle reminder of this age: if you choose to remain, the world will still prepare a bench for you.",
+      "choices": [
+        { "label": "Enter the store", "next": "waking" }
+      ]
+    }
+  }
+}

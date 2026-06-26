@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 720" role="img" aria-label="Qi focused expression placeholder">
+  <rect width="520" height="720" fill="#f6f6f2"/>
+  <circle cx="260" cy="270" r="118" fill="none" stroke="#222" opacity=".24"/>
+  <path d="M190 420 H330" stroke="#222" opacity=".32"/>
+  <path d="M335 620 L400 360" stroke="#222" opacity=".25"/>
+  <text x="42" y="70" fill="#555" font-family="Arial, sans-serif" font-size="20">FOCUSED</text>
+</svg>

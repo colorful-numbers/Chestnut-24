@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1100" role="img" aria-label="Sylph Corridor hero placeholder">
+  <rect width="1800" height="1100" fill="#090909"/>
+  <path d="M120 780 C440 610 690 690 940 540 S1390 330 1680 420" fill="none" stroke="#f5f5f2" stroke-width="2" opacity=".2"/>
+  <g fill="none" stroke="#f5f5f2" opacity=".22">
+    <path d="M280 240 C520 120 710 210 930 150 S1340 100 1560 230"/>
+    <path d="M340 520 L640 260 L960 430 L1330 210"/>
+  </g>
+  <g fill="#f5f5f2" opacity=".07">
+    <ellipse cx="340" cy="210" rx="48" ry="72"/>
+    <ellipse cx="640" cy="250" rx="48" ry="72"/>
+    <ellipse cx="960" cy="180" rx="48" ry="72"/>
+    <ellipse cx="1330" cy="230" rx="48" ry="72"/>
+  </g>
+  <path d="M0 860 H1800" stroke="#f5f5f2" opacity=".1"/>
+  <text x="80" y="110" fill="#aaa" font-family="Arial, sans-serif" font-size="28">HERO MEDIA PLACEHOLDER</text>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 720" role="img" aria-label="Qi neutral expression placeholder">
+  <rect width="520" height="720" fill="#e8e8e4"/>
+  <circle cx="260" cy="270" r="118" fill="none" stroke="#222" opacity=".24"/>
+  <path d="M190 430 C230 462 290 462 330 430" fill="none" stroke="#222" opacity=".32"/>
+  <text x="42" y="70" fill="#555" font-family="Arial, sans-serif" font-size="20">NEUTRAL</text>
+</svg>

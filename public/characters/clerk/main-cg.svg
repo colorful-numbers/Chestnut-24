@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-label="Clerk main CG placeholder">
+  <rect width="1400" height="900" fill="#101010"/>
+  <path d="M180 720 H1220 M260 720 V240 H1140 V720 M330 420 H1070" stroke="#ddd" opacity=".22" fill="none"/>
+  <text x="72" y="96" fill="#aaa" font-family="Arial, sans-serif" font-size="24">CLERK CG PLACEHOLDER</text>
+</svg>

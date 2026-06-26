@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1100" role="img" aria-label="character media placeholder">
+  <rect width="900" height="1100" fill="#eeeeeb"/>
+  <path d="M160 320 H740 M160 450 H740 M160 580 H740" stroke="#222" opacity=".18"/>
+  <circle cx="450" cy="520" r="190" fill="none" stroke="#222" opacity=".18"/>
+  <text x="56" y="92" fill="#555" font-family="Arial, sans-serif" font-size="24">CHARACTER MEDIA</text>
+</svg>
