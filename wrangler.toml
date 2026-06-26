@@ -1,5 +1,5 @@
 main = ".open-next/worker.js"
-name = "my-app"
+name = "chestnut-24"
 pages_build_output_directory = ".vercel/output/static"
 compatibility_date = "2025-01-13"
 compatibility_flags = ["nodejs_compat"]
