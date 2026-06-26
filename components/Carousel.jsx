@@ -89,43 +89,73 @@ export default function Carousel({ ariaLabel, items, renderItem, className = '',
     }
   }
 
+  const activeIndex = useMemo(() => {
+    if (items.length <= 1) return 0
+    if (index === 0) return items.length - 1
+    if (index === items.length + 1) return 0
+    return index - 1
+  }, [index, items.length])
+
+  const goTo = (nextIndex) => {
+    if (items.length <= 1) return
+    setTransitionEnabled(true)
+    setIndex(nextIndex + 1)
+  }
+
   const transform = `translate3d(${sideOffset - index * step + dragOffset}px, 0, 0)`
 
   return (
-    <div
-      ref={viewportRef}
-      className={`carousel ${className} ${isDragging ? 'is-dragging' : ''}`}
-      aria-label={ariaLabel}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={finishDrag}
-      onPointerCancel={finishDrag}
-      onPointerLeave={finishDrag}
-    >
+    <div className={`carousel-shell ${className}`}>
       <div
-        className="carousel-track"
-        style={{
-          transform,
-          transition: transitionEnabled ? 'transform 420ms cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
-        }}
-        onTransitionEnd={handleTransitionEnd}
+        ref={viewportRef}
+        className={`carousel ${isDragging ? 'is-dragging' : ''}`}
+        aria-label={ariaLabel}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={finishDrag}
+        onPointerCancel={finishDrag}
+        onPointerLeave={finishDrag}
       >
-        {loopItems.map((item, loopIndex) => {
-          const realIndex = items.length > 1
-            ? (loopIndex === 0 ? items.length - 1 : loopIndex === loopItems.length - 1 ? 0 : loopIndex - 1)
-            : loopIndex
-          return (
-            <div
-              key={`${item.id || realIndex}-${loopIndex}`}
-              ref={loopIndex === 0 ? firstItemRef : undefined}
-              className={`carousel-item ${itemClassName}`}
-              aria-hidden={items.length > 1 && (loopIndex === 0 || loopIndex === loopItems.length - 1)}
-            >
-              {renderItem(item, realIndex)}
-            </div>
-          )
-        })}
+        <div
+          className="carousel-track"
+          style={{
+            transform,
+            transition: transitionEnabled ? 'transform 420ms cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
+          }}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {loopItems.map((item, loopIndex) => {
+            const isClone = items.length > 1 && (loopIndex === 0 || loopIndex === loopItems.length - 1)
+            const realIndex = items.length > 1
+              ? (loopIndex === 0 ? items.length - 1 : loopIndex === loopItems.length - 1 ? 0 : loopIndex - 1)
+              : loopIndex
+            return (
+              <div
+                key={`${item.id || realIndex}-${loopIndex}`}
+                ref={loopIndex === 0 ? firstItemRef : undefined}
+                className={`carousel-item ${itemClassName}`}
+                aria-hidden={isClone}
+              >
+                {renderItem(item, realIndex, isClone)}
+              </div>
+            )
+          })}
+        </div>
       </div>
+      {items.length > 1 && (
+        <div className="carousel-dots" aria-label={`${ariaLabel} selector`}>
+          {items.map((item, dotIndex) => (
+            <button
+              key={item.id || dotIndex}
+              type="button"
+              className={dotIndex === activeIndex ? 'is-active' : ''}
+              aria-label={`${ariaLabel} ${dotIndex + 1}`}
+              aria-current={dotIndex === activeIndex}
+              onClick={() => goTo(dotIndex)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

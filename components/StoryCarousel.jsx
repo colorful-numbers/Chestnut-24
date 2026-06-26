@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Carousel from './Carousel'
+import DefinitionText from './DefinitionText'
 
 function pickRandomStories(stories, count) {
   const shuffled = [...stories]
@@ -10,7 +11,7 @@ function pickRandomStories(stories, count) {
   return shuffled.slice(0, Math.min(count, shuffled.length))
 }
 
-export default function StoryCarousel({ label, title, locale, stories, maxItems = 5 }) {
+export default function StoryCarousel({ label, title, locale, stories, definitions = [], maxItems = 5 }) {
   const [selectedStories, setSelectedStories] = useState(() => stories.slice(0, maxItems))
 
   useEffect(() => {
@@ -27,18 +28,21 @@ export default function StoryCarousel({ label, title, locale, stories, maxItems 
         ariaLabel={title}
         items={selectedStories}
         className="story-carousel"
-        renderItem={(story) => {
+        renderItem={(story, _index, isClone) => {
           const storyCopy = story[locale] || story.zh
           return (
-            <article
-              className="story-carousel__card"
-              style={{ backgroundImage: `url('${story.media}')` }}
-            >
+            <article className="story-carousel__card">
+              <img
+                src={story.media}
+                alt=""
+                loading={isClone ? 'eager' : 'lazy'}
+                draggable="false"
+              />
               <div className="story-carousel__copy">
                 <time>{story.time}</time>
                 <span>{storyCopy.kicker}</span>
                 <h3>{storyCopy.title}</h3>
-                <p>{storyCopy.body}</p>
+                <p><DefinitionText definitions={definitions}>{storyCopy.body}</DefinitionText></p>
               </div>
             </article>
           )

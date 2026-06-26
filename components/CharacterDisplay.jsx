@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ChevronsRight, Pause, Play, RotateCcw, StepForward, Undo2 } from 'lucide-react'
 import Typing from './Typing'
+import DefinitionText from './DefinitionText'
 
-export default function CharacterDisplay({ character, locale }) {
+export default function CharacterDisplay({ character, locale, definitions = [] }) {
   const copy = character.locales?.[locale] || character.locales?.zh || character[locale] || character.zh
   const [isOpen, setIsOpen] = useState(false)
   const [stateId, setStateId] = useState(character.defaultState)
@@ -100,7 +101,12 @@ export default function CharacterDisplay({ character, locale }) {
               <strong>{state.title}</strong>
             </div>
             <p>
-              <Typing instant={instant}>{state.response}</Typing>
+              <Typing
+                instant={instant}
+                renderText={(value) => <DefinitionText definitions={definitions}>{value}</DefinitionText>}
+              >
+                {state.response}
+              </Typing>
             </p>
           </div>
         </>

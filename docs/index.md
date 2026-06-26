@@ -7,6 +7,7 @@
 - [Project overview](readme.md)
 - [Add side stories](content/side-stories.md)
 - [Add characters and dialogue](content/characters.md)
+- [Add definitions](content/definitions.md)
 - [Version notes](versions/v0.1.3.md)
 
 ## Current Version

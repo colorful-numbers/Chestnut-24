@@ -21,6 +21,18 @@ Side-story fragments live in `data/sideStories/`.
 - Put artwork or placeholder media under `public/story-media/`.
 - Each fragment should include `time`, `media`, and `zh` / `en` copy so the language toggle can switch the whole homepage.
 - The homepage randomly selects at most five fragments from this folder on refresh.
+- Terms written as `【term】` are linked automatically when a matching definition exists in `data/definitions/`.
+
+## Definitions
+
+Definition files live in `data/definitions/`, parallel to `data/sideStories/`.
+
+- Add one markdown file per term.
+- Use the first `#` heading as the displayed term.
+- Use `aliases` frontmatter for English labels or alternate spellings.
+- The first paragraph becomes the hover tooltip text.
+- The `/defn` page lists every parsed definition.
+- `components/DefinitionText.jsx` turns labeled terms such as `【奇迹】` and `【精灵回廊】` into links with local hover summaries.
 
 ## Character Displays
 
@@ -35,6 +47,7 @@ The `docs/` directory is intended to be published as a GitHub Pages documentatio
 - Docs entry: `docs/index.md`
 - Add side stories: `docs/content/side-stories.md`
 - Add characters and dialogue: `docs/content/characters.md`
+- Add definitions: `docs/content/definitions.md`
 - Current version: `v0.1.3`
 
 ## Internationalization

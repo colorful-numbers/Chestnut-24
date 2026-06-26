@@ -1,7 +1,7 @@
 import Carousel from './Carousel'
 import CharacterDisplay from './CharacterDisplay'
 
-export default function CharacterCarousel({ label, title, body, locale, characters }) {
+export default function CharacterCarousel({ label, title, body, locale, characters, definitions = [] }) {
   return (
     <section id="system" className="info-section character-carousel-section">
       <div className="section-heading section-heading--wide">
@@ -16,7 +16,7 @@ export default function CharacterCarousel({ label, title, body, locale, characte
         items={characters}
         className="character-carousel"
         renderItem={(character) => (
-          <CharacterDisplay character={character} locale={locale} />
+          <CharacterDisplay character={character} locale={locale} definitions={definitions} />
         )}
       />
     </section>

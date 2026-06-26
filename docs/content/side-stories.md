@@ -39,3 +39,13 @@ public/story-media/
 ## Homepage Behavior
 
 On each refresh, the homepage randomly selects at most five fragments. Each card occupies 80% of the carousel viewport and shows its text in the lower-left corner.
+
+## Definition Links
+
+When a fragment references a shared world term, wrap it with full-width brackets:
+
+```text
+【奇迹】之后，城市仍然保留着给苏醒者使用的补给点。
+```
+
+If a matching markdown file exists in `data/definitions/`, the homepage renders the term as a hover definition link.

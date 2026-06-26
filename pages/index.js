@@ -7,8 +7,18 @@ import CharacterCarousel from '../components/CharacterCarousel'
 import { useI18n } from '../lib/i18n'
 import { sideStories } from '../data/sideStories'
 import { characters } from '../data/characters/index.js'
+import DefinitionText from '../components/DefinitionText'
+import { getDefinitions } from '../lib/definitions'
 
-export default function Home() {
+export async function getStaticProps() {
+  return {
+    props: {
+      definitions: getDefinitions(),
+    },
+  }
+}
+
+export default function Home({ definitions }) {
   const { locale, t } = useI18n()
 
   return (
@@ -31,7 +41,9 @@ export default function Home() {
             <span>{t.hero.kicker}</span>
             <h1>{t.hero.title}</h1>
             <p className="info-hero__subtitle">{t.hero.subtitle}</p>
-            <p className="info-hero__body">{t.hero.body}</p>
+            <p className="info-hero__body">
+              <DefinitionText definitions={definitions}>{t.hero.body}</DefinitionText>
+            </p>
             <div className="info-hero__actions">
               <a href="#notice">{t.hero.primary}<ArrowRight size={16} /></a>
               <a href="#system">{t.hero.secondary}</a>
@@ -44,6 +56,7 @@ export default function Home() {
           title={t.notice.title}
           locale={locale}
           stories={sideStories}
+          definitions={definitions}
           maxItems={5}
         />
         <CharacterCarousel
@@ -52,6 +65,7 @@ export default function Home() {
           body={t.system.body}
           locale={locale}
           characters={characters}
+          definitions={definitions}
         />
       </main>
 

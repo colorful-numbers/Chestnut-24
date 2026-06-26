@@ -21,7 +21,10 @@ The homepage should be treated as a visual novel surface first:
 - Do not render workflow notes, build notes, progress summaries, or utility catalog copy as homepage content.
 - Do not invent unrelated story fragments such as one-off locations, incidents, or characters that are not connected to the provided world outline.
 - Put publishable side-story fragments in `data/sideStories/` and media assets in `public/story-media/`.
+- Put reusable world definitions in `data/definitions/`; the `/defn` page and inline hover links are generated from these markdown files.
+- Use `【term】` labels in story copy when a local definition should be linked.
 - Use `components/StoryCarousel.jsx` for front-page fragments; cards should occupy 80% of the horizontal carousel space.
+- Keep the carousel cyclic, drag-enabled, and dot-indexed.
 - Use `components/CharacterDisplay.jsx` for game-dialog-style character widgets, with character data under `data/characters/<character>/` and media under `public/characters/<character>/`.
 - Keep the primary visual theme monochrome: black, white, gray, and low-saturation accents only.
 - Preserve existing utility routes under `pages/utils/*`, but do not use them as the homepage focus.
@@ -34,6 +37,10 @@ The homepage should be treated as a visual novel surface first:
 - Footer: `pages/footer.js`
 - Bilingual content: `data/siteContent.js`
 - Side-story fragments: `data/sideStories/index.js`
+- Definition markdown: `data/definitions/*.md`
+- Definition parser: `lib/definitions.js`
+- Inline definition tooltip/link component: `components/DefinitionText.jsx`
+- Definition page: `pages/defn.js`
 - Character display data: `data/characters/*/index.js`
 - Story media placeholders: `public/story-media/*`
 - Character media placeholders: `public/characters/*`
@@ -55,6 +62,6 @@ On Windows PowerShell, use `npm.cmd` if script execution policy blocks `npm.ps1`
 At the end of each modification round:
 
 1. Run the relevant validation command.
-2. Smoke-test `/`, `/utils`, and `/settings`.
+2. Smoke-test `/`, `/defn`, `/utils`, and `/settings`.
 3. Check that visible external links and dev/process notes have not been reintroduced into the homepage.
 4. Update `docs/PROGRESS.md` with a brief entry.

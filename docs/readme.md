@@ -18,8 +18,13 @@ Utilities remain available under `pages/utils/*`, but they are not part of the p
 - Styling: Tailwind base plus `styles/world-archive.css`
 - Locale state: `lib/i18n.js`
 - Side stories: `data/sideStories/`
+- Definitions: `data/definitions/`
 - Characters: `data/characters/`
 - Media: `public/story-media/` and `public/characters/`
+
+## Definition Surface
+
+The `/defn` route lists world-setting terms parsed from markdown. Inline labels written as `【term】` are linked by `components/DefinitionText.jsx` when the term exists in `data/definitions/`.
 
 ## Local Development
 

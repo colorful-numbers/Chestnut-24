@@ -8,7 +8,7 @@ function extractText(children) {
   return ''
 }
 
-export default function Typing({ children, speed = 28, pauseOnSpace = 80, cursor = true, instant = false, onDone }) {
+export default function Typing({ children, speed = 28, pauseOnSpace = 80, cursor = true, instant = false, onDone, renderText }) {
   const text = useMemo(() => extractText(children), [children])
   const [count, setCount] = useState(0)
   const timerRef = useRef(null)
@@ -40,7 +40,7 @@ export default function Typing({ children, speed = 28, pauseOnSpace = 80, cursor
 
   return (
     <span className="typing">
-      {text.slice(0, count)}
+      {renderText ? renderText(text.slice(0, count)) : text.slice(0, count)}
       {cursor && <span className={done ? 'typing__cursor typing__cursor--done' : 'typing__cursor'}>|</span>}
     </span>
   )

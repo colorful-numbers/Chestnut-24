@@ -1,5 +1,22 @@
 # Progress Log
 
+## 2026-06-25 Continued 4
+
+### Definitions And Cyclic Carousel
+
+Work completed in this round:
+
+- Fixed the shared carousel to keep cloned edge cards for cyclic movement while restoring dot selectors.
+- Kept carousel movement drag-based and removed left/right arrow controls.
+- Changed side-story cards to render media images directly so cloned edge cards participate in loading and rendering.
+- Added footer menu links for Colorful Numbers Lab, the old index page, documentation, and privacy.
+- Added the `defn` navigation entry after the world tab.
+- Created markdown-driven definitions under `data/definitions/`.
+- Added the `/defn` page to list parsed world definitions.
+- Added `components/DefinitionText.jsx` for inline bracketed definition links and hover summaries.
+- Passed local definitions into the homepage hero, story carousel, and character dialogue text.
+- Added documentation for creating definitions and using inline definition labels.
+
 ## 2026-06-25 Continued 3
 
 ### Carousel And Character Widgets

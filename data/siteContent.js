@@ -26,6 +26,7 @@ export const siteCopy = {
     brand: '栗世界',
     nav: {
       overview: '世界',
+      defn: '定义',
       notice: '碎片',
       system: '角色',
       tools: '工具',
@@ -41,6 +42,11 @@ export const siteCopy = {
       body: '二十一世纪中叶的【奇迹】之后，绝大多数人类进入平流层中的【精灵回廊】。气象气球组成新的天空网络，冬眠舱保留肉体，自动化维持城市，而少数醒着的人在过于安逸的世界里继续寻找生活的意义。',
       primary: '阅读随机碎片',
       secondary: '查看角色',
+    },
+    defn: {
+      label: 'DEFINITIONS',
+      title: '定义',
+      body: '从设定文档自动解析出的术语表。正文中被【】标记的术语会链接到这里。',
     },
     notice: {
       label: 'RANDOM FRAGMENTS',
@@ -78,6 +84,12 @@ export const siteCopy = {
       ],
     },
     footer: '交互式视觉小说 / 精灵回廊 / 栗世界',
+    footerMenu: {
+      lab: 'Colorful numbers Lab',
+      oldIndex: '旧主页',
+      docs: '文档',
+      privacy: '隐私',
+    },
   },
   en: {
     metaTitle: 'chestnut set',
@@ -85,6 +97,7 @@ export const siteCopy = {
     brand: 'chestnut set',
     nav: {
       overview: 'World',
+      defn: 'defn',
       notice: 'Fragments',
       system: 'Cast',
       tools: 'Tools',
@@ -97,9 +110,14 @@ export const siteCopy = {
       title: 'chestnut set',
       media: '/story-media/hero-sylph.svg',
       subtitle: 'After unlimited intelligence, people still need proof that they are really alive.',
-      body: 'After the Miracle in the mid twenty-first century, most humans entered the Sylph Corridor in the stratosphere. Weather balloons became the new sky network, hibernation pods preserved bodies, automation maintained cities, and the few who stayed awake kept searching for purpose inside a world made too comfortable.',
+      body: 'After the 【Miracle】 in the mid twenty-first century, most humans entered the 【Sylph Corridor】 in the stratosphere. Weather balloons became the new sky network, hibernation pods preserved bodies, automation maintained cities, and the few who stayed awake kept searching for purpose inside a world made too comfortable.',
       primary: 'Read random fragments',
       secondary: 'View the cast',
+    },
+    defn: {
+      label: 'DEFINITIONS',
+      title: 'Definitions',
+      body: 'A term index automatically parsed from local definition documents. Terms marked with 【】 link here.',
     },
     notice: {
       label: 'RANDOM FRAGMENTS',
@@ -137,5 +155,11 @@ export const siteCopy = {
       ],
     },
     footer: 'interactive visual fiction / Sylph Corridor / chestnut set',
+    footerMenu: {
+      lab: 'Colorful numbers Lab',
+      oldIndex: 'old index',
+      docs: 'docs',
+      privacy: 'privacy',
+    },
   },
 }

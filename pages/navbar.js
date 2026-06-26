@@ -56,6 +56,7 @@ export default function Navbar() {
   const { t } = useI18n()
   const navItems = [
     { href: '/#overview', label: t.nav.overview },
+    { href: '/defn', label: t.nav.defn },
     { href: '/#notice', label: t.nav.notice },
     { href: '/#system', label: t.nav.system },
   ]
