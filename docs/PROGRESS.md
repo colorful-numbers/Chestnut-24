@@ -1,5 +1,41 @@
 # Progress Log
 
+## 2026-06-27 Continued
+
+### Artifact101 Rename And Apple Music Embeds
+
+Work completed in this round:
+
+- Renamed the secondary character from `work101` to `artifact101` across code: the variable, `id`, graph node ids (`work101-1/2` → `artifact101-1/2`) and their line keys, the asset folder (`public/characters/work101/` → `public/characters/artifact101/`), and media paths.
+- Fixed the stale English name "Work 101" → "Artifact 101" in the character data and the homepage cast card copy.
+- Switched BGM from local `.m4a` files to Apple Music embeds. `BgmPlayer` now expands to a panel holding the Apple Music `<iframe>` (with its own play/pause/scrub controls) instead of a custom audio element, note icon, and volume slider. The iframe stays mounted while collapsed so playback persists. Cross-origin embeds only play once deployed; that is acceptable for local preview.
+- Test tracks: `Kimi ga Umareta Hi (feat. Hatsune Miku)` (default / main) and `Nuit` (the convenience-store scene). Removed the now-unused `public/story-media/bgm/` folder.
+
+## 2026-06-27
+
+### Galgame Character Display, BGM, And Routing Fixes
+
+Work completed in this round:
+
+- Fixed carousel cards not routing on click: the carousel now captures the pointer only after a real drag begins, so a plain tap stays a native link click and navigates to `/fragments/[id]` or `/cast/[id]`.
+- Added a top-to-bottom title reveal animation (`titleFadeDown`) for hero, post, and card titles, with a reduced-motion opt-out.
+- Restructured character data into a language-neutral story `graph` plus per-locale text `lines`. Most nodes are plain sentence nodes (`next`); decision nodes carry two or more `choices`. Roughly 80% of nodes are continue-only sentences.
+- Rewrote `components/CharacterDisplay.jsx`:
+  - Opens as a full-window modal occupying everything except the navbar.
+  - Back button is embedded in the upper-left of the stage (passed via `backHref`).
+  - Six tooltip-labelled controls: back to last choice, back to last sentence, backlog, auto play, next sentence, next choice.
+  - Auto play and "next sentence"/"next choice" only advance sentence nodes and pause on decision/end nodes.
+  - Added a galgame-style backlog panel to review visited lines and jump back to any of them.
+  - Scene background changes crossfade via a previous/next layer (`sceneFade`); `background` and `bgm` are read from the active node and carried forward along the visited path.
+- Added `components/BgmPlayer.jsx`: a corner circle button that expands into a widget with a play/pause note icon and a volume slider, collapses on outside click, and crossfades when the scene track changes. Playback uses an `<audio>` element (an Apple Music iframe embed cannot be controlled cross-origin). Audio files are expected under `public/story-media/bgm/`; the default track references *Kimi ga Umareta Hi (feat. Hatsune Miku)*.
+- `/cast/[id]` now renders the display fullscreen with `autoOpen` and an embedded back link; the visible heading was replaced with a visually-hidden `h1` for SEO.
+- Localization policy change: Chinese (`zh`) is authored fully; English (`en`) uses placeholders until reviewed. The new character `en.json` and the `work101` `en` lines are placeholders.
+
+### Asset Notes
+
+- Demo scene backgrounds reuse existing `public/story-media/*` art. Replace with dedicated CGs when ready.
+- Drop real audio files at `public/story-media/bgm/kimi-ga-umareta-hi.m4a` and `silent-city.m4a` to hear BGM; controls function without them.
+
 ## 2026-06-25 Continued 4
 
 ### Definitions And Cyclic Carousel

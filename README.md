@@ -48,7 +48,7 @@ The `docs/` directory is intended to be published as a GitHub Pages documentatio
 - Add side stories: `docs/content/side-stories.md`
 - Add characters and dialogue: `docs/content/characters.md`
 - Add definitions: `docs/content/definitions.md`
-- Current version: `v0.1.3`
+- Current version: `v0.1.4`
 
 ## Internationalization
 

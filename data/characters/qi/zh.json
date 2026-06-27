@@ -1,68 +1,105 @@
 {
-  "label": "CHARACTER DISPLAY",
+  "label": "角色对话",
   "title": "器：便利店之前",
   "speaker": "器",
-  "choiceLabel": "选择对话主题",
-  "controlsLabel": "对话控制",
-  "openLabel": "点击 CG 开始对话",
   "body": "她在废墟中醒来，尚未走进街角的便利店。白色长刀、信号塔和黄昏构成了这一站最初的记忆。",
+  "openLabel": "点击进入对话",
   "mainAlt": "器在黄昏废墟中醒来的占位场景",
+  "choiceLabel": "做出选择",
+  "controlsLabel": "对话控制",
+  "back": "返回全部角色",
   "controls": {
-    "back": "回到上一个选择",
+    "lastChoice": "回到上一个选择",
+    "lastSentence": "回到上一句",
+    "backlog": "对话回顾",
     "auto": "自动播放",
-    "reset": "回到开头",
-    "skip": "跳过打字",
-    "next": "前往下一个选择"
+    "autoStop": "停止自动播放",
+    "nextSentence": "下一句",
+    "nextChoice": "快进到下一个选择"
   },
-  "states": {
-    "waking": {
+  "music": {
+    "open": "背景音乐",
+    "play": "播放音乐",
+    "pause": "暂停音乐",
+    "volume": "音量",
+    "now": "正在播放",
+    "close": "关闭音乐面板"
+  },
+  "backlog": {
+    "title": "对话回顾",
+    "empty": "还没有可回顾的对话。",
+    "jump": "返回这一句",
+    "current": "当前",
+    "reset": "回到开头",
+    "close": "关闭回顾"
+  },
+  "tracks": {
+    "main": "君が生まれた日 (feat. 初音未来)",
+    "silent": "Nuit"
+  },
+  "lines": {
+    "wake-1": {
       "title": "醒来",
-      "expression": "uncertain",
-      "expressionAlt": "器不确定的表情占位图",
-      "response": "我记得自己应该每十年醒来一次。可是这一次，城市比记忆里更安静，像是有人把声音和人群都收走了，只留下供电、信号塔和这把白色的刀。",
-      "choices": [
-        { "label": "看向白色长刀", "next": "blade" },
-        { "label": "确认信号塔", "next": "tower" }
-      ]
+      "text": "我记得自己应该每十年醒来一次。"
     },
-    "blade": {
+    "wake-2": {
+      "title": "醒来",
+      "text": "可是这一次，城市比记忆里更安静。"
+    },
+    "wake-3": {
+      "title": "醒来",
+      "text": "像是有人把声音和人群都收走了，只留下供电、信号塔，和这把白色的刀。"
+    },
+    "look": {
+      "title": "第一个犹豫",
+      "text": "在彻底清醒之前，我得先弄清楚，自己究竟在看哪一边。",
+      "choices": ["看向白色长刀", "确认信号塔"]
+    },
+    "blade-1": {
       "title": "白刃",
-      "expression": "focused",
-      "expressionAlt": "器专注的表情占位图",
-      "response": "也许一开始它只是我冬眠前做的手工作品。几百年的现实时间让它看起来像遗物，可它真正的重量来自我忘掉的那个故事。",
-      "choices": [
-        { "label": "想起作品101", "next": "work101" },
-        { "label": "重新观察城市", "next": "tower" }
-      ]
+      "text": "刀身很轻，也许一开始它只是我冬眠前做的手工作品。"
     },
-    "tower": {
-      "title": "信号塔",
-      "expression": "neutral",
-      "expressionAlt": "器平静的表情占位图",
-      "response": "黄昏里，信号塔还在规律闪红光。既然航班还需要避让它，这座城市就没有彻底死去。街角的便利店也许还能回答我：这一站是否适合停留。",
-      "choices": [
-        { "label": "走向便利店", "next": "shop" },
-        { "label": "回想醒来的理由", "next": "waking" }
-      ]
+    "blade-2": {
+      "title": "白刃",
+      "text": "几百年的现实时间让它看起来像遗物。"
     },
-    "work101": {
+    "blade-3": {
+      "title": "白刃",
+      "text": "可它真正的重量，来自我忘掉的那个故事。这一次，我要先想起谁？",
+      "choices": ["想起作品101", "把注意力放回城市"]
+    },
+    "artifact101-1": {
       "title": "作品101",
-      "expression": "uncertain",
-      "expressionAlt": "器迟疑的表情占位图",
-      "response": "101 应该会知道这把刀为什么重要。她总是能把我遗忘的东西整理成故事，好像她才是那个替我活过很多次的人。",
-      "choices": [
-        { "label": "收起白刃", "next": "tower" },
-        { "label": "停在原地", "next": "waking" }
-      ]
+      "text": "101 应该会知道这把刀为什么重要。"
     },
-    "shop": {
+    "artifact101-2": {
+      "title": "作品101",
+      "text": "她总能把我遗忘的东西整理成故事，好像她才是那个替我活过很多次的人。"
+    },
+    "tower-1": {
+      "title": "信号塔",
+      "text": "黄昏里，信号塔还在规律地闪着红光。"
+    },
+    "tower-2": {
+      "title": "信号塔",
+      "text": "既然航班还需要避让它，这座城市就没有彻底死去。"
+    },
+    "tower-3": {
+      "title": "信号塔",
+      "text": "街角的便利店也许还能回答我：这一站，是否适合停留。",
+      "choices": ["走向便利店", "再多站一会儿"]
+    },
+    "shop-1": {
       "title": "街角",
-      "expression": "focused",
-      "expressionAlt": "器准备前进的表情占位图",
-      "response": "便利店的灯还亮着。那不是欢迎，也不是命令，只是这个时代一贯温柔的提醒：只要你愿意停留，世界仍会为你准备一张长椅。",
-      "choices": [
-        { "label": "进入便利店", "next": "waking" }
-      ]
+      "text": "便利店的灯还亮着。那不是欢迎，也不是命令。"
+    },
+    "shop-2": {
+      "title": "街角",
+      "text": "只是这个时代一贯温柔的提醒：只要你愿意停留，世界仍会为你准备一张长椅。"
+    },
+    "shop-3": {
+      "title": "街角",
+      "text": "我握紧白刀，向那扇还亮着的门走去。新的故事，大概就从这里开始。"
     }
   }
 }

@@ -1,5 +1,5 @@
 ---
-aliases: ["Sylph Corridor", "回廊"]
+aliases: ["回廊","The Corridor"]
 ---
 # 精灵回廊
 

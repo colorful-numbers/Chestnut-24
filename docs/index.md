@@ -8,10 +8,10 @@
 - [Add side stories](content/side-stories.md)
 - [Add characters and dialogue](content/characters.md)
 - [Add definitions](content/definitions.md)
-- [Version notes](versions/v0.1.3.md)
+- [Version notes](versions/v0.1.4.md)
 
 ## Current Version
 
-Current version: `v0.1.3`
+Current version: `v0.1.4`
 
 This docs directory is intended to be published as a GitHub Pages documentation site.

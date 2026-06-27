@@ -57,8 +57,8 @@ export default function Navbar() {
   const navItems = [
     { href: '/#overview', label: t.nav.overview },
     { href: '/defn', label: t.nav.defn },
-    { href: '/#notice', label: t.nav.notice },
-    { href: '/#system', label: t.nav.system },
+    { href: '/fragments', label: t.nav.notice },
+    { href: '/cast', label: t.nav.system },
   ]
 
   return (

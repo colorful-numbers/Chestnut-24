@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import Carousel from './Carousel'
 import DefinitionText from './DefinitionText'
 
@@ -11,7 +12,7 @@ function pickRandomStories(stories, count) {
   return shuffled.slice(0, Math.min(count, shuffled.length))
 }
 
-export default function StoryCarousel({ label, title, locale, stories, definitions = [], maxItems = 5 }) {
+export default function StoryCarousel({ label, title, locale, stories, definitions = [], maxItems = 5, moreLabel, moreHref = '/fragments' }) {
   const [selectedStories, setSelectedStories] = useState(() => stories.slice(0, maxItems))
 
   useEffect(() => {
@@ -20,9 +21,14 @@ export default function StoryCarousel({ label, title, locale, stories, definitio
 
   return (
     <section id="notice" className="info-section story-carousel-section">
-      <div className="section-heading">
-        <span>{label}</span>
-        <h2>{title}</h2>
+      <div className="section-heading section-heading--linked">
+        <div>
+          <span>{label}</span>
+          <h2>{title}</h2>
+        </div>
+        {moreLabel && (
+          <Link className="section-heading__more" href={moreHref}>{moreLabel}</Link>
+        )}
       </div>
       <Carousel
         ariaLabel={title}
@@ -31,7 +37,12 @@ export default function StoryCarousel({ label, title, locale, stories, definitio
         renderItem={(story, _index, isClone) => {
           const storyCopy = story[locale] || story.zh
           return (
-            <article className="story-carousel__card">
+            <Link
+              href={`/fragments/${story.id}`}
+              className="story-carousel__card"
+              tabIndex={isClone ? -1 : undefined}
+              draggable="false"
+            >
               <img
                 src={story.media}
                 alt=""
@@ -44,7 +55,7 @@ export default function StoryCarousel({ label, title, locale, stories, definitio
                 <h3>{storyCopy.title}</h3>
                 <p><DefinitionText definitions={definitions}>{storyCopy.body}</DefinitionText></p>
               </div>
-            </article>
+            </Link>
           )
         }}
       />

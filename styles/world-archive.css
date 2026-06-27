@@ -191,6 +191,36 @@
   font-weight: 800;
 }
 
+/* Title text reveals from top to bottom */
+@keyframes titleFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.45em);
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.info-hero h1,
+.story-post__hero-copy h1,
+.card-list__copy h2,
+.story-carousel__copy h3 {
+  animation: titleFadeDown 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .info-hero h1,
+  .story-post__hero-copy h1,
+  .card-list__copy h2,
+  .story-carousel__copy h3 {
+    animation: none;
+  }
+}
+
 .info-hero__subtitle {
   margin: 0;
   color: var(--site-text);
@@ -322,7 +352,18 @@
 }
 
 .story-carousel__card {
+  display: block;
+  width: 100%;
   min-height: 520px;
+  color: inherit;
+  text-decoration: none;
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+a.story-carousel__card:hover,
+a.story-carousel__card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 26px 70px var(--site-shadow);
 }
 
 .story-carousel__card > img {
@@ -816,5 +857,608 @@
     min-height: 0;
     padding: 1.2rem 0;
     display: grid;
+  }
+
+  .card-list__item {
+    grid-template-columns: 1fr;
+  }
+
+  .card-list__media {
+    min-height: 200px;
+  }
+
+  .story-post__hero {
+    min-height: 320px;
+  }
+}
+
+/* Section heading with an inline "view all" link */
+.section-heading--linked {
+  position: relative;
+}
+
+.section-heading__more {
+  align-self: center;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+  color: var(--site-accent);
+  font-size: 0.86rem;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.section-heading--linked:not(.section-heading--wide) {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.section-heading--wide.section-heading--linked .section-heading__more {
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+
+.section-heading__more:hover,
+.section-heading__more:focus-visible {
+  border-bottom-color: currentColor;
+}
+
+/* Detailed card list used on the Fragments and Cast pages */
+.card-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.card-list__item {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) 1.3fr;
+  gap: 0;
+  border: 1px solid var(--site-line);
+  border-radius: 8px;
+  background: var(--site-panel);
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 14px 45px var(--site-shadow);
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+.card-list__item:hover,
+.card-list__item:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 64px var(--site-shadow);
+}
+
+.card-list__media {
+  position: relative;
+  min-height: 240px;
+  background: #0c0c0c;
+}
+
+.card-list__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.card-list__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: clamp(1.1rem, 2vw, 1.6rem);
+}
+
+.card-list__copy time,
+.card-list__copy > span {
+  color: var(--site-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.card-list__copy h2 {
+  margin: 0.15rem 0 0.2rem;
+  color: var(--site-text);
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  line-height: 1.1;
+}
+
+.card-list__copy p {
+  margin: 0;
+  color: var(--site-muted);
+  line-height: 1.75;
+}
+
+.card-list__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+  color: var(--site-accent);
+  font-size: 0.86rem;
+}
+
+/* Fragment blog-post page */
+.story-post {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.story-post__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--site-muted);
+  font-size: 0.86rem;
+  text-decoration: none;
+}
+
+.story-post__back:hover,
+.story-post__back:focus-visible {
+  color: var(--site-text);
+}
+
+.story-post__hero {
+  position: relative;
+  min-height: 440px;
+  border: 1px solid var(--site-line);
+  border-radius: 10px;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 18px 55px var(--site-shadow);
+  overflow: hidden;
+}
+
+.story-post__hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 28%, rgba(0, 0, 0, 0.2) 52%, rgba(0, 0, 0, 0.82));
+}
+
+.story-post__hero-copy {
+  position: absolute;
+  left: clamp(1.2rem, 3vw, 2.4rem);
+  right: clamp(1.2rem, 3vw, 2.4rem);
+  bottom: clamp(1.2rem, 3vw, 2.4rem);
+  color: #f4f4f1;
+}
+
+.story-post__hero-copy span {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.82rem;
+  color: rgba(244, 244, 241, 0.8);
+}
+
+.story-post__hero-copy h1 {
+  margin: 0.4rem 0;
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 1.02;
+}
+
+.story-post__hero-copy time {
+  color: rgba(244, 244, 241, 0.72);
+  font-size: 0.9rem;
+}
+
+.story-post__body {
+  max-width: 70ch;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.story-post__body p {
+  margin: 0;
+  color: var(--site-text);
+  font-size: 1.08rem;
+  line-height: 1.95;
+}
+
+/* Character page reuses the interactive display under a heading */
+.character-page .character-display {
+  margin-top: 0.5rem;
+}
+
+.character-page .story-post__back {
+  margin-bottom: 0.6rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.character-route main {
+  margin: 0;
+}
+
+/* ----- Full-window character modal ----- */
+.character-display--open {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.character-display--modal {
+  position: fixed;
+  inset: 64px 0 0 0;
+  z-index: 24;
+  border-radius: 0;
+  background: #060606;
+  overflow: hidden;
+}
+
+.character-stage {
+  position: relative;
+  width: 100%;
+  min-height: 640px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.character-display--modal .character-stage {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+}
+
+.character-stage__bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #060606;
+}
+
+.character-stage__bg-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 24%, rgba(0, 0, 0, 0.28) 58%, rgba(0, 0, 0, 0.82)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.35), transparent 55%);
+  pointer-events: none;
+}
+
+.character-stage__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-position: center;
+  background-size: cover;
+  user-select: none;
+}
+
+.character-stage__bg--prev {
+  z-index: 0;
+}
+
+.character-stage__bg--next {
+  z-index: 1;
+  animation: sceneFade 640ms ease both;
+}
+
+@keyframes sceneFade {
+  from { opacity: 0; transform: scale(1.05); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .character-stage__bg--next { animation: none; }
+}
+
+.character-display--open .character-display__main {
+  z-index: 3;
+}
+
+/* ----- Embedded back button (upper-left) ----- */
+.character-stage__back {
+  position: absolute;
+  top: clamp(0.85rem, 2vw, 1.4rem);
+  left: clamp(0.85rem, 2vw, 1.4rem);
+  z-index: 8;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid rgba(244, 244, 241, 0.28);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.42);
+  color: #f4f4f1;
+  font-size: 0.84rem;
+  text-decoration: none;
+  backdrop-filter: blur(12px);
+}
+
+.character-stage__back:hover,
+.character-stage__back:focus-visible {
+  border-color: rgba(244, 244, 241, 0.55);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* ----- BGM player (upper-right circle / widget) ----- */
+.character-stage__bgm {
+  position: absolute;
+  top: clamp(0.85rem, 2vw, 1.4rem);
+  right: clamp(0.85rem, 2vw, 1.4rem);
+  z-index: 8;
+}
+
+.bgm-player__toggle {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(244, 244, 241, 0.28);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.42);
+  color: #f4f4f1;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+
+.bgm-player__toggle:hover,
+.bgm-player__toggle:focus-visible {
+  border-color: rgba(244, 244, 241, 0.55);
+}
+
+.bgm-player.is-expanded .bgm-player__toggle {
+  border-color: var(--site-accent);
+  color: var(--site-accent);
+}
+
+/* Apple Music embed panel. Kept mounted while collapsed (only visually hidden)
+   so background playback continues. */
+.bgm-player__panel {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  right: 0;
+  width: min(340px, 78vw);
+  padding: 0.5rem;
+  border: 1px solid rgba(244, 244, 241, 0.24);
+  border-radius: 14px;
+  background: rgba(8, 8, 8, 0.78);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(0.97);
+  transform-origin: top right;
+  transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 200ms;
+}
+
+.bgm-player__panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.bgm-player__panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.15rem 0.25rem 0.45rem;
+  color: #f4f4f1;
+}
+
+.bgm-player__track {
+  font-size: 0.74rem;
+  color: rgba(244, 244, 241, 0.82);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bgm-player__close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(244, 244, 241, 0.16);
+  color: #f4f4f1;
+  cursor: pointer;
+}
+
+.bgm-player__close:hover,
+.bgm-player__close:focus-visible {
+  background: rgba(244, 244, 241, 0.3);
+}
+
+.bgm-player__frame {
+  display: block;
+  width: 100%;
+  max-width: 660px;
+  height: 175px;
+  border: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ----- Dialogue controls + tooltips ----- */
+.dialog-controls__btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--site-line);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.34);
+  color: #f4f4f1;
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+}
+
+.dialog-controls__btn.is-active {
+  border-color: var(--site-accent);
+  color: var(--site-accent);
+}
+
+.dialog-controls__btn:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+
+.dialog-controls__btn[data-tip]:hover::after,
+.dialog-controls__btn[data-tip]:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9;
+  padding: 0.35rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.86);
+  color: #f4f4f1;
+  font-size: 0.74rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.dialog-window {
+  cursor: pointer;
+}
+
+/* ----- Backlog panel ----- */
+.dialog-backlog {
+  position: absolute;
+  left: 50%;
+  top: clamp(4rem, 9vw, 6rem);
+  bottom: clamp(4rem, 9vw, 6rem);
+  z-index: 9;
+  width: min(620px, 86%);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(244, 244, 241, 0.22);
+  border-radius: 12px;
+  background: rgba(8, 8, 8, 0.86);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+.dialog-backlog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(244, 244, 241, 0.16);
+  color: #f4f4f1;
+}
+
+.dialog-backlog__head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dialog-backlog__head-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: 1px solid rgba(244, 244, 241, 0.24);
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  background: transparent;
+  color: rgba(244, 244, 241, 0.82);
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.dialog-backlog__list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.dialog-backlog__list > li {
+  margin: 0;
+}
+
+.dialog-backlog__list > li > button {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  background: transparent;
+  color: rgba(244, 244, 241, 0.86);
+  cursor: pointer;
+}
+
+.dialog-backlog__list > li > button:hover,
+.dialog-backlog__list > li > button:focus-visible {
+  background: rgba(244, 244, 241, 0.1);
+}
+
+.dialog-backlog__empty {
+  padding: 0.8rem 0.7rem;
+  color: rgba(244, 244, 241, 0.6);
+}
+
+.dialog-backlog__current {
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  background: rgba(244, 244, 241, 0.08);
+}
+
+.dialog-backlog__speaker {
+  display: block;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--site-accent);
+}
+
+.dialog-backlog__text {
+  display: block;
+  color: rgba(244, 244, 241, 0.86);
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .character-display--modal {
+    inset: 56px 0 0 0;
+  }
+
+  .bgm-player__panel {
+    width: min(300px, 82vw);
+  }
+
+  .character-stage__back span {
+    display: none;
   }
 }

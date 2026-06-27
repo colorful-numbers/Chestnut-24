@@ -54,6 +54,7 @@ export default function Home({ definitions }) {
         <StoryCarousel
           label={t.notice.label}
           title={t.notice.title}
+          moreLabel={t.notice.more}
           locale={locale}
           stories={sideStories}
           definitions={definitions}
@@ -63,6 +64,7 @@ export default function Home({ definitions }) {
           label={t.system.label}
           title={t.system.title}
           body={t.system.body}
+          moreLabel={t.system.more}
           locale={locale}
           characters={characters}
           definitions={definitions}

@@ -51,11 +51,19 @@ export const siteCopy = {
     notice: {
       label: 'RANDOM FRAGMENTS',
       title: '支线故事碎片',
+      more: '查看全部碎片',
+      pageBody: '世界设定中的支线故事碎片。每一条都是这个时代里被记录下来的片段，点击任意卡片可以阅读完整故事。',
+      readMore: '阅读全文',
+      back: '返回全部碎片',
     },
     system: {
       label: 'CHARACTER CARDS',
       title: '角色',
       body: '醒来的人、被记忆养大的 AI、便利店里等待的人，以及是否继续前往未来的选择。',
+      more: '查看全部角色',
+      pageBody: '故事里出场的角色。点击任意角色进入独立的对话页面，按自己的选择推进剧情。',
+      enter: '进入对话',
+      back: '返回全部角色',
       cards: [
         {
           title: '器',
@@ -85,7 +93,7 @@ export const siteCopy = {
     brand: 'Set of Chestnut',
     nav: {
       overview: 'World',
-      defn: 'defn',
+      defn: 'Defn',
       notice: 'Fragments',
       system: 'Cast',
       tools: 'Tools',
@@ -110,11 +118,19 @@ export const siteCopy = {
     notice: {
       label: 'RANDOM FRAGMENTS',
       title: 'Side Story Fragments',
+      more: 'View all fragments',
+      pageBody: 'Side story fragments from the world setting. Each one is a recorded piece of this age — open any card to read the full story.',
+      readMore: 'Read the full fragment',
+      back: 'Back to all fragments',
     },
     system: {
       label: 'CHARACTER CARDS',
       title: 'Cast',
       body: 'The person who wakes, the AI raised by memory, the clerk waiting in the store, and the choice of whether to keep moving toward the future.',
+      more: 'Meet the cast',
+      pageBody: 'The characters who appear in the story. Open any character for a dedicated dialogue page and move the storyline forward through your own choices.',
+      enter: 'Enter the dialogue',
+      back: 'Back to the cast',
       cards: [
         {
           title: 'Qi',
@@ -123,7 +139,7 @@ export const siteCopy = {
           body: 'A young person from the time of the Miracle. She wakes in a ruined city with a white blade and the sense that she once chose to carry memories of humanity before the new age.',
         },
         {
-          title: 'Work 101',
+          title: 'Artifact 101',
           label: '101',
           media: '/story-media/character-101.svg',
           body: 'An independent AI assembled from memory and raised in a human-like environment. She is part prophecy, part answer key, and may have vanished into the silent world or continued traveling as something close to human.',

@@ -1,5 +1,5 @@
 ---
-aliases: ["Miracle"]
+aliases: ["奇迹", "Miracle"]
 ---
 # 奇迹
 
