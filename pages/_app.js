@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { useTheme } from 'next-themes'
 import { I18nProvider } from '../lib/i18n'
+import SiteEffects from '../components/SiteEffects'
 
 const SETTINGS_EVENT = 'index-settings-changed'
 const BRIGHTNESS_THRESHOLD = 160
@@ -117,6 +118,7 @@ function AppFrame({ Component, pageProps }) {
       <div className="app-content">
         <Component {...pageProps} />
       </div>
+      <SiteEffects />
     </div>
   )
 }

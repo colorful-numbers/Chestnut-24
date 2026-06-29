@@ -4,15 +4,20 @@ import { ArrowLeft, ChevronLeft, ChevronsRight, History, Pause, Play, SkipForwar
 import Typing from './Typing'
 import DefinitionText from './DefinitionText'
 import BgmPlayer from './BgmPlayer'
+import { EFFECTS } from '../lib/effects'
 
 const AUTO_DELAY = 1100
 const MAX_VISIBLE_CHOICES = 3
-const SPRITE_FADE_MS = 380
 // Sentinel sprite value meaning "render nothing"; matches lib/characters.js.
 const EMPTY_EXPRESSION = 'EMPTY'
-// Expression-change transition (prev/next sprite crossfade). Disabled for now;
-// the layered render and the spriteSwap CSS are kept for future revision.
-const ENABLE_SPRITE_TRANSITION = false
+
+// Expression-change crossfade. Toggle with EFFECTS.expressionTransition. Tune the
+// two durations here (the outgoing fade-out and the incoming fade-in); the prev
+// layer is retired once the slower of the two has finished.
+const ENABLE_SPRITE_TRANSITION = EFFECTS.expressionTransition
+const SPRITE_FADEOUT_MS = 1300
+const SPRITE_FADEIN_MS = 1200
+const SPRITE_FADE_MS = Math.max(SPRITE_FADEOUT_MS, SPRITE_FADEIN_MS) + 100
 
 function hasChoices(node) {
   return Array.isArray(node?.choices) && node.choices.length >= 1
@@ -312,6 +317,7 @@ export default function CharacterDisplay({
             <img
               key={`sprite-prev-${prevExpression}`}
               className="character-display__main character-stage__sprite character-stage__sprite--prev"
+              style={{ '--sprite-out': `${SPRITE_FADEOUT_MS}ms` }}
               src={prevExpression}
               alt=""
               draggable="false"
@@ -321,6 +327,7 @@ export default function CharacterDisplay({
             <img
               key={`sprite-${expressionSrc}`}
               className={`character-display__main character-stage__sprite ${ENABLE_SPRITE_TRANSITION ? 'character-stage__sprite--next' : ''}`}
+              style={ENABLE_SPRITE_TRANSITION ? { '--sprite-in': `${SPRITE_FADEIN_MS}ms` } : undefined}
               src={expressionSrc}
               alt={copy.mainAlt}
               draggable="false"

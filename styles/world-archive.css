@@ -1367,11 +1367,11 @@ a.story-carousel__card:focus-visible {
 /* Expression change: the outgoing sprite lifts up and fades out while the new
    one settles down from above into place. */
 .character-stage__sprite--next {
-  animation: spriteSwapIn 1360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: spriteSwapIn var(--sprite-in, 650ms) cubic-bezier(0.33, 0, 0.2, 1) both;
 }
 
 .character-stage__sprite--prev {
-  animation: spriteSwapOut 1360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: spriteSwapOut var(--sprite-out, 700ms) cubic-bezier(0.33, 0, 0.2, 1) both;
 }
 
 @keyframes spriteSwapIn {
@@ -1679,5 +1679,87 @@ a.story-carousel__card:focus-visible {
 
   .character-stage__back span {
     display: none;
+  }
+}
+
+/* =========================================================================
+   Experimental effects (toggled in lib/effects.js)
+   ========================================================================= */
+
+/* H + I: scroll-reveal. The .fx-reveal class is added by JS only, so without
+   JavaScript (or with reduced motion) content stays fully visible. The expand
+   is intentionally slow, like a graph easing open. */
+.fx-reveal {
+  opacity: 0;
+  transform: translateY(22px) scale(0.97);
+  transition:
+    opacity 1100ms ease,
+    transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.fx-reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* J: cursor point-light. A faint page-wide wash plus a per-widget sheen that
+   tracks the cursor's position inside the widget. */
+.fx-cursor-light::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: radial-gradient(
+    260px circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+    rgba(255, 255, 255, 0.05),
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+}
+
+.light .fx-cursor-light::after,
+.fx-cursor-light.light::after {
+  background: radial-gradient(
+    300px circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+    rgba(0, 0, 0, 0.05),
+    transparent 72%
+  );
+  mix-blend-mode: multiply;
+}
+
+.fx-light {
+  position: relative;
+  isolation: isolate;
+}
+
+.fx-light::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 320ms ease;
+  background: radial-gradient(
+    180px circle at var(--lx, 50%) var(--ly, 50%),
+    rgba(255, 255, 255, 0.16),
+    transparent 60%
+  );
+  mix-blend-mode: soft-light;
+}
+
+.fx-light:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
