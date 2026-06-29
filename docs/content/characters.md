@@ -5,104 +5,113 @@ homepage they appear as preview cards in `components/CharacterCarousel.jsx`; the
 full interactive dialogue lives on the standalone page `pages/cast/[id].js`,
 where the display opens as a full-window modal.
 
+A whole conversation is authored as **one markdown file per language**. The
+markdown is parsed by `lib/characters.js` into the graph + text the widget
+consumes; there is no per-character `index.js` or JSON anymore.
+
 ## Folder Layout
 
-Create one data folder and one media folder per character:
-
 ```text
-data/characters/<character>/
-public/characters/<character>/
+data/characters/<id>/zh.md      (en.md optional)
+public/characters/<id>/
 ```
 
-For a full bilingual character, use this shape:
+Media is auto-discovered from the public folder by filename convention:
 
-```text
-data/characters/<character>/index.js
-data/characters/<character>/zh.json
-data/characters/<character>/en.json
-public/characters/<character>/main-cg.svg
+- `bg-<scene>.png` — scene backgrounds (`- [BG](bg-<scene>.png)`).
+- `expression-<name>.<ext>` — dialogue sprites (`![x](expression-<name>.<ext>)`).
+  The `defaultExpression` from frontmatter is shown until the first switch.
+- `<id>-main-cg.png` — the still used everywhere outside the live dialogue stage
+  (cast cards, carousel, previews). Cards never use the default expression.
+
+## Global Settings
+
+`data/characters/index.js` holds everything shared across characters: the BGM
+track table (referenced by name from markdown), the per-locale display names for
+those tracks, and the UI chrome strings (control tooltips, music panel, backlog
+labels). It exports `getCharacters()`, which the pages call in `getStaticProps`.
+
+To add a BGM track, add it to the `BGM` map there and give it a display name in
+`TRACK_NAMES`; reference it in markdown as `- [BGM](<name>)`.
+
+## Markdown Format
+
+```md
+---
+"title": "角色名"
+"speaker": "角色名"
+"defaultExpression": "expression-neutral.svg"
+"defaultBGM": "main"
+"starterNode": "wake"
+"defaultNode": "tailing"
+---
+
+# 角色名
+
+Text right under the H1 is the short character blurb (cast card / meta).
+
+## 场景名
+
+- [BG](bg-scene.png)
+- [BGM](main)
+
+### wake
+
+![expression](expression-uncertain.png)
+
+第一句。每个非空行是单独显示的一句对话。
+
+第二句。
+
+![expression](expression-neutral.svg)
+
+第三句，从这一行开始换表情。
+
+- [SKIP](#look)
+
+### look
+
+提示文本。
+
+- [看向白色长刀](#blade) 0.5
+- [确认信号塔](#tower) 0.5
 ```
 
-## Character Index (language-neutral graph)
+### Rules
 
-`index.js` binds media, the background-music track, the story `graph`, and the
-locale JSON. The graph is authored once; only text is localized.
+- **Frontmatter** — `title`, `speaker`, `defaultExpression`, `defaultBGM`,
+  `starterNode`, `defaultNode`. `defaultNode` must always be defined; it is the
+  fallback target for skips and dead-ends. Node names are matched
+  case-insensitively (`#intro` == `Intro`).
+- **`# H1`** — the character title; the paragraph(s) under it are the `body`
+  blurb.
+- **`## H2`** — a scene. `- [BG](file)` sets its background (a file in the
+  character folder, or an absolute `/path`); `- [BGM](name)` sets its track. Every
+  node under the heading shares the scene background.
+- **`### H3`** — a dialogue node (id = heading text). Each non-empty line is one
+  displayed sentence; the window shows them one at a time.
+- **`![x](expression.png)`** — switches the sprite for the following lines.
+- **`![x](EMPTY)`** — hides the sprite entirely (renders nothing) until the next
+  expression switch.
+- **`- [BGM](name)`** mid-node — changes the running track from here on. It
+  persists; it is not reset on node or scene change.
+- **Choices** at the end of a node:
+  - `- [Label](#node) 0.3` — a weighted choice. Weight defaults to `1` if
+    omitted; weights need not sum to 1 (they are normalized by weighted sum).
+  - A node may list more than three choices; the display samples **three** by
+    weight. With three or fewer, all are shown.
+  - `- [SKIP](#node)` — jump straight to a node with no button. If a SKIP lands
+    in the sampled buffer of three, it fires immediately. A node whose only
+    choice is a SKIP is a plain transition.
+  - A node with **no** choices falls through to `defaultNode`. A choice pointing
+    at a node that does not exist is treated as `- [SKIP](#defaultNode)`.
 
-```js
-import zh from './zh.json'
-import en from './en.json'
+The widget keeps a per-sentence history stack, so the backlog panel and the
+"back to last choice / sentence" controls can return to any visited line.
 
-// Apple Music embed URL. Cross-origin embeds only play once deployed.
-const BGM = { id: 'main', src: 'https://embed.music.apple.com/us/song/.../123' }
+## Localization
 
-export const myCharacter = {
-  id: 'my-character',
-  defaultState: 'intro-1',
-  mainCg: '/characters/my-character/main-cg.svg',
-  background: '/story-media/scene.png',
-  defaultBgm: BGM,
-  expressions: { neutral: '/characters/my-character/main-cg.svg' },
-  graph: {
-    // Sentence node: advances through `next`. Optional `background` / `bgm`
-    // change the scene at this node and carry forward.
-    'intro-1': { expression: 'neutral', background: '/story-media/scene.png', bgm: BGM, next: 'intro-2' },
-    'intro-2': { expression: 'neutral', next: 'pick' },
-    // Decision node: two or more `choices` pause auto-play until the user picks.
-    pick: { expression: 'neutral', choices: [{ to: 'a-1' }, { to: 'b-1' }] },
-    'a-1': { expression: 'neutral' }, // end node: no `next`, no `choices`
-    'b-1': { expression: 'neutral' },
-  },
-  locales: { zh, en },
-}
-```
-
-Then export the character from `data/characters/index.js`.
-
-### Node types
-
-- **Sentence node** — has `next`, no multi-choice. Auto-play and the "next"
-  controls advance it automatically. Keep most nodes this way (~60%+ of the
-  graph should be continue-only).
-- **Decision node** — has `choices` with **two or more** entries. Auto-play
-  pauses here; the user must choose.
-- **End node** — no `next` and no `choices`.
-
-## Locale Text
-
-Each locale JSON owns chrome strings plus a `lines` map keyed by graph node id.
-Decision-node labels are an array aligned with that node's `choices` order.
-Author `zh` fully; `en` may stay a placeholder until a translation pass.
-
-```json
-{
-  "label": "角色对话",
-  "title": "角色名",
-  "speaker": "角色名",
-  "body": "简短角色描述。",
-  "openLabel": "点击进入对话",
-  "choiceLabel": "做出选择",
-  "controlsLabel": "对话控制",
-  "back": "返回全部角色",
-  "controls": {
-    "lastChoice": "回到上一个选择",
-    "lastSentence": "回到上一句",
-    "backlog": "对话回顾",
-    "auto": "自动播放",
-    "autoStop": "停止自动播放",
-    "nextSentence": "下一句",
-    "nextChoice": "快进到下一个选择"
-  },
-  "music": { "open": "背景音乐", "now": "正在播放", "close": "关闭音乐面板" },
-  "backlog": { "title": "对话回顾", "empty": "还没有可回顾的对话。", "jump": "返回这一句", "current": "当前", "reset": "回到开头", "close": "关闭回顾" },
-  "tracks": { "main": "曲目名" },
-  "lines": {
-    "intro-1": { "title": "开场", "text": "对话文本。" },
-    "pick": { "title": "选择", "text": "提示文本。", "choices": ["选项 A", "选项 B"] },
-    "a-1": { "title": "结局 A", "text": "结尾文本。" },
-    "b-1": { "title": "结局 B", "text": "结尾文本。" }
-  }
-}
-```
-
-The widget keeps a history stack, so the backlog panel and the "back to last
-choice / sentence" controls can return to any visited line.
+Author `zh.md` fully. `en.md` is optional and, because node ids are the
+(localized) headings, each language file is self-contained — keep the headings,
+choice targets, and media references consistent between languages. A missing
+`en.md` falls back to `zh.md`.

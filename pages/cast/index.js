@@ -5,18 +5,19 @@ import Navbar from '../navbar'
 import Footer from '../footer'
 import DefinitionText from '../../components/DefinitionText'
 import { useI18n } from '../../lib/i18n'
-import { characters } from '../../data/characters/index.js'
+import { getCharacters } from '../../data/characters/index.js'
 import { getDefinitions } from '../../lib/definitions'
 
 export async function getStaticProps() {
   return {
     props: {
       definitions: getDefinitions(),
+      characters: getCharacters(),
     },
   }
 }
 
-export default function CastPage({ definitions }) {
+export default function CastPage({ definitions, characters }) {
   const { locale, t } = useI18n()
 
   return (

@@ -41,12 +41,16 @@ The homepage should be treated as a visual novel surface first:
 - Navbar: `pages/navbar.js`
 - Footer: `pages/footer.js`
 - Bilingual content: `data/siteContent.js`
-- Side-story fragments: `data/sideStories/index.js`
-- Definition markdown: `data/definitions/*.md`
+- Side-story fragments: `data/sideStories/<id>/{zh,en}.md`
+- Side-story parser: `lib/sideStories.js`
+- Definition markdown: `data/definitions/<slug>/{zh,en}.md`
 - Definition parser: `lib/definitions.js`
+- Shared markdown/frontmatter helpers: `lib/markdown.js`
 - Inline definition tooltip/link component: `components/DefinitionText.jsx`
 - Definition page: `pages/defn.js`
-- Character display data: `data/characters/*/index.js` (graph) and `data/characters/<character>/*.json` (locale lines)
+- Character dialogue: `data/characters/<id>/{zh,en}.md` (one markdown file per language)
+- Character markdown parser: `lib/characters.js`
+- Character global settings + loader (BGM, chrome, `getCharacters()`): `data/characters/index.js`
 - Character dialogue component: `components/CharacterDisplay.jsx`
 - Background music component: `components/BgmPlayer.jsx` (Apple Music embeds; track URLs live in the character `bgm` data)
 - Fragments pages: `pages/fragments/index.js`, `pages/fragments/[id].js`

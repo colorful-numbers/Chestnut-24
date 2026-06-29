@@ -17,9 +17,9 @@ The site goal is not to be an information hub or utility portal. The front page 
 
 Side-story fragments live in `data/sideStories/`.
 
-- Add or edit fragments in `data/sideStories/index.js`.
+- Add or edit fragments as per-language markdown in `data/sideStories/<id>/{zh,en}.md`.
 - Put artwork or placeholder media under `public/story-media/`.
-- Each fragment should include `time`, `media`, and `zh` / `en` copy so the language toggle can switch the whole homepage.
+- Each fragment's frontmatter carries `time`, `media`, `order`, and a localized `kicker`; the body holds the title and prose so the language toggle can switch the whole homepage.
 - The homepage randomly selects at most five fragments from this folder on refresh.
 - Terms written as `【term】` are linked automatically when a matching definition exists in `data/definitions/`.
 
@@ -55,10 +55,10 @@ The `docs/` directory is intended to be published as a GitHub Pages documentatio
 Homepage frame copy is bilingual.
 
 - Site copy: `data/siteContent.js`
-- Side-story fragments: `data/sideStories/index.js`
+- Side-story fragments: `data/sideStories/<id>/{zh,en}.md`
 - Runtime hook/provider: `lib/i18n.js`
 - Locale storage key: `chestnut-locale`
-- Supported locales: `zh`, `en`
+- Supported locales: `zh` (`en` is currently under maintenance)
 
 ## Utilities
 

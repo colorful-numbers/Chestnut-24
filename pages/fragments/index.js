@@ -5,18 +5,19 @@ import Navbar from '../navbar'
 import Footer from '../footer'
 import DefinitionText from '../../components/DefinitionText'
 import { useI18n } from '../../lib/i18n'
-import { sideStories } from '../../data/sideStories'
 import { getDefinitions } from '../../lib/definitions'
+import { getSideStories } from '../../lib/sideStories'
 
 export async function getStaticProps() {
   return {
     props: {
       definitions: getDefinitions(),
+      sideStories: getSideStories(),
     },
   }
 }
 
-export default function FragmentsPage({ definitions }) {
+export default function FragmentsPage({ definitions, sideStories }) {
   const { locale, t } = useI18n()
 
   return (

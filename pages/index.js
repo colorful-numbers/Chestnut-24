@@ -5,20 +5,22 @@ import Footer from './footer'
 import StoryCarousel from '../components/StoryCarousel'
 import CharacterCarousel from '../components/CharacterCarousel'
 import { useI18n } from '../lib/i18n'
-import { sideStories } from '../data/sideStories'
-import { characters } from '../data/characters/index.js'
+import { getCharacters } from '../data/characters/index.js'
 import DefinitionText from '../components/DefinitionText'
 import { getDefinitions } from '../lib/definitions'
+import { getSideStories } from '../lib/sideStories'
 
 export async function getStaticProps() {
   return {
     props: {
       definitions: getDefinitions(),
+      sideStories: getSideStories(),
+      characters: getCharacters(),
     },
   }
 }
 
-export default function Home({ definitions }) {
+export default function Home({ definitions, sideStories, characters }) {
   const { locale, t } = useI18n()
 
   return (

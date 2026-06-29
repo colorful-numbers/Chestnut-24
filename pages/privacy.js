@@ -1,50 +1,44 @@
-
-
 'use client'
 
-import Head from 'next/head';
-import Navbar from './navbar';
-import Footer from './footer';
+import Head from 'next/head'
+import Navbar from './navbar'
+import Footer from './footer'
+import { useI18n } from '../lib/i18n'
 
 export default function Privacy() {
-    return (
-        <div className="min-h-screen flex flex-col">
-            <Head>
-                <title>Privacy Policy - Chestnut-24</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
+  const { t } = useI18n()
+  const p = t.privacy
 
-            <Navbar />
-            <main className="flex-grow">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="max-w-4xl mx-auto">
-                        <div className="rounded-lg shadow-md p-6 mb-6">
-                            <h1 className="text-4xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
+  return (
+    <div className="info-site min-h-screen flex flex-col">
+      <Head>
+        <title>{p.title} - {t.metaTitle}</title>
+        <meta name="description" content={p.intro} />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-                            <div className="prose prose-lg max-w-none">
-                                <p className="text-gray-600 mb-6">
-                                    Last updated: 2025-08-17
-                                </p>
-
-                                <section className="mb-8">
-                                    <h2 className="text-2xl font-semibold text-gray-800 mb-4">Information We Collect</h2>
-                                    <p className="text-gray-700 mb-4">
-                                        We collect (we define collect as storing any of your inputs outside of your local machine) <strong>absolutely no information</strong> from you. User-facing preferences and tool data are stored locally in your browser where possible.
-                                    </p>
-                                </section>
-
-                                <section className="mb-8">
-                                    <h2 className="text-2xl font-semibold text-gray-800 mb-4">Contact Us</h2>
-                                    <p className="text-gray-700 mb-4">
-                                        If you have any questions about this Privacy Policy, use the project channel where this site is maintained.
-                                    </p>
-                                </section>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-            <Footer />
-        </div>
-    );
+      <Navbar />
+      <main>
+        <section className="info-section defn-page">
+          <div className="section-heading section-heading--wide">
+            <div>
+              <span>{p.label}</span>
+              <h1>{p.title}</h1>
+            </div>
+            <p>{p.intro}</p>
+          </div>
+          <div className="privacy-body">
+            <p className="privacy-body__updated">{p.updated}</p>
+            {p.sections.map((section) => (
+              <section key={section.heading}>
+                <h2>{section.heading}</h2>
+                <p>{section.body}</p>
+              </section>
+            ))}
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  )
 }

@@ -13,7 +13,7 @@ export async function getStaticProps() {
 }
 
 export default function DefinitionsPage({ definitions }) {
-  const { t } = useI18n()
+  const { locale, t } = useI18n()
 
   return (
     <div className="info-site min-h-screen flex flex-col">
@@ -32,13 +32,16 @@ export default function DefinitionsPage({ definitions }) {
             <p>{t.defn.body}</p>
           </div>
           <div className="defn-grid">
-            {definitions.map((definition) => (
-              <article key={definition.slug} id={definition.slug} className="defn-card">
-                <span>{definition.aliases.join(' / ') || definition.slug}</span>
-                <h2>{definition.title}</h2>
-                <p>{definition.summary}</p>
-              </article>
-            ))}
+            {definitions.map((definition) => {
+              const copy = definition[locale] || definition.zh
+              return (
+                <article key={definition.slug} id={definition.slug} className="defn-card">
+                  <span>{definition.aliases.join(' / ') || definition.slug}</span>
+                  <h2>{copy.title}</h2>
+                  <p>{copy.summary}</p>
+                </article>
+              )
+            })}
           </div>
         </section>
       </main>

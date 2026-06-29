@@ -1,8 +1,10 @@
+import { useI18n } from '../lib/i18n'
+
 export default function DefinitionText({ children, definitions = [] }) {
+  const { locale } = useI18n()
   if (typeof children !== 'string') return children
 
   const lookup = definitions.reduce((current, definition) => {
-    current[definition.title] = definition
     ;(definition.aliases || []).forEach((alias) => {
       current[alias] = definition
     })
@@ -18,6 +20,8 @@ export default function DefinitionText({ children, definitions = [] }) {
     const definition = lookup[label]
     if (!definition) return part
 
+    const copy = definition[locale] || definition.zh
+
     return (
       <a
         key={`${label}-${index}`}
@@ -26,8 +30,8 @@ export default function DefinitionText({ children, definitions = [] }) {
       >
         {part}
         <span className="definition-tooltip" role="tooltip">
-          <strong>{definition.title}</strong>
-          <span>{definition.summary}</span>
+          <strong>{copy.title}</strong>
+          <span>{copy.summary}</span>
         </span>
       </a>
     )

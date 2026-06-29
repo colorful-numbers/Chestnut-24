@@ -6,7 +6,8 @@ import { useTheme } from 'next-themes'
 import { useI18n } from '../lib/i18n'
 
 function LanguageSwitch({ compact = false }) {
-  const { locale, setLocale, t } = useI18n()
+  const { locale, setLocale, t, maintenanceLocales = [] } = useI18n()
+  const enDisabled = maintenanceLocales.includes('en')
 
   return (
     <div className={`language-switch ${compact ? 'language-switch--compact' : ''}`} aria-label={t.nav.language}>
@@ -21,6 +22,10 @@ function LanguageSwitch({ compact = false }) {
         type="button"
         className={locale === 'en' ? 'is-active' : ''}
         onClick={() => setLocale('en')}
+        disabled={enDisabled}
+        aria-disabled={enDisabled}
+        title={enDisabled ? t.nav.maintenance : undefined}
+        data-maintenance={enDisabled ? t.nav.maintenance : undefined}
       >
         EN
       </button>

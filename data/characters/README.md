@@ -1,22 +1,23 @@
 # Characters
 
-Each character display binds one data folder to one media folder.
+Each character is one markdown file per language plus a media folder.
 
-Data folder pattern:
+```text
+data/characters/<id>/zh.md      (en.md optional)
+public/characters/<id>/
+```
 
-- `data/characters/<character>/index.js`
+The markdown carries the whole conversation — scenes, dialogue, expression and
+bgm switches, and weighted choices. Global settings (the BGM track table, the
+shared UI chrome strings, and the loader) live in
+[`data/characters/index.js`](./index.js), which exports `getCharacters()` for the
+pages to call in `getStaticProps`.
 
-Media folder pattern:
+Media is auto-discovered from `public/characters/<id>/`:
 
-- `public/characters/<character>/`
+- `bg-<scene>.png` — scene backgrounds, referenced by `- [BG](bg-<scene>.png)`.
+- `expression-<name>.<ext>` — dialogue sprites, referenced by `![x](expression-<name>.<ext>)`.
+- `<id>-main-cg.png` — the still used on cast cards and previews (not the default expression).
 
-Each character data file should define:
-
-- main CG path
-- expression image paths
-- `zh.json` and `en.json` locale files
-- dialogue states
-- predefined choices that jump to the next dialogue state
-- predefined answers for each state
-
-The first demo is `qi`, used by `components/CharacterDisplay.jsx`.
+See [docs/content/characters.md](../../docs/content/characters.md) for the full
+markdown format. `qi/zh.md` is the reference example.

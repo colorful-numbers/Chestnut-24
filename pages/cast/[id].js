@@ -2,18 +2,18 @@ import Head from 'next/head'
 import Navbar from '../navbar'
 import CharacterDisplay from '../../components/CharacterDisplay'
 import { useI18n } from '../../lib/i18n'
-import { characters } from '../../data/characters/index.js'
+import { getCharacters } from '../../data/characters/index.js'
 import { getDefinitions } from '../../lib/definitions'
 
 export async function getStaticPaths() {
   return {
-    paths: characters.map((character) => ({ params: { id: character.id } })),
+    paths: getCharacters().map((character) => ({ params: { id: character.id } })),
     fallback: false,
   }
 }
 
 export async function getStaticProps({ params }) {
-  const character = characters.find((item) => item.id === params.id) || null
+  const character = getCharacters().find((item) => item.id === params.id) || null
   return {
     props: {
       character,

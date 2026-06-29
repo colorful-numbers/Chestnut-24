@@ -10,7 +10,12 @@ The folder is parallel to `data/sideStories/` because definitions are story cont
 
 ## File Shape
 
-Create one markdown file per term:
+Create one folder per term with a markdown file per language:
+
+```text
+data/definitions/<slug>/zh.md
+data/definitions/<slug>/en.md
+```
 
 ```markdown
 ---
@@ -25,11 +30,15 @@ Longer notes can continue below. They appear on the `/defn` page as source conte
 
 ## Parsing Rules
 
-- The filename becomes the stable slug, for example `miracle.md` becomes `/defn#miracle`.
+- The folder name becomes the stable slug, for example `miracle/` becomes `/defn#miracle`.
+- Each language file is rendered in that language; a missing file falls back to `zh.md`.
 - The first `#` heading becomes the displayed title.
-- `aliases` are optional and let English text or alternate names link to the same definition.
+- `aliases` are optional. Lookup is language-neutral: every alias plus each
+  locale title resolves to the same definition, so `【奇迹】` and `【Miracle】`
+  both link here.
 - The first paragraph after the heading becomes the tooltip summary.
-- `README.md` inside `data/definitions/` is ignored by the parser.
+- Any other frontmatter keys are kept as extra metadata (`meta`).
+- Only subfolders are parsed; `README.md` at the root of `data/definitions/` is ignored.
 
 ## Inline Links
 
@@ -46,7 +55,7 @@ If a matching title or alias exists, `components/DefinitionText.jsx` turns the l
 The initial definition set covers:
 
 - `【奇迹】`
-- `【精灵回廊】`
+- `【回廊】`
 - `【冬眠】`
 - `【忘却职业】`
 - `【智能当量】`

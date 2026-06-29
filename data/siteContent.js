@@ -33,6 +33,7 @@ export const siteCopy = {
       theme: '切换明暗主题',
       menu: '菜单',
       language: '语言',
+      maintenance: '英文版维护中',
     },
     hero: {
       kicker: 'INTERACTIVE VISUAL FICTION',
@@ -47,6 +48,11 @@ export const siteCopy = {
       label: 'DEFINITIONS',
       title: '定义',
       body: '从设定文档自动解析出的术语表。正文中被【】标记的术语会链接到这里。',
+    },
+    docs: {
+      label: 'DEV NOTES',
+      title: '开发笔记',
+      body: '按版本记录的开发笔记，最新的版本排在最前面。',
     },
     notice: {
       label: 'RANDOM FRAGMENTS',
@@ -79,11 +85,32 @@ export const siteCopy = {
         },
       ],
     },
+    privacy: {
+      label: 'PRIVACY',
+      title: '隐私政策',
+      updated: '最后更新：2026-06-29',
+      intro: '除用于排查故障的调试数据外，本站不会收集任何访问者的任何数据。',
+      sections: [
+        {
+          heading: '我们收集的信息',
+          body: '我们（“收集”指将你的任何输入存储到你本地设备之外）不收集任何访问者的个人信息。用户偏好与工具数据会尽可能只保存在你本地的浏览器中。唯一可能离开你设备的，是匿名的调试数据。',
+        },
+        {
+          heading: '调试数据',
+          body: '调试数据指匿名的错误日志与诊断信息，不包含可识别个人身份的内容，仅用于发现并修复站点故障。',
+        },
+        {
+          heading: '联系我们',
+          body: '如果你对本隐私政策有任何疑问，请通过维护本站的项目渠道与我们联系。',
+        },
+      ],
+    },
     footer: '交互式视觉小说 / 栗世界',
+    footerRights: '保留所有权利',
     footerMenu: {
       lab: 'Colorful numbers Lab',
       oldIndex: '旧主页',
-      docs: '文档',
+      docs: '开发笔记',
       privacy: '隐私',
     },
   },
@@ -100,6 +127,7 @@ export const siteCopy = {
       theme: 'Toggle light and dark theme',
       menu: 'Menu',
       language: 'Language',
+      maintenance: 'English is under maintenance',
     },
     hero: {
       kicker: 'INTERACTIVE VISUAL FICTION',
@@ -114,6 +142,11 @@ export const siteCopy = {
       label: 'DEFINITIONS',
       title: 'Definitions',
       body: 'A term index automatically parsed from local definition documents. Terms marked with 【】 link here.',
+    },
+    docs: {
+      label: 'DEV NOTES',
+      title: 'Dev Notes',
+      body: 'Development notes by version, newest first.',
     },
     notice: {
       label: 'RANDOM FRAGMENTS',
@@ -146,11 +179,32 @@ export const siteCopy = {
         },
       ],
     },
+    privacy: {
+      label: 'PRIVACY',
+      title: 'Privacy Policy',
+      updated: 'Last updated: 2026-06-29',
+      intro: 'This site collects no data from any visitor, except debugging data used to fix problems.',
+      sections: [
+        {
+          heading: 'Information We Collect',
+          body: 'We (where "collect" means storing any of your input outside your own device) collect no personal information from any visitor. User-facing preferences and tool data are kept in your local browser wherever possible. The only thing that may leave your device is anonymous debugging data.',
+        },
+        {
+          heading: 'Debugging Data',
+          body: 'Debugging data means anonymous error logs and diagnostics. It contains nothing that identifies you personally and is used only to find and fix site problems.',
+        },
+        {
+          heading: 'Contact Us',
+          body: 'If you have any questions about this Privacy Policy, reach us through the project channel where this site is maintained.',
+        },
+      ],
+    },
     footer: 'interactive visual fiction / Set of Chestnut',
+    footerRights: 'All rights reserved',
     footerMenu: {
       lab: 'Colorful numbers Lab',
       oldIndex: 'old index',
-      docs: 'docs',
+      docs: 'dev notes',
       privacy: 'privacy',
     },
   },

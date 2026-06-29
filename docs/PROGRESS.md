@@ -1,5 +1,121 @@
 # Progress Log
 
+## 2026-06-28 Continued 3
+
+### Character Display: Responsive, Themed, Animated
+
+- **Wide-screen layout.** Introduced a `--dialog-width` / `--dialog-margin` pair
+  on `.character-stage`; the dialogue window, controls, and choices now all align
+  to the same centred band at any width (no more controls/choices drifting to the
+  viewport edges on ultrawide screens), and the band widens to `min(78%, 1100px)`.
+- **Theming.** The character display read hardcoded dark colours. Added
+  theme-aware `--stage-*` variables on `.character-stage` with `.light` overrides,
+  and switched the dialogue window, controls, choices, tooltips, and backlog to
+  them, so the widget follows the light/dark toggle (correct panel/text colours in
+  light mode).
+- **Scene crossfade.** The previous background is now an `<img>` layer that stays
+  opaque while the incoming scene fades in over it (720ms ease-in-out dissolve).
+- **Expression animation.** Sprites render through prev/next layers: on a switch
+  the outgoing sprite lifts up and fades out while the incoming one settles down
+  into place (`spriteSwapIn/Out`). Honors `prefers-reduced-motion`.
+- **EMPTY sprite tag.** `lib/characters.js` now resolves expression markers at
+  parse time and supports `![x](EMPTY)` and `- [expression](EMPTY)`, which set a
+  shared `EMPTY` sentinel; `CharacterDisplay` renders no sprite until the next
+  switch.
+
+## 2026-06-28 Continued 2
+
+### Expression Sprite Sizing
+
+- The expression sprites were given real transparency with an external tool, so
+  the in-app canvas keying was removed. `CharacterDisplay` renders the per-line
+  expression as a plain `<img>` again.
+- The stage sprite (`.character-stage__sprite`) is styled to occupy 5/6 of the
+  stage height, centred horizontally and anchored to the bottom with
+  `object-fit: contain`, so the scene background shows behind the character.
+
+## 2026-06-28 Continued
+
+### Markdown-Authored Character Dialogue
+
+Replaced the per-character JS graph + JSON locale files with a single markdown
+file per language, driven by a new format the owner proposed.
+
+- Added `lib/characters.js` — parses a character markdown file into the
+  `{ graph, lines }` shape `CharacterDisplay` consumes. Format:
+  - Frontmatter: `title`, `speaker`, `defaultExpression`, `defaultBGM`,
+    `starterNode`, `defaultNode` (node names matched case-insensitively).
+  - `# H1` body = character blurb; `## H2` = scene with `- [BG](file)` /
+    `- [BGM](name)`; `### H3` = dialogue node (id = heading).
+  - Each non-empty line under a node is one displayed sentence; `![x](expr.png)`
+    switches the sprite for following lines; a mid-node `- [BGM](name)` changes
+    the running track and persists.
+  - Choices: `- [Label](#node) 0.3` (weighted; default weight 1, normalized by
+    weighted sum). `- [SKIP](#node)` jumps with no button and fires if sampled
+    into the buffer of three. No choices → fall through to `defaultNode`; an
+    unknown target → treated as a skip to `defaultNode`.
+- Reworked `data/characters/index.js` into the global config + loader: the BGM
+  track table, per-locale track display names, shared UI chrome strings, and
+  `getCharacters()` (scans `data/characters/*`, parses `{zh,en}.md`,
+  auto-discovers `bg-*` / `expression-*` / `*main-cg*` media in
+  `public/characters/<id>/`, and JSON-sanitizes for `getStaticProps`). Removed
+  every per-character `index.js`, `zh.json`, and `en.json`.
+- `CharacterDisplay.jsx` now reads the graph/defaults from the active locale
+  (`copy.graph`, `copy.starterNode`, `copy.defaultBackground/defaultBgm`), shows
+  the per-line expression sprite, and auto-advances when a SKIP is sampled.
+- Pages (`index.js`, `cast/index.js`, `cast/[id].js`) now receive characters via
+  `getCharacters()` in `getStaticProps`/`getStaticPaths` (the loader is fs-based
+  and server-only).
+- Generated `data/characters/qi/zh.md` as the reference example and copied Qi's
+  backgrounds into `public/characters/qi/` as `bg-*.png`. `artifact101/zh.md` is
+  the owner's uploaded test conversation.
+
+Open follow-up: `artifact101` references expression sprites
+(`expression-happy.png`, etc.) that are not in `public/characters/artifact101/`
+yet, so those frames fall back to the cast still until the art is added. (Note a
+typo in that test file: `expression-focusd.png`.)
+
+## 2026-06-28
+
+### EN Maintenance, List-Based Dialogue, Weighted Choices, And Markdown Content
+
+Work completed in this round:
+
+- Disabled the English locale and labelled it as under maintenance. `lib/i18n.js`
+  now exports `MAINTENANCE_LOCALES`/`isLocaleAvailable`; `normalizeLocale` blocks
+  maintenance locales (saved `en` falls back to `zh`), and the navbar EN button is
+  disabled with a hover "维护中" label (`nav.maintenance` copy + a `[disabled]`
+  style on `.language-switch`).
+- Split the inline `artifact101` character out of `data/characters/index.js` into
+  its own `data/characters/artifact101/{index.js,zh.json,en.json}` folder, matching
+  the Qi structure. `index.js` now just composes `qiCharacter` and `artifact101Character`.
+- Rewired dialogue so each line's `text` is a **list of sentences** shown one at a
+  time. The story graph was re-segmented: each node now groups a run of sentences
+  and ends with either a weighted `choices` decision or a `next` scene/bgm change
+  (e.g. Qi's `wake-1/2/3` collapsed into one `wake` node). Migrated both characters'
+  zh/en JSON to the array format.
+- Reworked `components/CharacterDisplay.jsx` around a `(node, lineIndex)` cursor:
+  history, backlog, "back to last sentence/choice", auto-play, and skip-to-choice
+  all step sentence-by-sentence and cross node transitions.
+- Implemented Markov-style weighted choices. Choices carry a `weight` (distribution
+  sums to 1); a node may hold more than three. The display samples three by weight
+  when there are more than three, and shows all when there are three or fewer
+  (`sampleWeightedIndices`, re-rolled per node visit).
+- Converted definitions and side stories from JS/single-file content to per-language
+  markdown folders: `data/definitions/<slug>/{zh,en}.md` and
+  `data/sideStories/<id>/{zh,en}.md`. Frontmatter holds extra attributes (aliases,
+  time, media, order, kicker); bodies hold localized prose. Added `lib/markdown.js`
+  (shared frontmatter parser), `lib/sideStories.js`, and made `lib/definitions.js`
+  locale-aware. `DefinitionText`, the `/defn` page, and the fragments pages/homepage
+  now render the correct language; definition lookup is language-neutral so both
+  `【奇迹】` and `【Miracle】` resolve.
+
+### Validation Notes
+
+- `npm run build` passes; all 34 pages prerender, including `/cast/{qi,artifact101}`
+  and the five `/fragments/*` paths. Spot-checked that definition, fragment, and
+  dialogue text appear in the generated HTML.
+
 ## 2026-06-27 Continued
 
 ### Artifact101 Rename And Apple Music Embeds

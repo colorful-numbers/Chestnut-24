@@ -5,18 +5,18 @@ import Navbar from '../navbar'
 import Footer from '../footer'
 import DefinitionText from '../../components/DefinitionText'
 import { useI18n } from '../../lib/i18n'
-import { sideStories } from '../../data/sideStories'
 import { getDefinitions } from '../../lib/definitions'
+import { getSideStories } from '../../lib/sideStories'
 
 export async function getStaticPaths() {
   return {
-    paths: sideStories.map((story) => ({ params: { id: story.id } })),
+    paths: getSideStories().map((story) => ({ params: { id: story.id } })),
     fallback: false,
   }
 }
 
 export async function getStaticProps({ params }) {
-  const story = sideStories.find((item) => item.id === params.id) || null
+  const story = getSideStories().find((item) => item.id === params.id) || null
   return {
     props: {
       story,
