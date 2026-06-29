@@ -116,6 +116,7 @@ export default function CharacterDisplay({
   // its target instead of showing buttons.
   const autoSkipTo = sampledChoices.find((choice) => choice.skip)?.to || null
   const visibleChoices = sampledChoices.filter((choice) => !choice.skip)
+  const choicesShown = isDecision && !autoSkipTo && visibleChoices.length > 0
 
   // Resolve the active scene (background + bgm) by replaying the visited path so
   // carried-forward values stay correct even after backlog jumps.
@@ -349,7 +350,7 @@ export default function CharacterDisplay({
           className="character-stage__bgm"
         />
 
-        {isDecision && !autoSkipTo && visibleChoices.length > 0 && (
+        {choicesShown && (
           <div className="dialog-choices" aria-label={copy.choiceLabel}>
             {visibleChoices.map((choice) => (
               <button key={`${stateId}-${choice.to}`} type="button" onClick={() => choose(choice.to)}>
@@ -359,7 +360,7 @@ export default function CharacterDisplay({
           </div>
         )}
 
-        <div className="dialog-controls" aria-label={copy.controlsLabel}>
+        <div className={`dialog-controls ${choicesShown ? 'dialog-controls--choosing' : ''}`} aria-label={copy.controlsLabel}>
           <button
             type="button"
             className="dialog-controls__btn"

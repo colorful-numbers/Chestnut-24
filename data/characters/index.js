@@ -9,17 +9,26 @@ const LOCALES = ['zh', 'en']
 // --- Global settings (shared by every character) ---------------------------
 
 // Background-music tracks. Referenced by name from character markdown via
-// `- [BGM](main)`. Apple Music embeds only play once deployed to a real domain;
-// that is acceptable for local preview.
+// `- [BGM](main)`. `src` is a local file played by an <audio> element; `embed`
+// keeps the original Apple Music embed URL for future use (see BgmPlayer).
+// Local tracks are public-domain recordings from Wikimedia Commons.
 const BGM = {
-  main: { id: 'main', src: 'https://embed.music.apple.com/us/song/kimi-ga-umareta-hi-feat-hatsune-miku/409345971' },
-  silent: { id: 'silent', src: 'https://embed.music.apple.com/us/song/nuit/1335309747' },
+  main: {
+    id: 'main',
+    src: '/music/Erik_Satie_-_gymnopedies_-_la_1_ere._lent_et_douloureux.ogg',
+    embed: 'https://embed.music.apple.com/us/song/kimi-ga-umareta-hi-feat-hatsune-miku/409345971',
+  },
+  silent: {
+    id: 'silent',
+    src: "/music/Ludwig_van_Beethoven_-_sonata_no._14_in_c_sharp_minor_'moonlight',_op._27_no._2_-_i._adagio_sostenuto.ogg",
+    embed: 'https://embed.music.apple.com/us/song/nuit/1335309747',
+  },
 }
 
 // Display names for each BGM track, per locale.
 const TRACK_NAMES = {
-  zh: { main: '君が生まれた日 (feat. 初音未来)', silent: 'Nuit' },
-  en: { main: 'Kimi ga Umareta Hi (feat. Hatsune Miku)', silent: 'Nuit' },
+  zh: { main: 'Gymnopédie No.1 · Erik Satie', silent: '月光奏鸣曲 第一乐章 · Beethoven' },
+  en: { main: 'Gymnopédie No.1 · Erik Satie', silent: 'Moonlight Sonata, Mvt. I · Beethoven' },
 }
 
 // UI chrome strings. The dialogue markdown only carries story content, so these
@@ -41,7 +50,7 @@ const CHROME = {
       nextSentence: '下一句',
       nextChoice: '快进到下一个选择',
     },
-    music: { open: '背景音乐', play: '播放音乐', pause: '暂停音乐', volume: '音量', now: '正在播放', close: '关闭音乐面板' },
+    music: { open: '背景音乐', play: '播放音乐', pause: '暂停音乐', volume: '音量', mute: '静音', unmute: '取消静音', now: '正在播放', close: '关闭音乐面板' },
     backlog: { title: '对话回顾', empty: '还没有可回顾的对话。', jump: '返回这一句', current: '当前', reset: '回到开头', close: '关闭回顾' },
   },
   en: {
@@ -60,7 +69,7 @@ const CHROME = {
       nextSentence: 'Next line',
       nextChoice: 'Skip to next choice',
     },
-    music: { open: 'Background music', play: 'Play music', pause: 'Pause music', volume: 'Volume', now: 'Now playing', close: 'Close music panel' },
+    music: { open: 'Background music', play: 'Play music', pause: 'Pause music', volume: 'Volume', mute: 'Mute', unmute: 'Unmute', now: 'Now playing', close: 'Close music panel' },
     backlog: { title: 'Backlog', empty: 'No dialogue history yet.', jump: 'Jump back here', current: 'Current', reset: 'Back to start', close: 'Close backlog' },
   },
 }

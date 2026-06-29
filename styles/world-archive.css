@@ -558,22 +558,24 @@ a.story-carousel__card:focus-visible {
 
 .dialog-choices {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.55rem;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
   position: absolute;
   right: var(--dialog-margin);
   bottom: calc(33% + 1rem);
   z-index: 5;
+  width: min(380px, 52%);
   max-width: calc(var(--dialog-width) * 0.7);
 }
 
 .dialog-choices button {
   min-height: 40px;
-  border-radius: 999px;
-  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
   background: var(--stage-panel);
-  color: var(--stage-muted);
+  color: var(--stage-text);
+  text-align: left;
 }
 
 .dialog-choices button:hover,
@@ -1518,6 +1520,38 @@ a.story-carousel__card:focus-visible {
   overflow: hidden;
 }
 
+.bgm-player__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.25rem 0.15rem;
+}
+
+.bgm-player__ctrl {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--stage-line, rgba(244, 244, 241, 0.24));
+  border-radius: 999px;
+  background: transparent;
+  color: var(--stage-text, #f4f4f1);
+  cursor: pointer;
+}
+
+.bgm-player__ctrl:hover,
+.bgm-player__ctrl:focus-visible {
+  background: color-mix(in srgb, var(--stage-text, #f4f4f1) 14%, transparent);
+}
+
+.bgm-player__volume {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--stage-text, #f4f4f1);
+  cursor: pointer;
+}
+
 /* ----- Dialogue controls + tooltips ----- */
 .dialog-controls__btn {
   position: relative;
@@ -1679,6 +1713,16 @@ a.story-carousel__card:focus-visible {
 
   .character-stage__back span {
     display: none;
+  }
+
+  /* On compact screens the choice menu needs the room, so hide the control bar
+     while a choice is prompted; it returns once there are no choices. */
+  .dialog-controls--choosing {
+    display: none;
+  }
+
+  .dialog-choices {
+    width: min(440px, 86%);
   }
 }
 
