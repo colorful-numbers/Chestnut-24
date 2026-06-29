@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-label="Qi main CG placeholder">
-  <rect width="1400" height="900" fill="#111"/>
-  <path d="M0 690 C260 610 480 660 700 570 S1120 460 1400 360" fill="none" stroke="#ddd" stroke-width="2" opacity=".2"/>
-  <path d="M980 160 V650 M930 650 H1030 M960 210 H1000" stroke="#ddd" opacity=".3"/>
-  <path d="M430 720 L680 300" stroke="#eee" stroke-width="4" opacity=".34"/>
-  <text x="72" y="96" fill="#aaa" font-family="Arial, sans-serif" font-size="24">QI MAIN CG PLACEHOLDER</text>
-</svg>

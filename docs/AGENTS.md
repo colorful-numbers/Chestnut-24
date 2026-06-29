@@ -31,7 +31,6 @@ The homepage should be treated as a visual novel surface first:
 - Use `components/BgmPlayer.jsx` for background music (corner circle that expands to a panel holding an Apple Music embed with its own controls). BGM `bgm.src` values are Apple Music embed URLs; the iframe stays mounted while collapsed so playback continues. Cross-origin embeds only play once deployed to a real domain — they will not play on localhost, which is acceptable. Scene changes switch `background` and `bgm` from the active node, with a crossfade on the background image.
 - Localization policy: author Chinese (`zh`) fully; use placeholders for English (`en`) until a translation pass is explicitly requested. The maintainer previews the Chinese site only.
 - Keep the primary visual theme monochrome: black, white, gray, and low-saturation accents only. Titles in heroes and cards use the top-to-bottom `titleFadeDown` reveal.
-- Preserve existing utility routes under `pages/utils/*`, but do not use them as the homepage focus.
 - Record meaningful implementation progress in `docs/PROGRESS.md`.
 - Do not modify the root `AGENTS.md` submodule; project rules live here in `docs/AGENTS.md`.
 
@@ -59,7 +58,6 @@ The homepage should be treated as a visual novel surface first:
 - Character media placeholders: `public/characters/*` (e.g. `public/characters/artifact101/`)
 - i18n hook: `lib/i18n.js`
 - Site styling: `styles/world-archive.css`
-- Utility archive component: `components/ToolArchive.jsx`
 
 ## Local Build
 
@@ -75,6 +73,6 @@ On Windows PowerShell, use `npm.cmd` if script execution policy blocks `npm.ps1`
 At the end of each modification round:
 
 1. Run the relevant validation command.
-2. Smoke-test `/`, `/defn`, `/utils`, and `/settings`.
+2. Smoke-test `/`, `/defn`, `/fragments`, and `/cast`.
 3. Check that visible external links and dev/process notes have not been reintroduced into the homepage.
 4. Update `docs/PROGRESS.md` with a brief entry.

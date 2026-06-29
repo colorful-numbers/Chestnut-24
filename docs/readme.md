@@ -10,8 +10,6 @@ The public homepage should prioritize:
 - bilingual presentation
 - media placeholders that can later be replaced with generated art
 
-Utilities remain available under `pages/utils/*`, but they are not part of the primary homepage experience.
-
 ## Runtime Shape
 
 - Framework: Next.js pages router

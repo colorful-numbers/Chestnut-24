@@ -1,24 +1,5 @@
 export const locales = ['zh', 'en']
 
-export const tools = [
-  { title: 'Timer', href: '/utils/timer', category: 'Time', body: 'Countdown timer and stopwatch.' },
-  { title: 'Graph explorer', href: '/utils/graph_explorer', category: 'Model', body: 'Explore graphs in real time.' },
-  { title: 'Random generator', href: '/utils/random_gen', category: 'Generate', body: 'Generate numbers, arrays, graphs, permutations, and strings.' },
-  { title: 'QR code converter', href: '/utils/qr_convert', category: 'Convert', body: 'Convert text to QR code and inspect QR data.' },
-  { title: 'Lofi camera', href: '/utils/lofi_camera', category: 'Media', body: 'Turn a camera frame into a blocky low-fi image.' },
-  { title: 'Division raster', href: '/utils/division_raster', category: 'Visual', body: 'Interactive raster experiment.' },
-  { title: 'Dice Visualizer', href: '/utils/dice_visualizer', category: 'Probability', body: 'Visualize dice expressions for tabletop games.' },
-  { title: 'Workday2Calendar', href: '/utils/workday2calendar', category: 'Calendar', body: 'Convert a Workday schedule into an importable calendar file.' },
-  { title: 'Sheaf Explorer', href: '/utils/sheaf_explorer', category: 'Math', body: 'Explore sheaves interactively.' },
-  { title: 'Personality Test', href: '/utils/mbti_test', category: 'Play', body: 'A compact interactive personality test.' },
-  { title: 'Penrose Tiling Explorer', href: '/utils/penrose_tiling', category: 'Geometry', body: 'Generate and explore aperiodic Penrose tilings.' },
-  { title: 'Geometry of Music', href: '/utils/geometry_of_music', category: 'Music', body: 'Explore musical structures geometrically.' },
-  { title: 'Reaction Simulator', href: '/utils/reaction_simulator', category: 'Simulation', body: 'Run configurable particle reaction simulations.' },
-  { title: 'Miku Tap', href: '/utils/miku_tap', category: 'Experience', body: 'Interactive music experience.' },
-  { title: 'Mathlib Explorer', href: '/utils/mathlib_explorer', category: 'Math', body: 'Browse mathlib through a graph interface.' },
-  { title: 'Otto-hzys', href: '/utils/otto_hzys', category: 'Experience', body: 'Interactive reference experience.' },
-]
-
 export const siteCopy = {
   zh: {
     metaTitle: '栗世界',
@@ -29,7 +10,6 @@ export const siteCopy = {
       defn: '定义',
       notice: '碎片',
       system: '角色',
-      tools: '工具',
       theme: '切换明暗主题',
       menu: '菜单',
       language: '语言',
@@ -70,20 +50,6 @@ export const siteCopy = {
       pageBody: '故事里出场的角色。点击任意角色进入独立的对话页面，按自己的选择推进剧情。',
       enter: '进入对话',
       back: '返回全部角色',
-      cards: [
-        {
-          title: '器',
-          label: 'VESSEL',
-          media: '/story-media/character-vessel.svg',
-          body: '奇迹发生时刚刚成年的人。她带着一把白色长刀在废墟城市中醒来，记得自己似乎是为了承载某些关于人类过去的记忆而踏上旅途。',
-        },
-        {
-          title: '作品101',
-          label: '101',
-          media: '/story-media/character-101.svg',
-          body: '一个由记忆拼凑、由人类养大的独立 AI。她像预言，也像参考答案，可能消失在沉默世界里，也可能继续以近似人类的方式旅行。',
-        },
-      ],
     },
     privacy: {
       label: 'PRIVACY',
@@ -123,7 +89,6 @@ export const siteCopy = {
       defn: 'Defn',
       notice: 'Fragments',
       system: 'Cast',
-      tools: 'Tools',
       theme: 'Toggle light and dark theme',
       menu: 'Menu',
       language: 'Language',
@@ -164,20 +129,6 @@ export const siteCopy = {
       pageBody: 'The characters who appear in the story. Open any character for a dedicated dialogue page and move the storyline forward through your own choices.',
       enter: 'Enter the dialogue',
       back: 'Back to the cast',
-      cards: [
-        {
-          title: 'Qi',
-          label: 'VESSEL',
-          media: '/story-media/character-vessel.svg',
-          body: 'A young person from the time of the Miracle. She wakes in a ruined city with a white blade and the sense that she once chose to carry memories of humanity before the new age.',
-        },
-        {
-          title: 'Artifact 101',
-          label: '101',
-          media: '/story-media/character-101.svg',
-          body: 'An independent AI assembled from memory and raised in a human-like environment. She is part prophecy, part answer key, and may have vanished into the silent world or continued traveling as something close to human.',
-        },
-      ],
     },
     privacy: {
       label: 'PRIVACY',

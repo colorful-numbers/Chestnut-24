@@ -60,10 +60,6 @@ Homepage frame copy is bilingual.
 - Locale storage key: `chestnut-locale`
 - Supported locales: `zh` (`en` is currently under maintenance)
 
-## Utilities
-
-Utility routes remain under `pages/utils/*` for compatibility, but they are not embedded in the visual novel homepage.
-
 ## Agent Notes
 
 Canonical agent guidance is supplied by the root `AGENTS.md` submodule. Chestnut-24-specific rules live in `docs/AGENTS.md`, and the round-end checklist lives in `docs/LLM_CHECK.md`.
