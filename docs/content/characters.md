@@ -90,6 +90,15 @@ Text right under the H1 is the short character blurb (cast card / meta).
   node under the heading shares the scene background.
 - **`### H3`** — a dialogue node (id = heading text). Each non-empty line is one
   displayed sentence; the window shows them one at a time.
+- **Inline formatting** inside a sentence is resolved before typing, so the raw
+  syntax never appears on screen (`lib/richText.js` + `components/RichText.jsx`).
+  Supported: `**bold**`, `*italic*` / `_italic_`, `~~strike~~`, `[label](url)`
+  links, a leading `>` for a quotation, and simple inline HTML
+  (`<b> <i> <u> <s>`, `<span style="color: …">` / `<font color="…">`). Block
+  markdown (lists, code blocks, images, `details`) is **not** parsed — a leading
+  `-`/`*` list item is reserved for choices and config. A `~~strike~~` run is
+  typed out and then deleted with a backspace animation, so the finished line
+  omits it (the backlog still shows it struck through).
 - **`![x](expression.png)`** — switches the sprite for the following lines.
 - **`![x](EMPTY)`** — hides the sprite entirely (renders nothing) until the next
   expression switch.
@@ -100,9 +109,11 @@ Text right under the H1 is the short character blurb (cast card / meta).
     omitted; weights need not sum to 1 (they are normalized by weighted sum).
   - A node may list more than three choices; the display samples **three** by
     weight. With three or fewer, all are shown.
-  - `- [SKIP](#node)` — jump straight to a node with no button. If a SKIP lands
-    in the sampled buffer of three, it fires immediately. A node whose only
-    choice is a SKIP is a plain transition.
+  - `- [SKIP](#node) 0.3` — a weighted jump with no button (weight defaults to
+    `1`). A node whose only choice is a SKIP is a plain transition. When a SKIP
+    is mixed with normal choices, all choices (SKIPs included) join a single
+    weighted draw: if a SKIP wins it jumps to its target immediately; otherwise
+    the SKIPs are dropped and the remaining normal choices are shown as buttons.
   - A node with **no** choices falls through to `defaultNode`. A choice pointing
     at a node that does not exist is treated as `- [SKIP](#defaultNode)`.
 

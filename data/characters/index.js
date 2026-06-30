@@ -52,6 +52,23 @@ const CHROME = {
     },
     music: { open: '背景音乐', play: '播放音乐', pause: '暂停音乐', volume: '音量', mute: '静音', unmute: '取消静音', now: '正在播放', close: '关闭音乐面板' },
     backlog: { title: '对话回顾', empty: '还没有可回顾的对话。', jump: '返回这一句', current: '当前', reset: '回到开头', close: '关闭回顾' },
+    hints: {
+      open: '快捷键与设置',
+      title: '快捷键与设置',
+      close: '关闭',
+      keys: [
+        { key: '空格 / 滚轮', desc: '下一句' },
+        { key: '向上滚轮', desc: '上一句' },
+        { key: '按住 Ctrl', desc: '快速跳过对话' },
+        { key: 'A', desc: '自动播放' },
+        { key: '右键', desc: '隐藏 / 显示界面，欣赏立绘' },
+        { key: 'Esc', desc: '打开 / 关闭此菜单' },
+      ],
+      speed: '文字速度',
+      speeds: { slow: '慢', normal: '正常', fast: '快', instant: '瞬间' },
+      save: '存档 / 读档：暂未支持',
+      restore: '右键恢复界面',
+    },
   },
   en: {
     label: 'CHARACTER DIALOGUE',
@@ -71,6 +88,23 @@ const CHROME = {
     },
     music: { open: 'Background music', play: 'Play music', pause: 'Pause music', volume: 'Volume', mute: 'Mute', unmute: 'Unmute', now: 'Now playing', close: 'Close music panel' },
     backlog: { title: 'Backlog', empty: 'No dialogue history yet.', jump: 'Jump back here', current: 'Current', reset: 'Back to start', close: 'Close backlog' },
+    hints: {
+      open: 'Shortcuts & settings',
+      title: 'Shortcuts & settings',
+      close: 'Close',
+      keys: [
+        { key: 'Space / Scroll', desc: 'Next line' },
+        { key: 'Scroll up', desc: 'Previous line' },
+        { key: 'Hold Ctrl', desc: 'Fast-skip the dialogue' },
+        { key: 'A', desc: 'Auto play' },
+        { key: 'Right-click', desc: 'Hide / show the UI to view the art' },
+        { key: 'Esc', desc: 'Open / close this menu' },
+      ],
+      speed: 'Text speed',
+      speeds: { slow: 'Slow', normal: 'Normal', fast: 'Fast', instant: 'Instant' },
+      save: 'Save / Load: not supported yet',
+      restore: 'Right-click to restore the UI',
+    },
   },
 }
 

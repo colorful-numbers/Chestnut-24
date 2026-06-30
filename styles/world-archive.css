@@ -552,6 +552,31 @@ a.story-carousel__card:focus-visible {
   line-height: 1.85;
 }
 
+/* Inline rich text shared by the typed dialogue, the backlog, and RichText. */
+.rich-run {
+  /* Styling is applied inline per run (weight, slant, decoration, colour). */
+  white-space: pre-wrap;
+}
+
+.dialog-link {
+  color: var(--site-accent, #6ea8fe);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dialog-link:hover,
+.dialog-link:focus-visible {
+  opacity: 0.82;
+}
+
+.dialog-quote {
+  display: inline-block;
+  padding-left: 0.7rem;
+  border-left: 2px solid var(--site-line-strong, currentColor);
+  color: var(--site-muted, inherit);
+  font-style: italic;
+}
+
 .dialog-choices {
   display: flex;
   flex-direction: column;
@@ -1652,6 +1677,138 @@ a.story-carousel__card:focus-visible {
   display: block;
   color: var(--stage-text);
   line-height: 1.6;
+}
+
+/* ----- Hide-UI (view the art) restore hint ----- */
+.character-stage__restore {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1rem, 4vw, 2rem);
+  z-index: 8;
+  margin: 0;
+  transform: translateX(-50%);
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: var(--stage-panel-strong);
+  color: var(--stage-muted);
+  font-size: 0.78rem;
+  pointer-events: none;
+  animation: restoreHintFade 600ms ease both;
+}
+
+@keyframes restoreHintFade {
+  from { opacity: 0; }
+  to { opacity: 0.85; }
+}
+
+/* ----- Hotkeys & settings menu ----- */
+.dialog-hints {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: color-mix(in srgb, var(--stage-base) 55%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-hints__panel {
+  width: min(440px, 100%);
+  border: 1px solid var(--stage-line);
+  border-radius: 14px;
+  background: var(--stage-overlay);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  color: var(--stage-text);
+  overflow: hidden;
+}
+
+.dialog-hints__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--stage-line);
+  font-size: 1.02rem;
+}
+
+.dialog-hints__head button {
+  display: inline-flex;
+  border: 0;
+  background: transparent;
+  color: var(--stage-muted);
+  cursor: pointer;
+}
+
+.dialog-hints__keys {
+  margin: 0;
+  padding: 0.6rem 1rem;
+}
+
+.dialog-hints__keys > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.32rem 0;
+}
+
+.dialog-hints__keys dt {
+  flex: none;
+  font-weight: 650;
+  font-size: 0.84rem;
+}
+
+.dialog-hints__keys dd {
+  margin: 0;
+  text-align: right;
+  color: var(--stage-muted);
+  font-size: 0.86rem;
+}
+
+.dialog-hints__speed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--stage-line);
+}
+
+.dialog-hints__speed > span {
+  font-size: 0.84rem;
+}
+
+.dialog-hints__speed-options {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.dialog-hints__speed-options button {
+  min-width: 48px;
+  border: 1px solid var(--stage-line);
+  border-radius: 999px;
+  padding: 0.28rem 0.55rem;
+  background: transparent;
+  color: var(--stage-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.dialog-hints__speed-options button.is-active {
+  border-color: var(--stage-line-strong);
+  background: color-mix(in srgb, var(--stage-text) 14%, transparent);
+  color: var(--stage-text);
+}
+
+.dialog-hints__note {
+  margin: 0;
+  padding: 0.7rem 1rem 0.9rem;
+  border-top: 1px solid var(--stage-line);
+  color: var(--stage-muted);
+  font-size: 0.8rem;
 }
 
 @media (max-width: 640px) {

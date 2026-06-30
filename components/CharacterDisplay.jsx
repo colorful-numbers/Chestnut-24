@@ -1,15 +1,23 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, ChevronLeft, ChevronsRight, History, Pause, Play, SkipForward, Undo2, X } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronsRight, History, Keyboard, Pause, Play, SkipForward, Undo2, X } from 'lucide-react'
 import Typing from './Typing'
+import RichText from './RichText'
 import DefinitionText from './DefinitionText'
 import BgmPlayer from './BgmPlayer'
 import { EFFECTS } from '../lib/effects'
 
 const AUTO_DELAY = 1100
+const SKIP_DELAY = 28
+const WHEEL_COOLDOWN = 220
 const MAX_VISIBLE_CHOICES = 3
 // Sentinel sprite value meaning "render nothing"; matches lib/characters.js.
 const EMPTY_EXPRESSION = 'EMPTY'
+
+// Configurable typing speed (ms per character). `instant` reveals the whole line.
+const TYPING_SPEEDS = { slow: 52, normal: 28, fast: 12, instant: 0 }
+const SPEED_ORDER = ['slow', 'normal', 'fast', 'instant']
+const SPEED_STORAGE_KEY = 'chestnut-dialogue-speed'
 
 // Expression-change crossfade. Toggle with EFFECTS.expressionTransition. Tune the
 // two durations here (the outgoing fade-out and the incoming fade-in); the prev
@@ -69,11 +77,28 @@ export default function CharacterDisplay({
   const [lineIndex, setLineIndex] = useState(0)
   const [history, setHistory] = useState([])
   const [autoPlay, setAutoPlay] = useState(false)
+  const [skipping, setSkipping] = useState(false)
   const [instant, setInstant] = useState(false)
   const [lineDone, setLineDone] = useState(false)
   const [showBacklog, setShowBacklog] = useState(false)
+  const [showHints, setShowHints] = useState(false)
+  const [hideUi, setHideUi] = useState(false)
+  const [speedKey, setSpeedKey] = useState('normal')
   const [prevBackground, setPrevBackground] = useState(copy.defaultBackground || '')
   const [prevExpression, setPrevExpression] = useState('')
+
+  const stageRef = useRef(null)
+
+  // Restore the saved typing speed once on mount, then persist on change.
+  useEffect(() => {
+    const saved = typeof window !== 'undefined' && window.localStorage.getItem(SPEED_STORAGE_KEY)
+    if (saved && TYPING_SPEEDS[saved] != null) setSpeedKey(saved)
+  }, [])
+
+  const chooseSpeed = (key) => {
+    setSpeedKey(key)
+    if (typeof window !== 'undefined') window.localStorage.setItem(SPEED_STORAGE_KEY, key)
+  }
 
   const node = graph[stateId] || graph[starterNode]
   const line = copy.lines?.[stateId] || {}
@@ -94,28 +119,49 @@ export default function CharacterDisplay({
     ? ''
     : (rawExpression || copy.defaultExpressionSrc || character.mainCg)
 
-  // Sample which choices to present, re-rolled per node visit (keyed on stateId).
-  // With <= 3 choices all are kept.
-  const sampledIndices = useMemo(() => {
+  // Resolve how the node's choices are presented, rolled once per node visit
+  // (keyed on stateId) so the outcome stays stable while the node's lines play.
+  //
+  // SKIP rule: a node may mix `[SKIP]` choices with normal ones. SKIPs are not
+  // auto-followed just for being present. Every choice — SKIPs and normals
+  // alike — joins one weighted draw, each defaulting to weight 1. If a SKIP wins
+  // the draw, jump straight to its target. Otherwise the SKIPs are dropped and
+  // the remaining normal choices are presented as buttons (sampled to the cap).
+  const choicePlan = useMemo(() => {
     const all = node?.choices || []
-    if (all.length <= MAX_VISIBLE_CHOICES) return all.map((_, index) => index)
-    return sampleWeightedIndices(all.map((choice) => choice.weight ?? 1), MAX_VISIBLE_CHOICES)
+    if (!all.length) return { skipTo: null, indices: [] }
+
+    const weightOf = (choice) => {
+      const weight = Number(choice.weight)
+      return Number.isFinite(weight) ? weight : 1
+    }
+
+    // One-time weighted selection across all choices, SKIPs included.
+    const drawn = sampleWeightedIndices(all.map(weightOf), 1)[0]
+    if (drawn != null && all[drawn].skip) {
+      return { skipTo: all[drawn].to, indices: [] }
+    }
+
+    // No SKIP selected: present the non-skip choices, sampled to the cap.
+    const normalIndices = all.reduce((acc, choice, index) => {
+      if (!choice.skip) acc.push(index)
+      return acc
+    }, [])
+    if (normalIndices.length <= MAX_VISIBLE_CHOICES) return { skipTo: null, indices: normalIndices }
+    const sampled = sampleWeightedIndices(normalIndices.map((index) => weightOf(all[index])), MAX_VISIBLE_CHOICES)
+    return { skipTo: null, indices: sampled.map((i) => normalIndices[i]) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stateId])
 
-  const sampledChoices = useMemo(() => {
+  const visibleChoices = useMemo(() => {
     if (!isDecision) return []
-    return sampledIndices.map((index) => ({
+    return choicePlan.indices.map((index) => ({
       to: node.choices[index].to,
-      skip: !!node.choices[index].skip,
       label: (line.choices && line.choices[index]) || '…',
     }))
-  }, [isDecision, sampledIndices, node, line])
+  }, [isDecision, choicePlan, node, line])
 
-  // SKIP rule: if a SKIP choice lands in the presented buffer, jump straight to
-  // its target instead of showing buttons.
-  const autoSkipTo = sampledChoices.find((choice) => choice.skip)?.to || null
-  const visibleChoices = sampledChoices.filter((choice) => !choice.skip)
+  const autoSkipTo = isDecision ? choicePlan.skipTo : null
   const choicesShown = isDecision && !autoSkipTo && visibleChoices.length > 0
 
   // Resolve the active scene (background + bgm) by replaying the visited path so
@@ -143,6 +189,35 @@ export default function CharacterDisplay({
     return () => window.clearTimeout(timer)
   }, [expressionSrc])
 
+  // Every image this character can show (all expressions + backgrounds). Warming
+  // the browser cache up front keeps the crossfade smooth instead of popping in
+  // when an as-yet-unloaded expression is first revealed (notably on desktop,
+  // where the assets are not already cached from a card preview).
+  const preloadAssets = useMemo(() => {
+    const urls = new Set()
+    if (character.mainCg) urls.add(character.mainCg)
+    if (copy.defaultExpressionSrc) urls.add(copy.defaultExpressionSrc)
+    if (copy.defaultBackground) urls.add(copy.defaultBackground)
+    Object.values(copy.lines || {}).forEach((entry) => {
+      ;(entry.expressions || []).forEach((src) => {
+        if (src && src !== EMPTY_EXPRESSION) urls.add(src)
+      })
+    })
+    Object.values(graph).forEach((entry) => {
+      if (entry?.background) urls.add(entry.background)
+    })
+    return [...urls]
+  }, [copy, graph, character.mainCg])
+
+  useEffect(() => {
+    if (!isOpen || typeof window === 'undefined') return
+    preloadAssets.forEach((src) => {
+      const image = new window.Image()
+      image.decoding = 'async'
+      image.src = src
+    })
+  }, [isOpen, preloadAssets])
+
   const pushHistory = () => {
     setHistory((current) => [...current, { node: stateId, line: lineIndex }])
   }
@@ -164,14 +239,17 @@ export default function CharacterDisplay({
     setLineIndex(0)
   }
 
-  // Auto play reads sentence nodes only and pauses on decision / end nodes.
+  // Auto play and Ctrl-skip both walk sentence nodes and pause on decisions /
+  // endings. Skip runs fast and does not wait for the line to finish typing
+  // (the line is revealed instantly while skipping); auto play waits.
   useEffect(() => {
-    if (!isOpen || !autoPlay) return undefined
-    if (isDecision || !canStep || !lineDone) return undefined
-    const timer = window.setTimeout(advance, AUTO_DELAY)
+    if (!isOpen || (!autoPlay && !skipping)) return undefined
+    if (isDecision || !canStep) return undefined
+    if (autoPlay && !skipping && !lineDone) return undefined
+    const timer = window.setTimeout(advance, skipping ? SKIP_DELAY : AUTO_DELAY)
     return () => window.clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, autoPlay, isDecision, canStep, lineDone, stateId, lineIndex])
+  }, [isOpen, autoPlay, skipping, isDecision, canStep, lineDone, stateId, lineIndex])
 
   // SKIP auto-advance once the current line has finished typing.
   useEffect(() => {
@@ -271,7 +349,99 @@ export default function CharacterDisplay({
     if (!isDecision && canStep) advance()
   }
 
+  // Right-click toggles a clean "view the art" mode that hides the dialogue chrome.
+  const onContextMenu = (event) => {
+    event.preventDefault()
+    setShowHints(false)
+    setHideUi((current) => !current)
+  }
+
+  // The window key/wheel listeners are bound once per open; they read the latest
+  // handlers and flags through this ref so they never close over stale state.
+  const actionsRef = useRef(null)
+  actionsRef.current = {
+    onDialogClick,
+    goPrev: backToLastSentence,
+    showHints,
+    showBacklog,
+    toggleAuto: () => setAutoPlay((current) => !current),
+    toggleHints: () => setShowHints((current) => !current),
+    closeBacklog: () => setShowBacklog(false),
+    startSkip: () => setSkipping(true),
+    stopSkip: () => setSkipping(false),
+  }
+
+  useEffect(() => {
+    if (!isOpen) return undefined
+    let lastWheel = 0
+
+    const onKeyDown = (event) => {
+      const actions = actionsRef.current
+      const target = event.target
+      const interactive = target && (
+        ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'A'].includes(target.tagName)
+        || target.isContentEditable
+        || target.getAttribute?.('role') === 'button'
+      )
+
+      if (event.key === 'Control') {
+        actions.startSkip()
+        return
+      }
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        if (actions.showBacklog) actions.closeBacklog()
+        else actions.toggleHints()
+        return
+      }
+      // Let a focused control keep its own Space/Enter/letter behaviour.
+      if (interactive || actions.showHints) return
+      if (event.key === ' ' || event.key === 'Spacebar') {
+        event.preventDefault()
+        if (!event.repeat && !actions.showBacklog) actions.onDialogClick()
+        return
+      }
+      if ((event.key === 'a' || event.key === 'A') && !event.ctrlKey && !event.metaKey && !event.altKey && !event.repeat) {
+        actions.toggleAuto()
+      }
+    }
+
+    const onKeyUp = (event) => {
+      if (event.key === 'Control') actionsRef.current.stopSkip()
+    }
+    // Releasing Ctrl outside the window never fires keyup, so stop on blur too.
+    const onBlur = () => actionsRef.current.stopSkip()
+
+    const onWheel = (event) => {
+      const actions = actionsRef.current
+      if (actions.showHints || actions.showBacklog) return
+      event.preventDefault()
+      const now = Date.now()
+      if (now - lastWheel < WHEEL_COOLDOWN) return
+      lastWheel = now
+      if (event.deltaY > 0) actions.onDialogClick()
+      else if (event.deltaY < 0) actions.goPrev()
+    }
+
+    const stage = stageRef.current
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+    window.addEventListener('blur', onBlur)
+    if (stage) stage.addEventListener('wheel', onWheel, { passive: false })
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+      window.removeEventListener('blur', onBlur)
+      if (stage) stage.removeEventListener('wheel', onWheel)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen])
+
+  const typingInstant = instant || skipping || speedKey === 'instant'
+  const typingSpeed = TYPING_SPEEDS[speedKey] || TYPING_SPEEDS.normal
+
   const controls = copy.controls || {}
+  const hints = copy.hints || {}
 
   if (!isOpen) {
     return (
@@ -292,7 +462,11 @@ export default function CharacterDisplay({
 
   return (
     <article className={`character-display character-display--open ${fullscreen ? 'character-display--modal' : ''}`}>
-      <div className="character-stage">
+      <div
+        ref={stageRef}
+        className={`character-stage ${hideUi ? 'character-stage--bare' : ''}`}
+        onContextMenu={onContextMenu}
+      >
         <div className="character-stage__bg-layer" aria-hidden="true">
           {prevBackground && prevBackground !== scene.background && (
             <img
@@ -336,6 +510,8 @@ export default function CharacterDisplay({
           )}
         </div>
 
+        {!hideUi && (
+        <>
         {backHref && (
           <Link href={backHref} className="character-stage__back" aria-label={copy.back}>
             <ArrowLeft size={16} />
@@ -419,19 +595,20 @@ export default function CharacterDisplay({
           >
             <SkipForward size={18} />
           </button>
+          <button
+            type="button"
+            className={`dialog-controls__btn ${showHints ? 'is-active' : ''}`}
+            data-tip={hints.open}
+            aria-label={hints.open}
+            onClick={() => setShowHints((current) => !current)}
+          >
+            <Keyboard size={18} />
+          </button>
         </div>
 
         <div
           className="dialog-window"
-          role="button"
-          tabIndex={0}
           onClick={onDialogClick}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault()
-              onDialogClick()
-            }
-          }}
         >
           <div className="dialog-window__speaker">
             <span>{copy.speaker}</span>
@@ -439,7 +616,8 @@ export default function CharacterDisplay({
           </div>
           <p>
             <Typing
-              instant={instant}
+              instant={typingInstant}
+              speed={typingSpeed}
               onDone={() => setLineDone(true)}
               renderText={(value) => <DefinitionText definitions={definitions}>{value}</DefinitionText>}
             >
@@ -470,16 +648,68 @@ export default function CharacterDisplay({
                   <li key={`${entry.node}-${entry.line}-${index}`}>
                     <button type="button" onClick={() => jumpTo(index)} title={copy.backlog?.jump}>
                       <span className="dialog-backlog__speaker">{entryLine.title || copy.speaker}</span>
-                      <span className="dialog-backlog__text">{entrySentences[entry.line]}</span>
+                      <span className="dialog-backlog__text">
+                        <RichText definitions={definitions}>{entrySentences[entry.line]}</RichText>
+                      </span>
                     </button>
                   </li>
                 )
               })}
               <li className="dialog-backlog__current">
                 <span className="dialog-backlog__speaker">{line.title || copy.speaker} · {copy.backlog?.current}</span>
-                <span className="dialog-backlog__text">{currentText}</span>
+                <span className="dialog-backlog__text">
+                  <RichText definitions={definitions}>{currentText}</RichText>
+                </span>
               </li>
             </ol>
+          </div>
+        )}
+        </>
+        )}
+
+        {hideUi && hints.restore && (
+          <p className="character-stage__restore">{hints.restore}</p>
+        )}
+
+        {showHints && (
+          <div
+            className="dialog-hints"
+            role="dialog"
+            aria-label={hints.title}
+            onClick={() => setShowHints(false)}
+          >
+            <div className="dialog-hints__panel" onClick={(event) => event.stopPropagation()}>
+              <div className="dialog-hints__head">
+                <strong>{hints.title}</strong>
+                <button type="button" aria-label={hints.close} onClick={() => setShowHints(false)}>
+                  <X size={16} />
+                </button>
+              </div>
+              <dl className="dialog-hints__keys">
+                {(hints.keys || []).map((row) => (
+                  <div key={row.key}>
+                    <dt>{row.key}</dt>
+                    <dd>{row.desc}</dd>
+                  </div>
+                ))}
+              </dl>
+              <div className="dialog-hints__speed">
+                <span>{hints.speed}</span>
+                <div className="dialog-hints__speed-options">
+                  {SPEED_ORDER.map((key) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className={speedKey === key ? 'is-active' : ''}
+                      onClick={() => chooseSpeed(key)}
+                    >
+                      {hints.speeds?.[key] || key}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p className="dialog-hints__note">{hints.save}</p>
+            </div>
           </div>
         )}
       </div>
