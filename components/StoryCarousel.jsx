@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Carousel from './Carousel'
-import DefinitionText from './DefinitionText'
 
 function pickRandomStories(stories, count) {
   const shuffled = [...stories]
@@ -12,7 +11,7 @@ function pickRandomStories(stories, count) {
   return shuffled.slice(0, Math.min(count, shuffled.length))
 }
 
-export default function StoryCarousel({ label, title, locale, stories, definitions = [], maxItems = 5, moreLabel, moreHref = '/fragments' }) {
+export default function StoryCarousel({ title, locale, stories, maxItems = 5, moreLabel, moreHref = '/fragments' }) {
   const [selectedStories, setSelectedStories] = useState(() => stories.slice(0, maxItems))
 
   useEffect(() => {
@@ -23,7 +22,6 @@ export default function StoryCarousel({ label, title, locale, stories, definitio
     <section id="notice" className="info-section story-carousel-section">
       <div className="section-heading section-heading--linked">
         <div>
-          <span>{label}</span>
           <h2>{title}</h2>
         </div>
         {moreLabel && (
@@ -50,10 +48,7 @@ export default function StoryCarousel({ label, title, locale, stories, definitio
                 draggable="false"
               />
               <div className="story-carousel__copy">
-                <time>{story.time}</time>
-                <span>{storyCopy.kicker}</span>
                 <h3>{storyCopy.title}</h3>
-                <p><DefinitionText definitions={definitions}>{storyCopy.body}</DefinitionText></p>
               </div>
             </Link>
           )

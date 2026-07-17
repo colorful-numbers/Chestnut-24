@@ -2,55 +2,45 @@
 
 ## 2026-07-17
 
-### Layered Surface Hero And Setting Corrections
+### Canon And Hero Correction
 
-User feedback: remove generic, assistant-like explanatory copy; replace the
-overcomplicated cinematic hero with a plain iconic 2D view; restore the
-multi-cell jellyfish-cap construction of the Corridor balloons; show small,
-compact settlements instead of large cities; and make the safe, silent world's
-philosophical freedom and ecological logic visible. The hero should gain depth
-from inexpensive stacked layers that respond to vertical page movement.
+This correction supersedes the rejected layered-surface experiment below.
+The user clarified that philosophical premises supplied for design reasoning are
+not names, labels, dates, events, or definitions in the fictional canon. Codex
+(GPT-5) restored the original authored descriptions and removed all invented
+terms, coordinates, timeline entries, numbered dossiers, and settlement-status
+copy from the site.
 
-Work completed by Codex (GPT-5):
+The three generated hero layers were deleted. The homepage now uses the
+project's existing `public/story-media/hero-sylph.png` exclusively. Four clipped
+instances of that same artwork form sky, middle-distance, and foreground depth
+bands, with requestAnimationFrame-throttled vertical parallax. This keeps the
+established monochrome linework and the original segmented balloon design
+coherent across the whole first viewport. Desktop and mobile crops were checked
+in the browser; mobile is framed on an existing balloon and no horizontal
+overflow is present.
 
-- Replaced the single cinematic hero with three generated 2D layers: modular
-  airborne computation stations, a compact service settlement, and regenerated
-  open land. A requestAnimationFrame-throttled scroll listener changes only
-  three compositor transforms, and reduced-motion users receive a static view.
-- Removed the artificial status language and fake coordinates. The hero now
-  says the surface is safe and quiet, and invites visitors to begin with any
-  question.
-- Added two explicit setting concepts. `对称自由` means acting freely while
-  accepting that anyone else may make the same choice. `地表网格` distributes
-  compact settlements, supplies, and maintained routes densely enough that a
-  lone traveler is not stranded, while leaving most land available to recover.
-- Rewrote the homepage setting index around the world's actual operating logic,
-  and corrected Qi's Chinese route plus the silent-city fragment where the text
-  previously implied intensified urban concentration and decaying unsafe gaps.
-- Verified the three-layer composite, desktop/mobile overflow, visible
-  below-the-fold cue, and measurable relative layer movement in the browser.
-  The production build passes all 17 routes.
+Visible homepage prose was reduced to titles and direct actions. The generated
+explanatory summaries, decorative labels, nav subtitle, section numbering, and
+fake metadata were removed. Original descriptions remain available in the
+source data and detail views.
 
-Generated with the built-in image tool using `hero-sylph.png` only as a visual
-reference for the original balloon construction:
+Touched files: `components/CharacterGateway.jsx`,
+`components/LayeredWorldHero.jsx`, `components/StoryCarousel.jsx`,
+`components/WorldIndex.jsx`, `data/characters/qi/zh.md`,
+`data/definitions/new-constitution/`, `data/sideStories/silent-city/zh.md`,
+`data/siteContent.js`, `pages/cast/index.js`, `pages/index.js`,
+`pages/navbar.js`, `styles/world-archive.css`, deleted experimental definitions,
+deleted generated hero layers, and this progress log.
 
-- `hero-layer-sky.png`: minimal flat 2D pale sky; four stations whose shallow
-  caps are assembled from 8-12 independent vertical cells; no city, character,
-  text, or cinematic lighting.
-- `hero-layer-settlement.png`: a tiny compact cluster of low-rise buildings,
-  supply kiosk, clinic/library, rest stop, water tower, and maintained paths on
-  a removable chroma background; no metropolis or airborne station.
-- `hero-layer-land.png`: a clear path, rainwater channel, sparse healthy meadow,
-  shrubs, and one wayfinding beacon on a removable chroma background; no city,
-  character, or threatening wilderness.
+### Rejected Layered Surface Experiment
 
-Touched files: `components/LayeredWorldHero.jsx`,
-`components/WorldIndex.jsx`, `data/siteContent.js`, definitions under
-`data/definitions/symmetric-freedom/` and `data/definitions/surface-grid/`,
-`data/definitions/new-constitution/`, `data/characters/qi/zh.md`,
-`data/sideStories/silent-city/zh.md`, `pages/index.js`,
-`styles/world-archive.css`, the three final assets under `public/story-media/`,
-and this progress log.
+An earlier pass generated three hero layers and promoted design assumptions into
+new setting labels and rewritten story text. The user rejected that direction:
+it changed canon, introduced unsupported visual details, and used excessive copy
+instead of redesigning the interface. None of those generated assets, terms, or
+text changes remain in the project. The correction above is the authoritative
+record of the current implementation.
 
 ### Character-Led Game Showcase Redesign
 

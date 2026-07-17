@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { ArrowDown, ArrowRight } from 'lucide-react'
-import DefinitionText from './DefinitionText'
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
 
-export default function LayeredWorldHero({ copy, definitions }) {
+export default function LayeredWorldHero({ copy }) {
   const heroRef = useRef(null)
 
   useEffect(() => {
@@ -21,9 +20,9 @@ export default function LayeredWorldHero({ copy, definitions }) {
       const rect = hero.getBoundingClientRect()
       const progress = clamp(-rect.top / Math.max(rect.height, 1), 0, 1)
 
-      hero.style.setProperty('--hero-shift-sky', `${progress * 28}px`)
-      hero.style.setProperty('--hero-shift-settlement', `${progress * 8}px`)
-      hero.style.setProperty('--hero-shift-land', `${progress * -20}px`)
+      hero.style.setProperty('--hero-shift-sky', `${progress * 74}px`)
+      hero.style.setProperty('--hero-shift-settlement', `${progress * 18}px`)
+      hero.style.setProperty('--hero-shift-land', `${progress * -58}px`)
     }
 
     const requestUpdate = () => {
@@ -44,53 +43,25 @@ export default function LayeredWorldHero({ copy, definitions }) {
   return (
     <section id="overview" className="world-hero" ref={heroRef}>
       <div className="world-hero__layers" aria-hidden="true">
-        <img className="world-hero__layer world-hero__layer--sky" src={copy.layers.sky} alt="" />
-        <img
-          className="world-hero__layer world-hero__layer--settlement"
-          src={copy.layers.settlement}
-          alt=""
-        />
-        <img className="world-hero__layer world-hero__layer--land" src={copy.layers.land} alt="" />
-      </div>
-
-      <div className="world-hero__history" aria-label={copy.timelineLabel}>
-        <span>{copy.timelineLabel}</span>
-        <ol>
-          {copy.timeline.map((entry) => (
-            <li key={entry.time}>
-              <time>{entry.time}</time>
-              <span>{entry.text}</span>
-            </li>
-          ))}
-        </ol>
+        <img className="world-hero__layer world-hero__layer--base" src={copy.image} alt="" />
+        <img className="world-hero__layer world-hero__layer--sky" src={copy.image} alt="" />
+        <img className="world-hero__layer world-hero__layer--settlement" src={copy.image} alt="" />
+        <img className="world-hero__layer world-hero__layer--land" src={copy.image} alt="" />
       </div>
 
       <div className="world-hero__copy">
-        <span className="world-hero__kicker">{copy.kicker}</span>
         <h1>{copy.title}</h1>
         <p className="world-hero__subtitle">{copy.subtitle}</p>
-        <p className="world-hero__body">
-          <DefinitionText definitions={definitions}>{copy.body}</DefinitionText>
-        </p>
         <div className="world-hero__actions">
-          <Link href="/cast/artifact101" className="game-primary-action">
-            <span>
-              <small>{copy.primaryHint}</small>
-              {copy.primary}
-            </span>
+          <Link href={copy.primaryHref || '/fragments'} className="game-primary-action">
+            <span>{copy.primary}</span>
             <ArrowRight size={20} />
           </Link>
-          <a href="#cast-entry" className="world-hero__secondary">
+          <a href={copy.secondaryHref || '#cast-entry'} className="world-hero__secondary">
             {copy.secondary}
             <ArrowDown size={17} />
           </a>
         </div>
-      </div>
-
-      <div className="world-hero__footer" aria-hidden="true">
-        <span>{copy.chapter}</span>
-        <span>{copy.coordinate}</span>
-        <span>{copy.signal}</span>
       </div>
     </section>
   )
