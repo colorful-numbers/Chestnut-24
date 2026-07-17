@@ -37,20 +37,16 @@ export default function CastPage({ definitions, characters }) {
             <p>{t.system.pageBody}</p>
           </div>
           <div className="cast-dossiers">
-            {characters.map((character, index) => {
+            {characters.map((character) => {
               const copy = character.locales?.[locale] || character.locales?.zh || character[locale] || character.zh
-              const profile = t.system.profiles?.[character.id] || {}
               return (
                 <Link key={character.id} href={`/cast/${character.id}`} className="cast-dossier">
                   <div className="cast-dossier__media">
                     <img src={character.mainCg} alt="" loading="lazy" draggable="false" />
-                    <span>{String(index + 1).padStart(2, '0')}</span>
                   </div>
                   <div className="cast-dossier__copy">
-                    <span>{profile.eyebrow || copy.label}</span>
                     <h2>{copy.title}</h2>
                     <p><DefinitionText definitions={definitions}>{copy.body}</DefinitionText></p>
-                    <strong>{profile.question}</strong>
                     <span className="cast-dossier__cta">{t.system.enter}<ArrowRight size={17} /></span>
                   </div>
                 </Link>

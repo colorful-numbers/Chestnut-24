@@ -381,8 +381,8 @@ html {
   position: relative;
   isolation: isolate;
   width: 100%;
-  height: calc(100svh - 156px);
-  min-height: 560px;
+  height: calc(100svh - 104px);
+  min-height: 620px;
   max-height: 920px;
   overflow: hidden;
   background-color: #e9e6dd;
@@ -391,7 +391,7 @@ html {
 
 .world-hero__layers {
   position: absolute;
-  inset: -3%;
+  inset: -8% -4%;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -403,33 +403,42 @@ html {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: translate3d(0, 0, 0) scale(1.025);
+  object-position: center 18%;
+  transform: translate3d(0, 0, 0) scale(1.08);
   transform-origin: center;
   will-change: transform;
 }
 
-.world-hero__layer--sky {
+.world-hero__layer--base {
   z-index: 0;
-  transform: translate3d(0, var(--hero-shift-sky), 0) scale(1.025);
+  transform: translate3d(0, var(--hero-shift-settlement), 0) scale(1.08);
+}
+
+.world-hero__layer--sky {
+  z-index: 1;
+  clip-path: inset(0 0 56% 0);
+  transform: translate3d(0, calc(-3% + var(--hero-shift-sky)), 0) scale(1.1);
 }
 
 .world-hero__layer--settlement {
-  z-index: 1;
-  transform: translate3d(6%, var(--hero-shift-settlement), 0) scale(0.88);
+  z-index: 2;
+  clip-path: inset(34% 0 23% 0);
+  transform: translate3d(0, var(--hero-shift-settlement), 0) scale(1.08);
 }
 
 .world-hero__layer--land {
-  z-index: 2;
-  transform: translate3d(0, var(--hero-shift-land), 0) scale(1.025);
+  z-index: 3;
+  clip-path: inset(67% 0 0 0);
+  transform: translate3d(0, var(--hero-shift-land), 0) scale(1.11);
 }
 
 .world-hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 3;
-  background: rgba(239, 237, 230, 0.06);
-  box-shadow: inset 0 -150px 110px -110px rgba(10, 12, 11, 0.62);
+  z-index: 4;
+  background: linear-gradient(90deg, rgba(247, 245, 238, 0.55), transparent 58%);
+  box-shadow: inset 0 -150px 110px -110px rgba(10, 12, 11, 0.52);
   pointer-events: none;
 }
 
@@ -440,7 +449,7 @@ html {
   bottom: 0;
   left: clamp(1.25rem, 6vw, 6rem);
   width: 1px;
-  z-index: 4;
+  z-index: 5;
   background: rgba(17, 19, 17, 0.28);
   pointer-events: none;
 }
@@ -449,14 +458,12 @@ html {
   position: absolute;
   top: 50%;
   left: clamp(1.5rem, 8vw, 8.5rem);
-  z-index: 5;
+  z-index: 6;
   width: min(570px, calc(100% - 3rem));
   transform: translateY(-48%);
 }
 
 .world-hero__kicker,
-.world-hero__history,
-.world-hero__footer,
 .game-section-heading > div > span,
 .character-gateway__brief > span,
 .character-gateway__question span,
@@ -490,16 +497,6 @@ html {
   font-size: 1.55rem;
   font-weight: 680;
   line-height: 1.35;
-}
-
-.world-hero__body {
-  max-width: 550px;
-  margin: 1rem 0 0;
-  padding: 0.55rem 0.7rem;
-  background: rgba(247, 245, 238, 0.76);
-  color: #333633;
-  font-size: 0.92rem;
-  line-height: 1.75;
 }
 
 .world-hero__actions {
@@ -563,69 +560,6 @@ html {
   font-weight: 680;
 }
 
-.world-hero__history {
-  position: absolute;
-  top: 4.5rem;
-  right: clamp(1.5rem, 4vw, 4rem);
-  z-index: 5;
-  width: 250px;
-  padding: 0.8rem 1rem;
-  border-top: 2px solid #111311;
-  border-bottom: 1px solid rgba(17, 19, 17, 0.28);
-  background: rgba(247, 245, 238, 0.72);
-  font-size: 0.62rem;
-}
-
-.world-hero__history > span {
-  color: #656862;
-  font-weight: 700;
-}
-
-.world-hero__history ol {
-  margin: 0.65rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.world-hero__history li {
-  display: grid;
-  grid-template-columns: 3.25rem 1fr;
-  gap: 0.65rem;
-  padding: 0.42rem 0;
-  border-top: 1px solid rgba(17, 19, 17, 0.16);
-}
-
-.world-hero__history time {
-  color: var(--game-signal);
-  font-weight: 750;
-}
-
-.world-hero__footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 6;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  min-height: 52px;
-  align-items: center;
-  padding: 0 clamp(1.5rem, 4vw, 4rem);
-  border-top: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(10, 12, 11, 0.82);
-  color: #e9e8e2;
-  font-size: 0.62rem;
-}
-
-.world-hero__footer span:nth-child(2) {
-  text-align: center;
-}
-
-.world-hero__footer span:last-child {
-  color: var(--game-cyan);
-  text-align: right;
-}
-
 .character-gateway,
 .world-index,
 .cast-archive {
@@ -638,18 +572,6 @@ html {
   padding-top: clamp(2.25rem, 3vw, 3rem);
   background: var(--game-surface);
   color: #f7f5ee;
-}
-
-.character-gateway::before {
-  content: '01';
-  position: absolute;
-  top: 2.5rem;
-  right: max(1.5rem, calc((100% - 1320px) / 2));
-  color: rgba(255, 255, 255, 0.04);
-  font-size: 11rem;
-  font-weight: 850;
-  line-height: 1;
-  pointer-events: none;
 }
 
 .game-section-heading {
@@ -899,17 +821,6 @@ html {
   position: relative;
   background: var(--game-paper);
   color: var(--game-ink);
-}
-
-.world-index::before {
-  content: 'WORLD INDEX';
-  position: absolute;
-  top: 3rem;
-  right: max(1.5rem, calc((100% - 1320px) / 2));
-  color: rgba(17, 19, 17, 0.05);
-  font-size: clamp(3rem, 7rem, 7rem);
-  font-weight: 850;
-  pointer-events: none;
 }
 
 .world-index__grid {
@@ -1228,10 +1139,6 @@ html {
 }
 
 @media (max-width: 1050px) {
-  .world-hero__history {
-    width: 220px;
-  }
-
   .world-hero__copy {
     left: 3rem;
     width: 480px;
@@ -1247,7 +1154,7 @@ html {
 
   .character-gateway__brief {
     grid-column: 1 / -1;
-    min-height: 470px;
+    min-height: 260px;
     border-top: 1px solid var(--game-line-light);
     border-left: 0;
   }
@@ -1302,12 +1209,10 @@ html {
   }
 
   .world-hero__layer {
-    object-position: 62% center;
+    object-position: 28% 18%;
   }
 
   .world-hero__layer--settlement {
-    object-fit: contain;
-    object-position: center 64%;
     transform: translate3d(0, var(--hero-shift-settlement), 0) scale(1.08);
   }
 
@@ -1334,14 +1239,6 @@ html {
     font-size: 1.25rem;
   }
 
-  .world-hero__body {
-    max-width: 390px;
-    padding: 0.75rem;
-    background: rgba(242, 243, 239, 0.74);
-    font-size: 0.84rem;
-    line-height: 1.7;
-  }
-
   .world-hero__actions {
     flex-direction: column;
     max-width: 390px;
@@ -1355,19 +1252,6 @@ html {
     justify-content: flex-start;
     width: max-content;
     min-height: 44px;
-  }
-
-  .world-hero__history {
-    display: none;
-  }
-
-  .world-hero__footer {
-    grid-template-columns: 1fr auto;
-    padding: 0 1rem;
-  }
-
-  .world-hero__footer span:nth-child(2) {
-    display: none;
   }
 
   .character-gateway,
@@ -1392,11 +1276,6 @@ html {
 
   .game-section-heading > p {
     font-size: 0.86rem;
-  }
-
-  .character-gateway::before {
-    top: 1rem;
-    font-size: 7rem;
   }
 
   .character-gateway__stage {
@@ -1454,10 +1333,6 @@ html {
     min-height: 330px;
   }
 
-  .world-index__item p {
-    -webkit-line-clamp: 2;
-  }
-
   .story-carousel-section.info-section {
     padding: 4.5rem 1rem;
   }
@@ -1477,10 +1352,6 @@ html {
   .story-carousel-section .story-carousel__copy {
     width: 100%;
     padding: 1.25rem;
-  }
-
-  .story-carousel-section .story-carousel__copy p {
-    display: -webkit-box;
   }
 
   .cast-dossier {

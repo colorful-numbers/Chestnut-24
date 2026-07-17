@@ -34,24 +34,21 @@ export default function Home({ definitions, sideStories, characters }) {
       <Navbar />
 
       <main>
-        <LayeredWorldHero copy={t.hero} definitions={definitions} />
+        <LayeredWorldHero copy={t.hero} />
 
         <CharacterGateway
           copy={t.system}
           locale={locale}
           characters={characters}
-          definitions={definitions}
         />
 
-        <WorldIndex copy={t.worldIndex} locale={locale} definitions={definitions} />
+        <WorldIndex copy={t.defn} locale={locale} definitions={definitions} />
 
         <StoryCarousel
-          label={t.notice.label}
           title={t.notice.title}
           moreLabel={t.notice.more}
           locale={locale}
           stories={sideStories}
-          definitions={definitions}
           maxItems={5}
         />
       </main>

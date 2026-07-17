@@ -60,7 +60,6 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useI18n()
   const navItems = [
-    { href: '/#cast-entry', label: t.nav.overview },
     { href: '/cast', label: t.nav.system },
     { href: '/defn', label: t.nav.defn },
     { href: '/fragments', label: t.nav.notice },
@@ -71,7 +70,6 @@ export default function Navbar() {
       <div className="site-nav__inner">
         <a href="/" className="site-nav__brand">
           <span>{t.brand}</span>
-          <small>WORLD PREVIEW</small>
         </a>
 
         <div className="site-nav__links" aria-label="Primary navigation">
