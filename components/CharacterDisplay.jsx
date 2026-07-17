@@ -5,6 +5,7 @@ import Typing from './Typing'
 import RichText from './RichText'
 import DefinitionText from './DefinitionText'
 import BgmPlayer from './BgmPlayer'
+import LightweightCharacterPuppet, { moodFromExpression } from './LightweightCharacterPuppet'
 import { EFFECTS } from '../lib/effects'
 
 const AUTO_DELAY = 1100
@@ -13,6 +14,7 @@ const WHEEL_COOLDOWN = 220
 const MAX_VISIBLE_CHOICES = 3
 // Sentinel sprite value meaning "render nothing"; matches lib/characters.js.
 const EMPTY_EXPRESSION = 'EMPTY'
+const ENABLE_LIGHTWEIGHT_PUPPET = true
 
 // Configurable typing speed (ms per character). `instant` reveals the whole line.
 const TYPING_SPEEDS = { slow: 52, normal: 28, fast: 12, instant: 0 }
@@ -160,6 +162,8 @@ export default function CharacterDisplay({
   const expressionSrc = hideSprite
     ? ''
     : (rawExpression || copy.defaultExpressionSrc || character.mainCg)
+  const puppetSrc = copy.defaultExpressionSrc || character.mainCg
+  const puppetMood = moodFromExpression(rawExpression)
 
   // Resolve how the node's choices are presented, rolled once per node visit
   // (keyed on stateId) so the outcome stays stable while the node's lines play.
@@ -530,7 +534,15 @@ export default function CharacterDisplay({
         </div>
 
         <div className="character-stage__sprite-layer" aria-hidden="true">
-          {ENABLE_SPRITE_TRANSITION && prevExpression && prevExpression !== expressionSrc && (
+          {ENABLE_LIGHTWEIGHT_PUPPET && !hideSprite && puppetSrc && (
+            <LightweightCharacterPuppet
+              key={`puppet-${character.id}`}
+              src={puppetSrc}
+              alt={copy.mainAlt}
+              mood={puppetMood}
+            />
+          )}
+          {!ENABLE_LIGHTWEIGHT_PUPPET && ENABLE_SPRITE_TRANSITION && prevExpression && prevExpression !== expressionSrc && (
             <img
               key={`sprite-prev-${prevExpression}`}
               className="character-display__main character-stage__sprite character-stage__sprite--prev"
@@ -540,7 +552,7 @@ export default function CharacterDisplay({
               draggable="false"
             />
           )}
-          {!hideSprite && expressionSrc && (
+          {!ENABLE_LIGHTWEIGHT_PUPPET && !hideSprite && expressionSrc && (
             <img
               key={`sprite-${expressionSrc}`}
               className={`character-display__main character-stage__sprite ${ENABLE_SPRITE_TRANSITION ? 'character-stage__sprite--next' : ''}`}

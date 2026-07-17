@@ -2,6 +2,23 @@
 
 ## 2026-07-17
 
+### Live2D Feasibility Branch
+
+Created `live2d` from the deployable `codex/game-show-redesign` checkpoint
+`4d2bb73`. Research found that Cubism Web is suitable only after a layered PSD
+has been meshed and rigged, while single-image neural animation currently needs
+GPU-oriented Python inference. The branch therefore adds a zero-dependency
+compositor puppet to `CharacterDisplay`: one neutral transparent raster,
+requestAnimationFrame-throttled gaze, CSS breathing, expression-derived mood
+parameters, and reduced-motion/coarse-pointer fallbacks. The original still
+renderer remains behind a feature constant for comparison. Full research and
+the recommended hybrid asset pipeline are recorded in
+`docs/LIVE2D_EXPERIMENT.md`.
+
+Touched files on this branch: `components/LightweightCharacterPuppet.jsx`,
+`components/CharacterDisplay.jsx`, `styles/world-archive.css`,
+`docs/LIVE2D_EXPERIMENT.md`, and this progress log.
+
 ### Layered Surface Hero And Setting Corrections
 
 User feedback: remove generic, assistant-like explanatory copy; replace the
