@@ -36,7 +36,7 @@ export default function FragmentPage({ story, definitions }) {
   return (
     <div className="info-site min-h-screen flex flex-col">
       <Head>
-        <title>{copy.title} - {t.metaTitle}</title>
+        <title>{`${copy.title} - ${t.metaTitle}`}</title>
         <meta name="description" content={copy.body} />
       </Head>
       <Navbar />

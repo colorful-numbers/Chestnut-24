@@ -18,6 +18,7 @@ const EMPTY_EXPRESSION = 'EMPTY'
 const TYPING_SPEEDS = { slow: 52, normal: 28, fast: 12, instant: 0 }
 const SPEED_ORDER = ['slow', 'normal', 'fast', 'instant']
 const SPEED_STORAGE_KEY = 'chestnut-dialogue-speed'
+const PROGRESS_STORAGE_PREFIX = 'chestnut-dialogue-progress-v2'
 
 // Expression-change crossfade. Toggle with EFFECTS.expressionTransition. Tune the
 // two durations here (the outgoing fade-out and the incoming fade-in); the prev
@@ -84,10 +85,12 @@ export default function CharacterDisplay({
   const [showHints, setShowHints] = useState(false)
   const [hideUi, setHideUi] = useState(false)
   const [speedKey, setSpeedKey] = useState('normal')
+  const [progressReady, setProgressReady] = useState(false)
   const [prevBackground, setPrevBackground] = useState(copy.defaultBackground || '')
   const [prevExpression, setPrevExpression] = useState('')
 
   const stageRef = useRef(null)
+  const progressKey = `${PROGRESS_STORAGE_PREFIX}:${character.id}:${locale}`
 
   // Restore the saved typing speed once on mount, then persist on change.
   useEffect(() => {
@@ -99,6 +102,45 @@ export default function CharacterDisplay({
     setSpeedKey(key)
     if (typeof window !== 'undefined') window.localStorage.setItem(SPEED_STORAGE_KEY, key)
   }
+
+  // Restore the current position and full backlog for this character/locale.
+  // Every restored position is checked against the latest graph, so editing a
+  // chapter cannot strand a reader on a node that no longer exists.
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(progressKey) || 'null')
+      const validPosition = (entry) => (
+        entry
+        && graph[entry.node]
+        && Number.isInteger(entry.line)
+        && entry.line >= 0
+        && entry.line < sentencesOf(copy, entry.node).length
+      )
+      if (saved && validPosition(saved)) {
+        setStateId(saved.node)
+        setLineIndex(saved.line)
+        setHistory(Array.isArray(saved.history) ? saved.history.filter(validPosition) : [])
+      }
+    } catch {
+      // Ignore malformed or unavailable local storage and start normally.
+    }
+    setProgressReady(true)
+    // The route keys this component by character and locale.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [progressKey])
+
+  useEffect(() => {
+    if (!progressReady) return
+    try {
+      window.localStorage.setItem(progressKey, JSON.stringify({
+        node: stateId,
+        line: lineIndex,
+        history: history.slice(-1000),
+      }))
+    } catch {
+      // Dialogue remains usable when storage is unavailable or full.
+    }
+  }, [history, lineIndex, progressKey, progressReady, stateId])
 
   const node = graph[stateId] || graph[starterNode]
   const line = copy.lines?.[stateId] || {}
@@ -647,7 +689,9 @@ export default function CharacterDisplay({
                 return (
                   <li key={`${entry.node}-${entry.line}-${index}`}>
                     <button type="button" onClick={() => jumpTo(index)} title={copy.backlog?.jump}>
-                      <span className="dialog-backlog__speaker">{entryLine.title || copy.speaker}</span>
+                      <span className="dialog-backlog__speaker">
+                        {[entryLine.chapterTitle, entryLine.title || copy.speaker].filter(Boolean).join(' / ')}
+                      </span>
                       <span className="dialog-backlog__text">
                         <RichText definitions={definitions}>{entrySentences[entry.line]}</RichText>
                       </span>
@@ -656,7 +700,9 @@ export default function CharacterDisplay({
                 )
               })}
               <li className="dialog-backlog__current">
-                <span className="dialog-backlog__speaker">{line.title || copy.speaker} · {copy.backlog?.current}</span>
+                <span className="dialog-backlog__speaker">
+                  {[line.chapterTitle, line.title || copy.speaker, copy.backlog?.current].filter(Boolean).join(' / ')}
+                </span>
                 <span className="dialog-backlog__text">
                   <RichText definitions={definitions}>{currentText}</RichText>
                 </span>

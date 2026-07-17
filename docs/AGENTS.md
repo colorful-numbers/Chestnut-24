@@ -47,7 +47,7 @@ The homepage should be treated as a visual novel surface first:
 - Shared markdown/frontmatter helpers: `lib/markdown.js`
 - Inline definition tooltip/link component: `components/DefinitionText.jsx`
 - Definition page: `pages/defn.js`
-- Character dialogue: `data/characters/<id>/{zh,en}.md` (one markdown file per language)
+- Character dialogue: `data/characters/<id>/<locale>/*.md` (chapter format), with `data/characters/<id>/{zh,en}.md` retained for legacy stories
 - Character markdown parser: `lib/characters.js`
 - Character global settings + loader (BGM, chrome, `getCharacters()`): `data/characters/index.js`
 - Character dialogue component: `components/CharacterDisplay.jsx`

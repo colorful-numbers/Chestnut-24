@@ -12,7 +12,7 @@ export default function Privacy() {
   return (
     <div className="info-site min-h-screen flex flex-col">
       <Head>
-        <title>{p.title} - {t.metaTitle}</title>
+        <title>{`${p.title} - ${t.metaTitle}`}</title>
         <meta name="description" content={p.intro} />
         <link rel="icon" href="/favicon.ico" />
       </Head>

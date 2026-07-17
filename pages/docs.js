@@ -18,7 +18,7 @@ export default function DocsPage({ notes }) {
   return (
     <div className="info-site min-h-screen flex flex-col">
       <Head>
-        <title>{t.docs.title} - {t.metaTitle}</title>
+        <title>{`${t.docs.title} - ${t.metaTitle}`}</title>
         <meta name="description" content={t.docs.body} />
       </Head>
       <Navbar />

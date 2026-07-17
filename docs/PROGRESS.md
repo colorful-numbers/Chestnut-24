@@ -1,5 +1,136 @@
 # Progress Log
 
+## 2026-07-17
+
+### Layered Surface Hero And Setting Corrections
+
+User feedback: remove generic, assistant-like explanatory copy; replace the
+overcomplicated cinematic hero with a plain iconic 2D view; restore the
+multi-cell jellyfish-cap construction of the Corridor balloons; show small,
+compact settlements instead of large cities; and make the safe, silent world's
+philosophical freedom and ecological logic visible. The hero should gain depth
+from inexpensive stacked layers that respond to vertical page movement.
+
+Work completed by Codex (GPT-5):
+
+- Replaced the single cinematic hero with three generated 2D layers: modular
+  airborne computation stations, a compact service settlement, and regenerated
+  open land. A requestAnimationFrame-throttled scroll listener changes only
+  three compositor transforms, and reduced-motion users receive a static view.
+- Removed the artificial status language and fake coordinates. The hero now
+  says the surface is safe and quiet, and invites visitors to begin with any
+  question.
+- Added two explicit setting concepts. `对称自由` means acting freely while
+  accepting that anyone else may make the same choice. `地表网格` distributes
+  compact settlements, supplies, and maintained routes densely enough that a
+  lone traveler is not stranded, while leaving most land available to recover.
+- Rewrote the homepage setting index around the world's actual operating logic,
+  and corrected Qi's Chinese route plus the silent-city fragment where the text
+  previously implied intensified urban concentration and decaying unsafe gaps.
+- Verified the three-layer composite, desktop/mobile overflow, visible
+  below-the-fold cue, and measurable relative layer movement in the browser.
+  The production build passes all 17 routes.
+
+Generated with the built-in image tool using `hero-sylph.png` only as a visual
+reference for the original balloon construction:
+
+- `hero-layer-sky.png`: minimal flat 2D pale sky; four stations whose shallow
+  caps are assembled from 8-12 independent vertical cells; no city, character,
+  text, or cinematic lighting.
+- `hero-layer-settlement.png`: a tiny compact cluster of low-rise buildings,
+  supply kiosk, clinic/library, rest stop, water tower, and maintained paths on
+  a removable chroma background; no metropolis or airborne station.
+- `hero-layer-land.png`: a clear path, rainwater channel, sparse healthy meadow,
+  shrubs, and one wayfinding beacon on a removable chroma background; no city,
+  character, or threatening wilderness.
+
+Touched files: `components/LayeredWorldHero.jsx`,
+`components/WorldIndex.jsx`, `data/siteContent.js`, definitions under
+`data/definitions/symmetric-freedom/` and `data/definitions/surface-grid/`,
+`data/definitions/new-constitution/`, `data/characters/qi/zh.md`,
+`data/sideStories/silent-city/zh.md`, `pages/index.js`,
+`styles/world-archive.css`, the three final assets under `public/story-media/`,
+and this progress log.
+
+### Character-Led Game Showcase Redesign
+
+User request: create a development branch from `main` and freely redesign the
+Chinese-first site as a modern game showcase. The primary product message must
+be unmistakable: visitors pre-explore the world setting through the characters
+defined in the cast view. Text and media should work together, navigation should
+be intuitive, and the visual direction may draw from the restraint of
+NieR:Automata and the information architecture of Arknights: Endfield without
+copying either project.
+
+Work completed by Codex (GPT-5):
+
+- Created `codex/game-show-redesign` from `main`, preserving the existing
+  in-progress multi-chapter dialogue work in the working tree.
+- Rebuilt the home hero around the direct Chinese message "先认识一个人，再进入
+  她眼中的世界", with a recommended three-minute entry into 作品101's dialogue
+  and a secondary path to choose another observer.
+- Added an interactive observer gateway that switches between 作品101 and 器,
+  pairing each character's media with her premise, central question, related
+  world terms, and direct dialogue route.
+- Added a visual world index and repositioned story fragments as recorded
+  evidence from the setting, creating a clear sequence: observer, world terms,
+  then archival fragments.
+- Rebuilt the cast archive as large character dossiers and simplified the
+  navigation/footer to internal discovery routes only. The mobile menu now
+  reports its expanded state and controlled region.
+- Introduced a monochrome, architectural game-show visual system with signal
+  red and cyan status accents, hard-edged controls, responsive section layouts,
+  and restrained motion. Existing monochrome character and fragment artwork is
+  now used as primary narrative media instead of decoration.
+- Generated `public/story-media/hero-gateway-v2.png` with the built-in image
+  generation tool. Prompt summary: a 16:9 original monochrome anime
+  science-fiction city after humanity moved into the stratosphere, immense
+  flower-like weather-balloon computation stations, and an original black-haired
+  female traveler on the right, with pale negative space on the left for Chinese
+  interface copy; quiet overcast lighting, stone and industrial detail, tiny red
+  signals, no text, logos, watermark, or recognizable copyrighted character.
+- Verified the production build and tested the homepage, character switching,
+  cast archive, mobile menu, desktop/mobile overflow, and browser diagnostics at
+  desktop and 390 x 844 mobile viewports. Browser warnings/errors were empty.
+
+Redesign files: `components/CharacterGateway.jsx`,
+`components/WorldIndex.jsx`, `components/SiteEffects.jsx`,
+`data/siteContent.js`, `pages/index.js`, `pages/cast/index.js`,
+`pages/navbar.js`, `pages/footer.js`, `styles/world-archive.css`,
+`public/story-media/hero-gateway-v2.png`, and this progress log.
+
+### Multi-Chapter Dialogue Routing
+
+User request: revisit the character dialogue, fix the reported hydration/SSR
+warnings, and replace the one-file conversation limit with freely linked
+markdown chapters whose route remains visible and navigable in the backlog.
+
+Work completed by Codex (GPT-5):
+
+- Fixed multi-node `<title>` rendering on content routes and removed the
+  carousel's server-side `useLayoutEffect` warning.
+- Added chapter discovery under `data/characters/<id>/<locale>/*.md`, while
+  retaining the legacy `<locale>.md` loader.
+- Namespaced dialogue nodes by chapter and added local `#node` plus cross-file
+  `./chapter.md/#node` routing, including nested relative paths.
+- Merged every locale's chapters into one graph so existing next/previous,
+  choice, skip, and backlog controls work across file boundaries.
+- Added chapter names to backlog entries and persisted the current position plus
+  up to 1,000 history entries per character and locale in local storage.
+- Migrated the in-progress `artifact101` split, corrected the lighthouse
+  filename and cross-chapter ending links, and preserved the user's new park
+  background asset.
+- Updated character authoring docs and project guidance for the chapter format.
+- Verified a production build, serialized graph targets, browser navigation from
+  the library to the park, chapter-aware backlog display, reload persistence,
+  and an empty browser warning/error log.
+
+Touched files: `components/Carousel.jsx`, `components/CharacterDisplay.jsx`,
+`data/characters/index.js`, `lib/characters.js`, all content under
+`data/characters/artifact101/zh/`, `pages/cast/[id].js`, other content page title
+components, `data/characters/README.md`, `docs/content/characters.md`,
+`docs/AGENTS.md`, and this progress log.
+
 ## 2026-06-28 Continued 3
 
 ### Character Display: Responsive, Themed, Animated

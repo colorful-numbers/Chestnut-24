@@ -18,7 +18,7 @@ export default function DefinitionsPage({ definitions }) {
   return (
     <div className="info-site min-h-screen flex flex-col">
       <Head>
-        <title>{t.defn.title} - {t.metaTitle}</title>
+        <title>{`${t.defn.title} - ${t.metaTitle}`}</title>
         <meta name="description" content={t.defn.body} />
       </Head>
       <Navbar />

@@ -32,7 +32,7 @@ export default function CharacterPage({ character, definitions }) {
   return (
     <div className="info-site character-route">
       <Head>
-        <title>{copy.title} - {t.metaTitle}</title>
+        <title>{`${copy.title} - ${t.metaTitle}`}</title>
         <meta name="description" content={copy.body} />
       </Head>
       <Navbar />

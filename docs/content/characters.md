@@ -5,16 +5,23 @@ homepage they appear as preview cards in `components/CharacterCarousel.jsx`; the
 full interactive dialogue lives on the standalone page `pages/cast/[id].js`,
 where the display opens as a full-window modal.
 
-A whole conversation is authored as **one markdown file per language**. The
-markdown is parsed by `lib/characters.js` into the graph + text the widget
-consumes; there is no per-character `index.js` or JSON anymore.
+A conversation can be split into **one markdown file per chapter**. The markdown
+is parsed by `lib/characters.js` into one namespaced graph, so chapters may reuse
+node headings without collisions. The original one-file-per-language layout is
+still supported.
 
 ## Folder Layout
 
 ```text
-data/characters/<id>/zh.md      (en.md optional)
+data/characters/<id>/zh/index.md
+data/characters/<id>/zh/<chapter>.md
+data/characters/<id>/en/index.md      (optional)
 public/characters/<id>/
 ```
+
+`index.md` is the entry chapter. Chapter ids come from their relative filenames,
+so `routes/park.md` is addressed as `./routes/park.md/#arrival`. For a legacy
+character, `data/characters/<id>/zh.md` continues to work unchanged.
 
 Media is auto-discovered from the public folder by filename convention:
 
@@ -117,12 +124,26 @@ Text right under the H1 is the short character blurb (cast card / meta).
   - A node with **no** choices falls through to `defaultNode`. A choice pointing
     at a node that does not exist is treated as `- [SKIP](#defaultNode)`.
 
+### Chapter routing
+
+- `- [Stay here](#node)` targets a node in the current markdown file.
+- `- [Enter the park](./city-park.md/#intro)` targets a node in another chapter.
+- `- [Enter the park](./city-park.md)` targets that chapter's `starterNode`.
+- If a chapter exists but its linked anchor was renamed, routing falls back to
+  that chapter's `starterNode`. If the chapter file does not exist, routing uses
+  the source chapter's `defaultNode` as a skip.
+- Each chapter should define `starterNode` and `defaultNode` in frontmatter.
+  `chapterTitle` is optional; when omitted, the first H2 is used in the backlog.
+
 The widget keeps a per-sentence history stack, so the backlog panel and the
-"back to last choice / sentence" controls can return to any visited line.
+"back to last choice / sentence" controls can return to any visited line across
+all chapters. The current position and up to 1,000 backlog entries are saved in
+local storage per character and locale, then validated against the latest graph
+when restored. "Back to start" clears that route and begins at `index.md` again.
 
 ## Localization
 
-Author `zh.md` fully. `en.md` is optional and, because node ids are the
-(localized) headings, each language file is self-contained — keep the headings,
-choice targets, and media references consistent between languages. A missing
-`en.md` falls back to `zh.md`.
+Author the `zh/` chapter folder fully. The matching `en/` folder is optional and,
+because node ids are localized headings, each locale's chapter graph is
+self-contained. Keep filenames, choice targets, and media references consistent
+between languages. A missing English graph falls back to Chinese.

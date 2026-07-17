@@ -21,8 +21,9 @@ export default function Footer() {
           </div>
         </div>
         <nav className="site-footer__menu" aria-label="Footer navigation">
-          <a href="https://github.com/colorful-numbers" target="_blank" rel="noopener noreferrer">{t.footerMenu.lab}</a>
-          <a href="https://index.trance-0.com" target="_blank" rel="noopener noreferrer">{t.footerMenu.oldIndex}</a>
+          <a href="/cast">{t.footerMenu.cast}</a>
+          <a href="/defn">{t.footerMenu.world}</a>
+          <a href="/fragments">{t.footerMenu.stories}</a>
           <a href="/docs">{t.footerMenu.docs}</a>
           <a href="/privacy">{t.footerMenu.privacy}</a>
         </nav>

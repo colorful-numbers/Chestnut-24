@@ -23,32 +23,35 @@ export default function CastPage({ definitions, characters }) {
   return (
     <div className="info-site min-h-screen flex flex-col">
       <Head>
-        <title>{t.system.title} - {t.metaTitle}</title>
+        <title>{`${t.system.title} - ${t.metaTitle}`}</title>
         <meta name="description" content={t.system.pageBody} />
       </Head>
       <Navbar />
       <main>
-        <section className="info-section defn-page">
-          <div className="section-heading section-heading--wide">
+        <section className="cast-archive">
+          <div className="game-section-heading cast-archive__heading">
             <div>
               <span>{t.system.label}</span>
               <h1>{t.system.title}</h1>
             </div>
             <p>{t.system.pageBody}</p>
           </div>
-          <div className="card-list">
-            {characters.map((character) => {
+          <div className="cast-dossiers">
+            {characters.map((character, index) => {
               const copy = character.locales?.[locale] || character.locales?.zh || character[locale] || character.zh
+              const profile = t.system.profiles?.[character.id] || {}
               return (
-                <Link key={character.id} href={`/cast/${character.id}`} className="card-list__item">
-                  <div className="card-list__media">
+                <Link key={character.id} href={`/cast/${character.id}`} className="cast-dossier">
+                  <div className="cast-dossier__media">
                     <img src={character.mainCg} alt="" loading="lazy" draggable="false" />
+                    <span>{String(index + 1).padStart(2, '0')}</span>
                   </div>
-                  <div className="card-list__copy">
-                    <span>{copy.label}</span>
+                  <div className="cast-dossier__copy">
+                    <span>{profile.eyebrow || copy.label}</span>
                     <h2>{copy.title}</h2>
                     <p><DefinitionText definitions={definitions}>{copy.body}</DefinitionText></p>
-                    <span className="card-list__cta">{t.system.enter}<ArrowRight size={15} /></span>
+                    <strong>{profile.question}</strong>
+                    <span className="cast-dossier__cta">{t.system.enter}<ArrowRight size={17} /></span>
                   </div>
                 </Link>
               )

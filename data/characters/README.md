@@ -1,15 +1,19 @@
 # Characters
 
-Each character is one markdown file per language plus a media folder.
+Each character uses one markdown chapter folder per language plus a media
+folder. The original one-file layout remains supported for existing characters.
 
 ```text
-data/characters/<id>/zh.md      (en.md optional)
+data/characters/<id>/zh/index.md
+data/characters/<id>/zh/<chapter>.md
+data/characters/<id>/en/index.md      (optional)
 public/characters/<id>/
 ```
 
-The markdown carries the whole conversation — scenes, dialogue, expression and
-bgm switches, and weighted choices. Global settings (the BGM track table, the
-shared UI chrome strings, and the loader) live in
+Each markdown file carries one chapter's scenes, dialogue, expression and BGM
+switches, and weighted choices. Use `#node` for a node in the current chapter
+and `./chapter.md/#node` to route into another chapter. Global settings (the BGM
+track table, the shared UI chrome strings, and the loader) live in
 [`data/characters/index.js`](./index.js), which exports `getCharacters()` for the
 pages to call in `getStaticProps`.
 
@@ -20,4 +24,5 @@ Media is auto-discovered from `public/characters/<id>/`:
 - `<id>-main-cg.png` — the still used on cast cards and previews (not the default expression).
 
 See [docs/content/characters.md](../../docs/content/characters.md) for the full
-markdown format. `qi/zh.md` is the reference example.
+markdown format. `artifact101/zh/` is the chapter-based reference; `qi/zh.md`
+shows the compatible legacy format.

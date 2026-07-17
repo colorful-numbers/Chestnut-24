@@ -23,7 +23,7 @@ export default function FragmentsPage({ definitions, sideStories }) {
   return (
     <div className="info-site min-h-screen flex flex-col">
       <Head>
-        <title>{t.notice.title} - {t.metaTitle}</title>
+        <title>{`${t.notice.title} - ${t.metaTitle}`}</title>
         <meta name="description" content={t.notice.pageBody} />
       </Head>
       <Navbar />

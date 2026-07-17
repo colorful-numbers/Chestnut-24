@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { parseCharacterMarkdown } from '../../lib/characters'
+import { parseCharacterChapters, parseCharacterMarkdown } from '../../lib/characters'
 
 const CHARACTERS_DIR = path.join(process.cwd(), 'data', 'characters')
 const PUBLIC_DIR = path.join(process.cwd(), 'public', 'characters')
@@ -66,7 +66,7 @@ const CHROME = {
       ],
       speed: '文字速度',
       speeds: { slow: '慢', normal: '正常', fast: '快', instant: '瞬间' },
-      save: '存档 / 读档：暂未支持',
+      save: '进度与对话回顾会自动保存在此设备上',
       restore: '右键恢复界面',
     },
   },
@@ -102,13 +102,44 @@ const CHROME = {
       ],
       speed: 'Text speed',
       speeds: { slow: 'Slow', normal: 'Normal', fast: 'Fast', instant: 'Instant' },
-      save: 'Save / Load: not supported yet',
+      save: 'Progress and backlog are saved automatically on this device',
       restore: 'Right-click to restore the UI',
     },
   },
 }
 
 // --- Loader ----------------------------------------------------------------
+
+function readChapterFiles(rootDir, currentDir = rootDir) {
+  return fs.readdirSync(currentDir, { withFileTypes: true })
+    .flatMap((entry) => {
+      const absolute = path.join(currentDir, entry.name)
+      if (entry.isDirectory()) return readChapterFiles(rootDir, absolute)
+      if (!entry.isFile() || !entry.name.toLowerCase().endsWith('.md')) return []
+      const relative = path.relative(rootDir, absolute).split(path.sep).join('/')
+      return [{
+        id: relative.replace(/\.md$/i, '').toLowerCase(),
+        source: fs.readFileSync(absolute, 'utf8'),
+      }]
+    })
+    .sort((left, right) => {
+      if (left.id === 'index') return -1
+      if (right.id === 'index') return 1
+      return left.id.localeCompare(right.id)
+    })
+}
+
+function loadLocaleDialogue(characterDir, lang, id) {
+  const chapterDir = path.join(characterDir, lang)
+  if (fs.existsSync(chapterDir) && fs.statSync(chapterDir).isDirectory()) {
+    const chapters = readChapterFiles(chapterDir)
+    return parseCharacterChapters(chapters, { id, bgmMap: BGM })
+  }
+
+  const legacyFile = path.join(characterDir, `${lang}.md`)
+  if (!fs.existsSync(legacyFile)) return null
+  return parseCharacterMarkdown(fs.readFileSync(legacyFile, 'utf8'), { id, bgmMap: BGM })
+}
 
 // Pick the still used by cast cards and previews (everything outside the live
 // dialogue stage). Prefer `<id>-main-cg.png`, then any `*main-cg.*` file. The
@@ -140,9 +171,8 @@ export function getCharacters() {
       let defaultExpressionSrc = ''
 
       LOCALES.forEach((lang) => {
-        const file = path.join(CHARACTERS_DIR, id, `${lang}.md`)
-        if (!fs.existsSync(file)) return
-        const parsed = parseCharacterMarkdown(fs.readFileSync(file, 'utf8'), { id, bgmMap: BGM })
+        const parsed = loadLocaleDialogue(path.join(CHARACTERS_DIR, id), lang, id)
+        if (!parsed) return
         defaultExpressionSrc = defaultExpressionSrc || parsed.defaultExpressionSrc
         locales[lang] = {
           ...CHROME[lang],
@@ -157,6 +187,7 @@ export function getCharacters() {
           defaultBgm: parsed.defaultBgm,
           graph: parsed.graph,
           lines: parsed.lines,
+          chapters: parsed.chapters || [],
         }
       })
 

@@ -16,6 +16,9 @@ const REVEAL_SELECTORS = [
   '.info-module-card',
   '.story-post__body',
   '.privacy-body > section',
+  '.character-gateway__stage',
+  '.world-index__item',
+  '.cast-dossier',
 ]
 
 // Repeated widgets that catch a cursor-following highlight.
@@ -26,6 +29,8 @@ const LIGHT_SELECTORS = [
   '.info-module-card',
   '.character-card',
   '.dev-note',
+  '.world-index__item',
+  '.cast-dossier',
 ]
 
 const STAGGER_MAX_MS = 320

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export default function Carousel({ ariaLabel, items, renderItem, className = '', itemClassName = '' }) {
   const viewportRef = useRef(null)
@@ -38,9 +38,9 @@ export default function Carousel({ ariaLabel, items, renderItem, className = '',
     setSideOffset(Math.max(0, (viewportWidth - itemWidth) / 2))
   }, [])
 
-  // Measure before the first paint so the starting transform is already correct
-  // and the carousel never visibly jumps from translateX(0) into position.
-  useLayoutEffect(() => {
+  // Measure after mount. The server cannot perform layout measurements, and
+  // using a layout effect there produces a hydration warning.
+  useEffect(() => {
     measure()
   }, [measure, loopItems])
 

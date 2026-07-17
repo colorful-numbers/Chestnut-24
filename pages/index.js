@@ -1,12 +1,12 @@
 import Head from 'next/head'
-import { ArrowRight } from 'lucide-react'
 import Navbar from './navbar'
 import Footer from './footer'
 import StoryCarousel from '../components/StoryCarousel'
-import CharacterCarousel from '../components/CharacterCarousel'
+import CharacterGateway from '../components/CharacterGateway'
+import WorldIndex from '../components/WorldIndex'
+import LayeredWorldHero from '../components/LayeredWorldHero'
 import { useI18n } from '../lib/i18n'
 import { getCharacters } from '../data/characters/index.js'
-import DefinitionText from '../components/DefinitionText'
 import { getDefinitions } from '../lib/definitions'
 import { getSideStories } from '../lib/sideStories'
 
@@ -34,24 +34,16 @@ export default function Home({ definitions, sideStories, characters }) {
       <Navbar />
 
       <main>
-        <section
-          id="overview"
-          className="info-hero"
-          style={{ backgroundImage: `url('${t.hero.media}')` }}
-        >
-          <div className="info-hero__copy">
-            <span>{t.hero.kicker}</span>
-            <h1>{t.hero.title}</h1>
-            <p className="info-hero__subtitle">{t.hero.subtitle}</p>
-            <p className="info-hero__body">
-              <DefinitionText definitions={definitions}>{t.hero.body}</DefinitionText>
-            </p>
-            <div className="info-hero__actions">
-              <a href="#notice">{t.hero.primary}<ArrowRight size={16} /></a>
-              <a href="#system">{t.hero.secondary}</a>
-            </div>
-          </div>
-        </section>
+        <LayeredWorldHero copy={t.hero} definitions={definitions} />
+
+        <CharacterGateway
+          copy={t.system}
+          locale={locale}
+          characters={characters}
+          definitions={definitions}
+        />
+
+        <WorldIndex copy={t.worldIndex} locale={locale} definitions={definitions} />
 
         <StoryCarousel
           label={t.notice.label}
@@ -61,15 +53,6 @@ export default function Home({ definitions, sideStories, characters }) {
           stories={sideStories}
           definitions={definitions}
           maxItems={5}
-        />
-        <CharacterCarousel
-          label={t.system.label}
-          title={t.system.title}
-          body={t.system.body}
-          moreLabel={t.system.more}
-          locale={locale}
-          characters={characters}
-          definitions={definitions}
         />
       </main>
 

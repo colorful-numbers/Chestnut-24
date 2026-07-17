@@ -60,16 +60,19 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useI18n()
   const navItems = [
-    { href: '/#overview', label: t.nav.overview },
+    { href: '/#cast-entry', label: t.nav.overview },
+    { href: '/cast', label: t.nav.system },
     { href: '/defn', label: t.nav.defn },
     { href: '/fragments', label: t.nav.notice },
-    { href: '/cast', label: t.nav.system },
   ]
 
   return (
     <nav className="site-nav">
       <div className="site-nav__inner">
-        <a href="/" className="site-nav__brand">{t.brand}</a>
+        <a href="/" className="site-nav__brand">
+          <span>{t.brand}</span>
+          <small>WORLD PREVIEW</small>
+        </a>
 
         <div className="site-nav__links" aria-label="Primary navigation">
           {navItems.map((item) => (
@@ -84,6 +87,8 @@ export default function Navbar() {
             type="button"
             className="site-nav__menu"
             aria-label={t.nav.menu}
+            aria-expanded={isOpen}
+            aria-controls="site-mobile-navigation"
             onClick={() => setIsOpen((current) => !current)}
           >
             {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -92,7 +97,7 @@ export default function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="site-nav__mobile">
+        <div className="site-nav__mobile" id="site-mobile-navigation">
           {navItems.map((item) => (
             <a key={item.href} href={item.href} onClick={() => setIsOpen(false)}>{item.label}</a>
           ))}
