@@ -50,6 +50,24 @@ Touched files on this branch: `components/LightweightCharacterPuppet.jsx`,
 `components/CharacterDisplay.jsx`, `styles/world-archive.css`,
 `docs/LIVE2D_EXPERIMENT.md`, and this progress log.
 
+### Qi Layered Bone Pass
+
+Codex (GPT-5) inspected Qi's main CG and existing transparent neutral portrait.
+Because the approved neutral asset already matches the character and is suitable
+for compositing, no replacement character art was generated. A new
+`QiLayeredPuppet` renders that image as three aligned planes bound to a simple
+lower-body/torso/head hierarchy. The head follows fine-pointer movement, the
+torso breathes on the compositor, and coarse-pointer plus reduced-motion modes
+stay static. Other characters continue to use the one-plane fallback.
+
+Browser verification confirmed the `layered-bone-css` runtime, three active
+planes using the approved local asset, independent head and torso transforms,
+and no horizontal overflow at desktop or mobile sizes.
+
+Touched files: `components/QiLayeredPuppet.jsx`,
+`components/CharacterDisplay.jsx`, `styles/world-archive.css`,
+`docs/LIVE2D_EXPERIMENT.md`, and this progress log.
+
 ### Rejected Layered Surface Experiment
 
 An earlier pass generated three hero layers and promoted design assumptions into

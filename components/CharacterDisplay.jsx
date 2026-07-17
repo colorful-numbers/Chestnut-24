@@ -6,6 +6,7 @@ import RichText from './RichText'
 import DefinitionText from './DefinitionText'
 import BgmPlayer from './BgmPlayer'
 import LightweightCharacterPuppet, { moodFromExpression } from './LightweightCharacterPuppet'
+import QiLayeredPuppet from './QiLayeredPuppet'
 import { EFFECTS } from '../lib/effects'
 
 const AUTO_DELAY = 1100
@@ -535,12 +536,21 @@ export default function CharacterDisplay({
 
         <div className="character-stage__sprite-layer" aria-hidden="true">
           {ENABLE_LIGHTWEIGHT_PUPPET && !hideSprite && puppetSrc && (
-            <LightweightCharacterPuppet
-              key={`puppet-${character.id}`}
-              src={puppetSrc}
-              alt={copy.mainAlt}
-              mood={puppetMood}
-            />
+            character.id === 'qi' ? (
+              <QiLayeredPuppet
+                key={`puppet-${character.id}`}
+                src={puppetSrc}
+                alt={copy.mainAlt}
+                mood={puppetMood}
+              />
+            ) : (
+              <LightweightCharacterPuppet
+                key={`puppet-${character.id}`}
+                src={puppetSrc}
+                alt={copy.mainAlt}
+                mood={puppetMood}
+              />
+            )
           )}
           {!ENABLE_LIGHTWEIGHT_PUPPET && ENABLE_SPRITE_TRANSITION && prevExpression && prevExpression !== expressionSrc && (
             <img

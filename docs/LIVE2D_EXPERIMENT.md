@@ -68,9 +68,34 @@ The branch uses `LightweightCharacterPuppet` as an intentionally small baseline:
 This is not presented as real Cubism. It measures how much presence the site can
 gain before accepting Cubism's authoring and licensing costs.
 
+### Qi Layered Bone Prototype
+
+Qi now has a second, character-specific prototype built from the existing
+approved `expression-neutral.png`. The main CG was used to verify identity,
+costume, and silhouette, but no new character art was generated: the transparent
+neutral portrait already supplies a cleaner source than a regenerated copy.
+
+`QiLayeredPuppet` draws the same source in three clipped, aligned planes:
+
+- lower body, kept fixed as the root;
+- torso, with a low-amplitude CSS breathing cycle;
+- head and upper hair, with pointer-driven translation and rotation.
+
+The planes form a simple root/torso/head hierarchy in one shared coordinate
+system. Pointer updates are requestAnimationFrame-throttled, coarse pointers do
+not track, and reduced-motion removes both breathing and tracking. The dialogue
+stage exposes `data-puppet-runtime="layered-bone-css"` so browser tests can
+distinguish this path from the one-plane fallback.
+
+This prototype does not provide independent eyes, mouth, hands, coat, or hair
+tails. Those require real source-layer separation and clean hidden artwork under
+each moving joint. The three-plane version establishes the rendering and input
+contract before investing in that asset work.
+
 ## Recommended Pipeline
 
-1. Generate one neutral, upright, transparent full-body image per character.
+1. Prefer an existing approved neutral transparent portrait when one is already
+   available; generate a replacement only when the source cannot be rigged.
 2. Use this branch's compositor puppet as the default low-resource renderer.
 3. For important characters, separate the same approved art into a layered PSD,
    rig it once in Cubism Editor, and export a `.model3.json` package.
