@@ -132,7 +132,7 @@ html {
   --hero-shift-background: 0px;
   --hero-shift-balloons: 0px;
   --hero-shift-foreground: 0px;
-  --hero-progress: 0;
+  --hero-layer-scale: 1.18;
   position: relative;
   isolation: isolate;
   width: 100%;
@@ -146,7 +146,7 @@ html {
 
 .world-hero__layers {
   position: absolute;
-  inset: 0;
+  inset: -20px 0 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -158,18 +158,16 @@ html {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center;
-  transform: translate3d(0, 0, 0);
-  transform-origin: center;
+  object-fit: cover;
+  object-position: center top;
+  transform: translate3d(0, 0, 0) scale(var(--hero-layer-scale));
+  transform-origin: center top;
   will-change: transform;
   opacity: 0;
 }
 
 .world-hero__fallback {
   z-index: 0;
-  object-fit: contain;
-  object-position: center;
   opacity: 1;
 }
 
@@ -183,17 +181,17 @@ html {
 
 .world-hero__layer--background {
   z-index: 0;
-  transform: translate3d(0, var(--hero-shift-background), 0);
+  transform: translate3d(0, var(--hero-shift-background), 0) scale(var(--hero-layer-scale));
 }
 
 .world-hero__layer--balloons {
   z-index: 1;
-  transform: translate3d(0, var(--hero-shift-balloons), 0);
+  transform: translate3d(0, var(--hero-shift-balloons), 0) scale(var(--hero-layer-scale));
 }
 
 .world-hero__layer--foreground {
   z-index: 2;
-  transform: translate3d(0, var(--hero-shift-foreground), 0);
+  transform: translate3d(0, var(--hero-shift-foreground), 0) scale(var(--hero-layer-scale));
 }
 
 .world-hero::before {
@@ -203,23 +201,6 @@ html {
   z-index: 4;
   background: linear-gradient(90deg, rgba(247, 245, 238, 0.55), transparent 58%);
   box-shadow: inset 0 -150px 110px -110px rgba(10, 12, 11, 0.52);
-  pointer-events: none;
-}
-
-.world-hero::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: clamp(1.25rem, 6vw, 6rem);
-  width: 2px;
-  z-index: 5;
-  background:
-    linear-gradient(
-      to bottom,
-      var(--game-signal) 0 calc(var(--hero-progress) * 100%),
-      rgba(17, 19, 17, 0.24) calc(var(--hero-progress) * 100%) 100%
-    );
   pointer-events: none;
 }
 

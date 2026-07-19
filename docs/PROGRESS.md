@@ -10,6 +10,10 @@ story, character, or definition copy.
 - Rebuilt the hero's first frame around the complete original composition. A
   visible eager-loaded source image now remains in place until all three aligned
   parallax planes have loaded, preventing a blank or partially decoded opening.
+- Added aligned layer overscan and cover framing so scroll and pointer movement
+  cannot expose the hero container or lift the image edge above its clipping
+  boundary on desktop or mobile.
+- Removed the two hero orbit circles and their vertical red progress guide.
 - Removed the reduced-motion early return that had disabled the hero effect.
   Scroll now drives the background, balloon, foreground, and copy planes at
   distinct rates; pointer movement remains gentler when reduced motion is set.

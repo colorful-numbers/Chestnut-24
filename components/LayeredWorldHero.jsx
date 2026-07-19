@@ -34,7 +34,6 @@ export default function LayeredWorldHero({ copy }) {
       const rect = hero.getBoundingClientRect()
       const progress = clamp(-rect.top / Math.max(rect.height, 1), 0, 1)
 
-      hero.style.setProperty('--hero-progress', progress.toFixed(4))
       hero.style.setProperty('--hero-shift-background', `${progress * -18}px`)
       hero.style.setProperty('--hero-shift-balloons', `${progress * -74}px`)
       hero.style.setProperty('--hero-shift-foreground', `${progress * -138}px`)
@@ -94,11 +93,6 @@ export default function LayeredWorldHero({ copy }) {
         <img className="world-hero__layer world-hero__layer--balloons" src={copy.layers?.balloons || copy.image} alt="" loading="eager" decoding="sync" />
         <img className="world-hero__layer world-hero__layer--foreground" src={copy.layers?.foreground || copy.image} alt="" loading="eager" decoding="sync" />
         <div className="world-hero__haze" />
-        <div className="world-hero__orbits">
-          <span />
-          <span />
-          <span />
-        </div>
       </div>
 
       <div className="world-hero__copy">
