@@ -20,10 +20,10 @@ export default function LayeredWorldHero({ copy }) {
       const rect = hero.getBoundingClientRect()
       const progress = clamp(-rect.top / Math.max(rect.height, 1), 0, 1)
 
-      hero.style.setProperty('--hero-shift-sky', `${progress * 118}px`)
-      hero.style.setProperty('--hero-shift-settlement', `${progress * 42}px`)
-      hero.style.setProperty('--hero-shift-land', `${progress * -86}px`)
-      hero.style.setProperty('--hero-copy-shift', `${progress * -52}px`)
+      hero.style.setProperty('--hero-shift-background', `${progress * 28}px`)
+      hero.style.setProperty('--hero-shift-balloons', `${progress * 104}px`)
+      hero.style.setProperty('--hero-shift-foreground', `${progress * -112}px`)
+      hero.style.setProperty('--hero-copy-shift', `${progress * -64}px`)
       hero.style.setProperty('--hero-fade', `${1 - progress * 0.82}`)
     }
 
@@ -35,22 +35,21 @@ export default function LayeredWorldHero({ copy }) {
       const rect = hero.getBoundingClientRect()
       const x = clamp(((event.clientX - rect.left) / rect.width) * 2 - 1, -1, 1)
       const y = clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1, 1)
-      hero.style.setProperty('--hero-x-base', `${(x * -5).toFixed(2)}px`)
-      hero.style.setProperty('--hero-y-base', `${(y * -4).toFixed(2)}px`)
-      hero.style.setProperty('--hero-x-sky', `${(x * 11).toFixed(2)}px`)
-      hero.style.setProperty('--hero-y-sky', `${(y * 8).toFixed(2)}px`)
-      hero.style.setProperty('--hero-x-mid', `${(x * -13).toFixed(2)}px`)
-      hero.style.setProperty('--hero-y-mid', `${(y * -7).toFixed(2)}px`)
-      hero.style.setProperty('--hero-x-near', `${(x * 18).toFixed(2)}px`)
-      hero.style.setProperty('--hero-y-near', `${(y * 12).toFixed(2)}px`)
+      hero.style.setProperty('--hero-x-background', `${(x * -4).toFixed(2)}px`)
+      hero.style.setProperty('--hero-y-background', `${(y * -3).toFixed(2)}px`)
+      hero.style.setProperty('--hero-x-balloons', `${(x * 16).toFixed(2)}px`)
+      hero.style.setProperty('--hero-y-balloons', `${(y * 10).toFixed(2)}px`)
+      hero.style.setProperty('--hero-x-foreground', `${(x * 28).toFixed(2)}px`)
+      hero.style.setProperty('--hero-y-foreground', `${(y * 18).toFixed(2)}px`)
       hero.style.setProperty('--hero-x-copy', `${(x * -7).toFixed(2)}px`)
       hero.style.setProperty('--hero-y-copy', `${(y * -4).toFixed(2)}px`)
     }
 
     const resetPointer = () => {
       ;[
-        '--hero-x-base', '--hero-y-base', '--hero-x-sky', '--hero-y-sky',
-        '--hero-x-mid', '--hero-y-mid', '--hero-x-near', '--hero-y-near',
+        '--hero-x-background', '--hero-y-background',
+        '--hero-x-balloons', '--hero-y-balloons',
+        '--hero-x-foreground', '--hero-y-foreground',
         '--hero-x-copy', '--hero-y-copy',
       ].forEach((property) => hero.style.setProperty(property, '0px'))
     }
@@ -73,10 +72,9 @@ export default function LayeredWorldHero({ copy }) {
   return (
     <section id="overview" className="world-hero" ref={heroRef}>
       <div className="world-hero__layers" aria-hidden="true">
-        <img className="world-hero__layer world-hero__layer--base" src={copy.image} alt="" />
-        <img className="world-hero__layer world-hero__layer--sky" src={copy.image} alt="" />
-        <img className="world-hero__layer world-hero__layer--settlement" src={copy.image} alt="" />
-        <img className="world-hero__layer world-hero__layer--land" src={copy.image} alt="" />
+        <img className="world-hero__layer world-hero__layer--background" src={copy.layers?.background || copy.image} alt="" />
+        <img className="world-hero__layer world-hero__layer--balloons" src={copy.layers?.balloons || copy.image} alt="" />
+        <img className="world-hero__layer world-hero__layer--foreground" src={copy.layers?.foreground || copy.image} alt="" />
         <div className="world-hero__haze" />
         <div className="world-hero__orbits">
           <span />

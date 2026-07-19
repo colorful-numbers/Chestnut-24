@@ -24,11 +24,22 @@ export const siteCopy = {
       secondary: '查看角色',
       secondaryHref: '#cast-entry',
       image: '/story-media/hero-sylph.png',
+      layers: {
+        background: '/story-media/hero-sylph-background.png',
+        balloons: '/story-media/hero-sylph-balloons.png',
+        foreground: '/story-media/hero-sylph-foreground.png',
+      },
     },
     defn: {
       label: 'DEFINITIONS',
       title: '定义',
       body: '从设定文档自动解析出的术语表。正文中被【】标记的术语会链接到这里。',
+      hooks: {
+        miracle: '从失去尺度的那一天开始。',
+        'sylph-corridor': '抬头。天空仍在运转。',
+        hibernation: '醒来，还是继续梦？',
+        forgetting: '有些记忆正在等待交付。',
+      },
     },
     docs: {
       label: 'DEV NOTES',
@@ -42,6 +53,13 @@ export const siteCopy = {
       pageBody: '世界设定中的支线故事碎片。每一条都是这个时代里被记录下来的片段，点击任意卡片可以阅读完整故事。',
       readMore: '阅读全文',
       back: '返回全部碎片',
+      hooks: {
+        'miracle-measure': '当答案不再稀缺。',
+        'sylph-corridor': '去听高空的回声。',
+        'ten-year-waking': '十年之后，谁先开口？',
+        'silent-city': '灯还亮着。人在哪里？',
+        'white-blade': '她只问了一个问题。',
+      },
     },
     system: {
       label: 'CHARACTER CARDS',
@@ -52,6 +70,10 @@ export const siteCopy = {
       enter: '进入对话',
       back: '返回全部角色',
       selectLabel: '选择角色',
+      hooks: {
+        artifact101: '先听她说完第一句话。',
+        qi: '她的记忆，等你确认。',
+      },
     },
     privacy: {
       label: 'PRIVACY',
@@ -106,11 +128,22 @@ export const siteCopy = {
       secondary: 'View the cast',
       secondaryHref: '#cast-entry',
       image: '/story-media/hero-sylph.png',
+      layers: {
+        background: '/story-media/hero-sylph-background.png',
+        balloons: '/story-media/hero-sylph-balloons.png',
+        foreground: '/story-media/hero-sylph-foreground.png',
+      },
     },
     defn: {
       label: 'DEFINITIONS',
       title: 'Definitions',
       body: 'A term index automatically parsed from local definition documents. Terms marked with 【】 link here.',
+      hooks: {
+        miracle: 'Begin where every measure failed.',
+        'sylph-corridor': 'Look up. The sky is still running.',
+        hibernation: 'Wake—or remain inside the dream?',
+        forgetting: 'Some memories are waiting for delivery.',
+      },
     },
     docs: {
       label: 'DEV NOTES',
@@ -124,6 +157,13 @@ export const siteCopy = {
       pageBody: 'Side story fragments from the world setting. Each one is a recorded piece of this age — open any card to read the full story.',
       readMore: 'Read the full fragment',
       back: 'Back to all fragments',
+      hooks: {
+        'miracle-measure': 'When answers stop being scarce.',
+        'sylph-corridor': 'Listen for the high-altitude echo.',
+        'ten-year-waking': 'Ten years later—who speaks first?',
+        'silent-city': 'The lights remain. Where is everyone?',
+        'white-blade': 'She asked only one question.',
+      },
     },
     system: {
       label: 'CHARACTER CARDS',
@@ -134,6 +174,10 @@ export const siteCopy = {
       enter: 'Enter the dialogue',
       back: 'Back to the cast',
       selectLabel: 'Choose a character',
+      hooks: {
+        artifact101: 'Let her finish the first sentence.',
+        qi: 'Her memory is waiting for your answer.',
+      },
     },
     privacy: {
       label: 'PRIVACY',

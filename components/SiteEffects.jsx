@@ -8,6 +8,7 @@ import { EFFECTS } from '../lib/effects'
 const REVEAL_SELECTORS = [
   '.info-hero__copy',
   '.section-heading',
+  '.game-section-heading',
   '.story-carousel__card',
   '.character-card',
   '.card-list__item',

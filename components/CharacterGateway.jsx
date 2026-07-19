@@ -54,6 +54,11 @@ export default function CharacterGateway({ copy, locale, characters }) {
 
         <div className="character-gateway__brief">
           <h3>{characterCopy.title}</h3>
+          {copy.hooks?.[activeCharacter.id] && (
+            <p key={`${activeCharacter.id}-hook`} className="character-gateway__summary card-hook">
+              {copy.hooks[activeCharacter.id]}
+            </p>
+          )}
           <Link className="game-primary-action" href={`/cast/${activeCharacter.id}`}>
             <span>{copy.enter}</span>
             <ArrowRight size={20} />

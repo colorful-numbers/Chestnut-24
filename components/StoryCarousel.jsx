@@ -11,7 +11,7 @@ function pickRandomStories(stories, count) {
   return shuffled.slice(0, Math.min(count, shuffled.length))
 }
 
-export default function StoryCarousel({ title, locale, stories, maxItems = 5, moreLabel, moreHref = '/fragments' }) {
+export default function StoryCarousel({ title, locale, stories, hooks = {}, maxItems = 5, moreLabel, moreHref = '/fragments' }) {
   const [selectedStories, setSelectedStories] = useState(() => stories.slice(0, maxItems))
 
   useEffect(() => {
@@ -49,6 +49,7 @@ export default function StoryCarousel({ title, locale, stories, maxItems = 5, mo
               />
               <div className="story-carousel__copy">
                 <h3>{storyCopy.title}</h3>
+                {hooks[story.id] && <p className="card-hook">{hooks[story.id]}</p>}
               </div>
             </Link>
           )

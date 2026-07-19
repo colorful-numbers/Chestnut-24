@@ -36,6 +36,7 @@ export default function WorldIndex({ copy, locale, definitions }) {
               <span className="world-index__shade" aria-hidden="true" />
               <div>
                 <h3>{definitionCopy.title}</h3>
+                <p className="card-hook">{copy.hooks?.[definition.slug]}</p>
               </div>
               <ArrowUpRight size={18} />
             </Link>

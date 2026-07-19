@@ -44,9 +44,9 @@ html {
   position: sticky;
   top: 0;
   z-index: 80;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(10, 11, 10, 0.94);
-  color: #f7f5ee;
+  border-bottom: 1px solid rgba(17, 19, 17, 0.14);
+  background: rgba(247, 245, 238, 0.94);
+  color: var(--game-ink);
   backdrop-filter: blur(16px);
 }
 
@@ -60,21 +60,21 @@ html {
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
-  color: #f7f5ee;
+  color: var(--game-ink);
   font-size: 1rem;
   font-weight: 760;
   text-transform: none;
 }
 
 .site-nav__brand small {
-  color: #92968f;
+  color: var(--game-muted);
   font-size: 0.58rem;
   font-weight: 600;
 }
 
 .site-nav__links {
   gap: 0;
-  color: #b7bab4;
+  color: #626660;
   font-size: 0.78rem;
 }
 
@@ -84,11 +84,11 @@ html {
   min-height: 68px;
   place-items: center;
   padding: 0 1.25rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 1px solid rgba(17, 19, 17, 0.08);
 }
 
 .site-nav__links a:last-child {
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(17, 19, 17, 0.08);
 }
 
 .site-nav__links a::after {
@@ -106,7 +106,7 @@ html {
 
 .site-nav__links a:hover,
 .site-nav__links a:focus-visible {
-  color: #fff;
+  color: #111311;
 }
 
 .site-nav__links a:hover::after,
@@ -117,21 +117,21 @@ html {
 .site-nav__menu,
 .language-switch,
 .language-switch button {
-  border-color: rgba(255, 255, 255, 0.16);
+  border-color: rgba(17, 19, 17, 0.16);
   border-radius: 0;
   background: transparent;
-  color: #f7f5ee;
-}
-
-.language-switch button.is-active {
-  background: #f7f5ee;
   color: #111311;
 }
 
+.language-switch button.is-active {
+  background: #111311;
+  color: #f7f5ee;
+}
+
 .world-hero {
-  --hero-shift-sky: 0px;
-  --hero-shift-settlement: 0px;
-  --hero-shift-land: 0px;
+  --hero-shift-background: 0px;
+  --hero-shift-balloons: 0px;
+  --hero-shift-foreground: 0px;
   position: relative;
   isolation: isolate;
   width: 100%;
@@ -163,27 +163,19 @@ html {
   will-change: transform;
 }
 
-.world-hero__layer--base {
+.world-hero__layer--background {
   z-index: 0;
-  transform: translate3d(0, var(--hero-shift-settlement), 0) scale(1.08);
+  transform: translate3d(0, var(--hero-shift-background), 0) scale(1.08);
 }
 
-.world-hero__layer--sky {
+.world-hero__layer--balloons {
   z-index: 1;
-  clip-path: inset(0 0 56% 0);
-  transform: translate3d(0, calc(-3% + var(--hero-shift-sky)), 0) scale(1.1);
+  transform: translate3d(0, var(--hero-shift-balloons), 0) scale(1.08);
 }
 
-.world-hero__layer--settlement {
+.world-hero__layer--foreground {
   z-index: 2;
-  clip-path: inset(34% 0 23% 0);
-  transform: translate3d(0, var(--hero-shift-settlement), 0) scale(1.08);
-}
-
-.world-hero__layer--land {
-  z-index: 3;
-  clip-path: inset(67% 0 0 0);
-  transform: translate3d(0, var(--hero-shift-land), 0) scale(1.11);
+  transform: translate3d(0, var(--hero-shift-foreground), 0) scale(1.08);
 }
 
 .world-hero::before {
@@ -324,8 +316,8 @@ html {
 .character-gateway {
   position: relative;
   padding-top: clamp(2.25rem, 3vw, 3rem);
-  background: var(--game-surface);
-  color: #f7f5ee;
+  background: var(--game-paper-bright);
+  color: var(--game-ink);
 }
 
 .game-section-heading {
@@ -376,14 +368,14 @@ html {
   display: grid;
   grid-template-columns: 180px minmax(360px, 1.35fr) minmax(330px, 0.85fr);
   min-height: 620px;
-  border-top: 1px solid var(--game-line-light);
-  border-bottom: 1px solid var(--game-line-light);
+  border-top: 1px solid var(--game-line);
+  border-bottom: 1px solid var(--game-line);
 }
 
 .character-gateway__tabs {
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--game-line-light);
+  border-right: 1px solid var(--game-line);
 }
 
 .character-gateway__tabs button {
@@ -396,10 +388,10 @@ html {
   min-height: 120px;
   padding: 1.25rem;
   border: 0;
-  border-bottom: 1px solid var(--game-line-light);
+  border-bottom: 1px solid var(--game-line);
   border-radius: 0;
   background: transparent;
-  color: #9b9f98;
+  color: #666a64;
   text-align: left;
   cursor: pointer;
 }
@@ -421,8 +413,8 @@ html {
 }
 
 .character-gateway__tabs button.is-active {
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  background: rgba(17, 19, 17, 0.055);
+  color: #111311;
 }
 
 .character-gateway__tabs button.is-active::before {
@@ -457,7 +449,7 @@ html {
   content: '';
   position: absolute;
   inset: 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(17, 19, 17, 0.1);
   pointer-events: none;
 }
 
@@ -499,7 +491,7 @@ html {
   flex-direction: column;
   justify-content: center;
   padding: clamp(2rem, 4vw, 4rem);
-  border-left: 1px solid var(--game-line-light);
+  border-left: 1px solid var(--game-line);
 }
 
 .character-gateway__brief > span {
@@ -515,7 +507,7 @@ html {
 
 .character-gateway__summary {
   margin: 1.4rem 0 0;
-  color: #c3c6bf;
+  color: #595d57;
   font-size: 0.94rem;
   line-height: 1.8;
 }
@@ -559,9 +551,9 @@ html {
   width: 100%;
   min-width: 0;
   margin-top: auto;
-  border-color: #f7f5ee;
-  background: #f7f5ee;
-  color: #111311;
+  border-color: #111311;
+  background: #111311;
+  color: #f7f5ee;
 }
 
 .character-gateway__brief .game-primary-action:hover,
@@ -700,8 +692,8 @@ html {
   max-width: none;
   margin: 0;
   padding: clamp(5rem, 8vw, 8rem) max(1.5rem, calc((100% - 1320px) / 2));
-  background: #0f1110;
-  color: #f7f5ee;
+  background: var(--game-paper-bright);
+  color: var(--game-ink);
 }
 
 .story-carousel-section .section-heading {
@@ -709,7 +701,7 @@ html {
   grid-template-columns: 1fr auto;
   align-items: end;
   margin-bottom: 2.5rem;
-  border-bottom: 1px solid var(--game-line-light);
+  border-bottom: 1px solid var(--game-line);
   padding-bottom: 1.25rem;
 }
 
@@ -726,7 +718,7 @@ html {
 }
 
 .story-carousel-section .section-heading__more {
-  color: #c1c4bd;
+  color: #5b5f59;
 }
 
 .story-carousel-section .carousel-item {
@@ -735,7 +727,7 @@ html {
 
 .story-carousel-section .story-carousel__card {
   aspect-ratio: 16 / 8.5;
-  border: 1px solid var(--game-line-light);
+  border: 1px solid var(--game-line);
   border-radius: 0;
 }
 
@@ -861,9 +853,9 @@ html {
 }
 
 .site-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  background: #090a09;
-  color: #e9e8e2;
+  border-top: 1px solid rgba(17, 19, 17, 0.14);
+  background: #f7f5ee;
+  color: #30332f;
 }
 
 .site-footer__inner {
@@ -874,4 +866,3 @@ html {
 .site-footer__menu {
   gap: 0.8rem 1.5rem;
 }
-

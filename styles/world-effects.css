@@ -30,9 +30,9 @@
 
 /* Keep the redesigned footer above legacy page styles declared earlier. */
 .site-footer.site-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  background: #090a09;
-  color: #e9e8e2;
+  border-top: 1px solid rgba(17, 19, 17, 0.14);
+  background: #f7f5ee;
+  color: #30332f;
 }
 
 .site-footer.site-footer .site-footer__inner {

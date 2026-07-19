@@ -139,17 +139,15 @@ body.nav-is-open {
   to { translate: 0 -18px; }
 }
 
-/* Hero multi-layer parallax. Each clipped image plane responds to scroll and
-   pointer movement at a different rate, preserving the source composition. */
+/* Hero multi-layer parallax. These are three physically separated source
+   images, so every plane can move without revealing duplicated artwork. */
 .world-hero {
-  --hero-x-base: 0px;
-  --hero-y-base: 0px;
-  --hero-x-sky: 0px;
-  --hero-y-sky: 0px;
-  --hero-x-mid: 0px;
-  --hero-y-mid: 0px;
-  --hero-x-near: 0px;
-  --hero-y-near: 0px;
+  --hero-x-background: 0px;
+  --hero-y-background: 0px;
+  --hero-x-balloons: 0px;
+  --hero-y-balloons: 0px;
+  --hero-x-foreground: 0px;
+  --hero-y-foreground: 0px;
   --hero-x-copy: 0px;
   --hero-y-copy: 0px;
   --hero-copy-shift: 0px;
@@ -160,47 +158,34 @@ body.nav-is-open {
   transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.world-hero__layer--base {
+.world-hero__layer--background {
   transform:
     translate3d(
-      var(--hero-x-base),
-      calc(var(--hero-shift-settlement) + var(--hero-y-base)),
+      var(--hero-x-background),
+      calc(var(--hero-shift-background) + var(--hero-y-background)),
       0
     )
-    scale(1.095);
+    scale(1.08);
 }
 
-.world-hero__layer--sky {
-  clip-path: polygon(0 0, 100% 0, 100% 45%, 67% 43%, 51% 51%, 0 47%);
+.world-hero__layer--balloons {
   transform:
     translate3d(
-      var(--hero-x-sky),
-      calc(-3% + var(--hero-shift-sky) + var(--hero-y-sky)),
+      var(--hero-x-balloons),
+      calc(var(--hero-shift-balloons) + var(--hero-y-balloons)),
       0
     )
-    scale(1.12);
+    scale(1.08);
 }
 
-.world-hero__layer--settlement {
-  clip-path: polygon(0 35%, 51% 39%, 68% 31%, 100% 38%, 100% 79%, 58% 76%, 0 83%);
+.world-hero__layer--foreground {
   transform:
     translate3d(
-      var(--hero-x-mid),
-      calc(var(--hero-shift-settlement) + var(--hero-y-mid)),
+      var(--hero-x-foreground),
+      calc(var(--hero-shift-foreground) + var(--hero-y-foreground)),
       0
     )
-    scale(1.1);
-}
-
-.world-hero__layer--land {
-  clip-path: polygon(0 69%, 37% 75%, 59% 68%, 100% 73%, 100% 100%, 0 100%);
-  transform:
-    translate3d(
-      var(--hero-x-near),
-      calc(var(--hero-shift-land) + var(--hero-y-near)),
-      0
-    )
-    scale(1.135);
+    scale(1.08);
 }
 
 .world-hero__copy {
@@ -230,8 +215,8 @@ body.nav-is-open {
   inset: 0;
   z-index: 5;
   transform: translate3d(
-    var(--hero-x-near),
-    var(--hero-y-near),
+    var(--hero-x-foreground),
+    var(--hero-y-foreground),
     0
   );
   transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -293,6 +278,71 @@ body.nav-is-open {
 @keyframes hero-copy-in {
   from { opacity: 0; translate: 0 22px; }
   to { opacity: 1; translate: 0; }
+}
+
+/* Quiet card copy: one invitation line, revealed only when its card enters the
+   viewport. Hover motion points toward the click without giving the story away. */
+.card-hook {
+  position: relative;
+  max-width: 34ch;
+  margin: 0.85rem 0 0;
+  padding-left: 1rem;
+  color: #555952;
+  font-size: clamp(0.76rem, 1.1vw, 0.9rem);
+  line-height: 1.55;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transform: translateY(12px);
+}
+
+.card-hook::before {
+  content: '';
+  position: absolute;
+  top: 0.7em;
+  left: 0;
+  width: 0.48rem;
+  height: 1px;
+  background: var(--game-signal, #ef4b3f);
+}
+
+.fx-reveal.is-revealed .card-hook,
+.character-gateway__stage.is-revealed .card-hook {
+  animation: card-hook-in 760ms calc(var(--reveal-delay, 0ms) + 220ms) cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.story-carousel__copy .card-hook,
+.world-index__item .card-hook {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.story-carousel__copy h3,
+.world-index__item h3,
+.character-gateway__brief h3,
+.card-hook {
+  transition: color 240ms ease, transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-carousel__card:hover h3,
+.story-carousel__card:focus-visible h3,
+.world-index__item:hover h3,
+.world-index__item:focus-visible h3 {
+  transform: translateX(0.5rem);
+}
+
+.story-carousel__card:hover .card-hook,
+.story-carousel__card:focus-visible .card-hook,
+.world-index__item:hover .card-hook,
+.world-index__item:focus-visible .card-hook {
+  color: #fff;
+  transform: translateX(0.35rem);
+}
+
+@keyframes card-hook-in {
+  to {
+    opacity: 1;
+    clip-path: inset(0);
+    transform: translateY(0);
+  }
 }
 
 /* Scroll-linked media depth. */
@@ -477,7 +527,7 @@ body.nav-is-open {
     min-height: 0;
     aspect-ratio: auto;
     grid-template-rows: auto minmax(112px, auto);
-    background: #111311;
+    background: #f7f5ee;
   }
 
   .story-carousel-section .story-carousel__card > img {
@@ -495,15 +545,21 @@ body.nav-is-open {
     position: relative;
     inset: auto;
     display: flex;
+    flex-direction: column;
     width: 100%;
-    align-items: center;
+    align-items: flex-start;
     padding: 1.25rem;
-    background: #111311;
+    background: #f7f5ee;
   }
 
   .story-carousel-section .story-carousel__copy h3 {
     margin: 0;
+    color: #111311;
     font-size: clamp(1.6rem, 8vw, 2.5rem);
+  }
+
+  .story-carousel-section .story-carousel__copy .card-hook {
+    color: #555952;
   }
 
   .fx-depth-media,
@@ -522,7 +578,8 @@ body.nav-is-open {
   .world-hero__kicker,
   .world-hero h1,
   .world-hero__subtitle,
-  .world-hero__actions {
+  .world-hero__actions,
+  .card-hook {
     animation: none;
   }
 
@@ -538,5 +595,11 @@ body.nav-is-open {
 
   .fx-depth-media {
     transform: none !important;
+  }
+
+  .card-hook {
+    opacity: 1;
+    clip-path: none;
+    transform: none;
   }
 }

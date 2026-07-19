@@ -32,7 +32,7 @@
   .character-gateway__brief {
     grid-column: 1 / -1;
     min-height: 260px;
-    border-top: 1px solid var(--game-line-light);
+    border-top: 1px solid var(--game-line);
     border-left: 0;
   }
 
@@ -87,10 +87,6 @@
 
   .world-hero__layer {
     object-position: 28% 18%;
-  }
-
-  .world-hero__layer--settlement {
-    transform: translate3d(0, var(--hero-shift-settlement), 0) scale(1.08);
   }
 
   .world-hero::before {
@@ -163,12 +159,12 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     border-right: 0;
-    border-bottom: 1px solid var(--game-line-light);
+    border-bottom: 1px solid var(--game-line);
   }
 
   .character-gateway__tabs button {
     min-height: 104px;
-    border-right: 1px solid var(--game-line-light);
+    border-right: 1px solid var(--game-line);
     border-bottom: 0;
   }
 

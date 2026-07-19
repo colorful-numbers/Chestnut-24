@@ -47,6 +47,7 @@ export default function Home({ definitions, sideStories, characters }) {
         <StoryCarousel
           title={t.notice.title}
           moreLabel={t.notice.more}
+          hooks={t.notice.hooks}
           locale={locale}
           stories={sideStories}
           maxItems={5}

@@ -2,6 +2,28 @@
 
 ## 2026-07-19
 
+### Light Surface And Physical Hero Layers
+
+Corrected the homepage after review showed that its structural surfaces still
+read as a dark theme and that clipped copies of one hero image did not create
+convincing depth.
+
+- Regenerated the existing hero artwork as three aligned 1536×1024 planes:
+  distant sky/city, transparent balloon structures, and transparent foreground
+  architecture/vegetation. No new scene or story element was introduced.
+- Rewired hero scroll and pointer transforms to move the three physical planes
+  at distinct speeds, with the foreground and balloon layers traveling farther
+  than the reconstructed background.
+- Converted the homepage navigation, character gateway, story carousel section,
+  mobile menu, and footer to light surfaces with corrected ink/muted text colors.
+  Dark values remain only inside artwork overlays and primary action controls.
+- Added one-line curiosity hooks to character, world, and fragment cards. The
+  hooks use clipped scroll reveals and small hover shifts to invite interaction
+  without summarizing the underlying story or character dialogue.
+- Verified the homepage at desktop and 390×844 mobile widths: all three layers
+  load, the mobile menu remains full height, no horizontal overflow appears, and
+  the browser console is clean.
+
 ### Responsive Interaction And Light-Only Pass
 
 Reworked the current game-show UI around reliable mobile navigation, visible
