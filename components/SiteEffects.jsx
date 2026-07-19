@@ -29,7 +29,7 @@ const PARALLAX_SELECTORS = [
   '.story-post__hero > img',
 ]
 
-const STAGGER_MAX_MS = 320
+const STAGGER_STEP_MS = 60
 const WORLD_NODES = [
   { x: 8, y: 18, size: 6, delay: -2 },
   { x: 18, y: 68, size: 3, delay: -8 },
@@ -50,9 +50,9 @@ function prefersReducedMotion() {
 export default function SiteEffects() {
   const router = useRouter()
 
-  // H + I: reveal on scroll, with a randomized per-widget delay.
+  // H + I: reveal on scroll, with a short deterministic sequence.
   useEffect(() => {
-    if (!EFFECTS.scrollReveal || prefersReducedMotion()) return undefined
+    if (!EFFECTS.scrollReveal) return undefined
 
     let observer
     const setup = () => {
@@ -68,14 +68,16 @@ export default function SiteEffects() {
 
       const viewportBottom = window.innerHeight * 0.9
       const seen = new Set()
+      let revealIndex = 0
       REVEAL_SELECTORS.forEach((selector) => {
         document.querySelectorAll(selector).forEach((el) => {
           if (seen.has(el) || el.classList.contains('fx-reveal')) return
           seen.add(el)
           el.classList.add('fx-reveal')
           if (EFFECTS.cardStagger) {
-            el.style.setProperty('--reveal-delay', `${Math.round(Math.random() * STAGGER_MAX_MS)}ms`)
+            el.style.setProperty('--reveal-delay', `${(revealIndex % 6) * STAGGER_STEP_MS}ms`)
           }
+          revealIndex += 1
           if (el.getBoundingClientRect().top < viewportBottom) {
             // Already in view on load: play the intro once on the next frame.
             window.requestAnimationFrame(() => el.classList.add('is-revealed'))
@@ -129,7 +131,7 @@ export default function SiteEffects() {
   // K: nearby media moves more slowly than the page, creating depth between
   // each image and its frame without changing layout or intercepting input.
   useEffect(() => {
-    if (!EFFECTS.mediaParallax || prefersReducedMotion()) return undefined
+    if (!EFFECTS.mediaParallax) return undefined
 
     let media = []
     let frame = 0
@@ -150,7 +152,8 @@ export default function SiteEffects() {
         if (rect.bottom < -100 || rect.top > window.innerHeight + 100) return
         const center = rect.top + rect.height / 2
         const progress = Math.max(-1, Math.min(1, (viewportCenter - center) / window.innerHeight))
-        element.style.setProperty('--media-shift', `${(progress * 34).toFixed(2)}px`)
+        const motionScale = prefersReducedMotion() ? 0.45 : 1
+        element.style.setProperty('--media-shift', `${(progress * 34 * motionScale).toFixed(2)}px`)
       })
     }
 

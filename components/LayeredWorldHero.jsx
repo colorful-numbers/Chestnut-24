@@ -11,19 +11,34 @@ export default function LayeredWorldHero({ copy }) {
     const hero = heroRef.current
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
 
-    if (!hero || reduceMotion.matches) return undefined
+    if (!hero) return undefined
 
     let frame = 0
+    let mounted = true
+    const layerImages = Array.from(hero.querySelectorAll('.world-hero__layer'))
+    const waitForLayer = (image) => {
+      if (image.complete) {
+        return image.naturalWidth > 0 ? Promise.resolve() : Promise.reject(new Error('Hero layer failed to load'))
+      }
+      return new Promise((resolve, reject) => {
+        image.addEventListener('load', resolve, { once: true })
+        image.addEventListener('error', reject, { once: true })
+      })
+    }
+    Promise.all(layerImages.map(waitForLayer)).then(() => {
+      if (mounted) hero.classList.add('is-layered')
+    }).catch(() => {})
 
     const updateLayers = () => {
       frame = 0
       const rect = hero.getBoundingClientRect()
       const progress = clamp(-rect.top / Math.max(rect.height, 1), 0, 1)
 
-      hero.style.setProperty('--hero-shift-background', `${progress * 28}px`)
-      hero.style.setProperty('--hero-shift-balloons', `${progress * 104}px`)
-      hero.style.setProperty('--hero-shift-foreground', `${progress * -112}px`)
-      hero.style.setProperty('--hero-copy-shift', `${progress * -64}px`)
+      hero.style.setProperty('--hero-progress', progress.toFixed(4))
+      hero.style.setProperty('--hero-shift-background', `${progress * -18}px`)
+      hero.style.setProperty('--hero-shift-balloons', `${progress * -74}px`)
+      hero.style.setProperty('--hero-shift-foreground', `${progress * -138}px`)
+      hero.style.setProperty('--hero-copy-shift', `${progress * -84}px`)
       hero.style.setProperty('--hero-fade', `${1 - progress * 0.82}`)
     }
 
@@ -35,14 +50,15 @@ export default function LayeredWorldHero({ copy }) {
       const rect = hero.getBoundingClientRect()
       const x = clamp(((event.clientX - rect.left) / rect.width) * 2 - 1, -1, 1)
       const y = clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1, 1)
-      hero.style.setProperty('--hero-x-background', `${(x * -4).toFixed(2)}px`)
-      hero.style.setProperty('--hero-y-background', `${(y * -3).toFixed(2)}px`)
-      hero.style.setProperty('--hero-x-balloons', `${(x * 16).toFixed(2)}px`)
-      hero.style.setProperty('--hero-y-balloons', `${(y * 10).toFixed(2)}px`)
-      hero.style.setProperty('--hero-x-foreground', `${(x * 28).toFixed(2)}px`)
-      hero.style.setProperty('--hero-y-foreground', `${(y * 18).toFixed(2)}px`)
-      hero.style.setProperty('--hero-x-copy', `${(x * -7).toFixed(2)}px`)
-      hero.style.setProperty('--hero-y-copy', `${(y * -4).toFixed(2)}px`)
+      const pointerScale = reduceMotion.matches ? 0.35 : 1
+      hero.style.setProperty('--hero-x-background', `${(x * -4 * pointerScale).toFixed(2)}px`)
+      hero.style.setProperty('--hero-y-background', `${(y * -3 * pointerScale).toFixed(2)}px`)
+      hero.style.setProperty('--hero-x-balloons', `${(x * 16 * pointerScale).toFixed(2)}px`)
+      hero.style.setProperty('--hero-y-balloons', `${(y * 10 * pointerScale).toFixed(2)}px`)
+      hero.style.setProperty('--hero-x-foreground', `${(x * 28 * pointerScale).toFixed(2)}px`)
+      hero.style.setProperty('--hero-y-foreground', `${(y * 18 * pointerScale).toFixed(2)}px`)
+      hero.style.setProperty('--hero-x-copy', `${(x * -7 * pointerScale).toFixed(2)}px`)
+      hero.style.setProperty('--hero-y-copy', `${(y * -4 * pointerScale).toFixed(2)}px`)
     }
 
     const resetPointer = () => {
@@ -61,6 +77,7 @@ export default function LayeredWorldHero({ copy }) {
     hero.addEventListener('pointerleave', resetPointer)
 
     return () => {
+      mounted = false
       window.removeEventListener('scroll', requestUpdate)
       window.removeEventListener('resize', requestUpdate)
       hero.removeEventListener('pointermove', onPointerMove)
@@ -72,9 +89,10 @@ export default function LayeredWorldHero({ copy }) {
   return (
     <section id="overview" className="world-hero" ref={heroRef}>
       <div className="world-hero__layers" aria-hidden="true">
-        <img className="world-hero__layer world-hero__layer--background" src={copy.layers?.background || copy.image} alt="" />
-        <img className="world-hero__layer world-hero__layer--balloons" src={copy.layers?.balloons || copy.image} alt="" />
-        <img className="world-hero__layer world-hero__layer--foreground" src={copy.layers?.foreground || copy.image} alt="" />
+        <img className="world-hero__fallback" src={copy.image} alt="" loading="eager" fetchPriority="high" decoding="sync" />
+        <img className="world-hero__layer world-hero__layer--background" src={copy.layers?.background || copy.image} alt="" loading="eager" fetchPriority="high" decoding="sync" />
+        <img className="world-hero__layer world-hero__layer--balloons" src={copy.layers?.balloons || copy.image} alt="" loading="eager" decoding="sync" />
+        <img className="world-hero__layer world-hero__layer--foreground" src={copy.layers?.foreground || copy.image} alt="" loading="eager" decoding="sync" />
         <div className="world-hero__haze" />
         <div className="world-hero__orbits">
           <span />

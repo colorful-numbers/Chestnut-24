@@ -28,13 +28,12 @@ export default function CastPage({ definitions, characters }) {
       </Head>
       <Navbar />
       <main>
-        <section className="cast-archive">
+        <section className="cast-archive archive-page">
           <div className="game-section-heading cast-archive__heading">
             <div>
               <span>{t.system.label}</span>
               <h1>{t.system.title}</h1>
             </div>
-            <p>{t.system.pageBody}</p>
           </div>
           <div className="cast-dossiers">
             {characters.map((character) => {

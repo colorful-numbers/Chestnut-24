@@ -24,17 +24,16 @@ export default function FragmentsPage({ definitions, sideStories }) {
     <div className="info-site min-h-screen flex flex-col">
       <Head>
         <title>{`${t.notice.title} - ${t.metaTitle}`}</title>
-        <meta name="description" content={t.notice.pageBody} />
+        <meta name="description" content={`${t.notice.title} - ${t.metaTitle}`} />
       </Head>
       <Navbar />
       <main>
-        <section className="info-section defn-page">
+        <section className="info-section defn-page archive-page archive-page--fragments">
           <div className="section-heading section-heading--wide">
             <div>
               <span>{t.notice.label}</span>
               <h1>{t.notice.title}</h1>
             </div>
-            <p>{t.notice.pageBody}</p>
           </div>
           <div className="card-list">
             {sideStories.map((story) => {

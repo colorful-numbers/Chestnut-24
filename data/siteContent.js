@@ -50,7 +50,6 @@ export const siteCopy = {
       label: 'RANDOM FRAGMENTS',
       title: '支线故事碎片',
       more: '查看全部碎片',
-      pageBody: '世界设定中的支线故事碎片。每一条都是这个时代里被记录下来的片段，点击任意卡片可以阅读完整故事。',
       readMore: '阅读全文',
       back: '返回全部碎片',
       hooks: {
@@ -154,7 +153,6 @@ export const siteCopy = {
       label: 'RANDOM FRAGMENTS',
       title: 'Side Story Fragments',
       more: 'View all fragments',
-      pageBody: 'Side story fragments from the world setting. Each one is a recorded piece of this age — open any card to read the full story.',
       readMore: 'Read the full fragment',
       back: 'Back to all fragments',
       hooks: {

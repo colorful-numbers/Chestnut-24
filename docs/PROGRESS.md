@@ -2,6 +2,29 @@
 
 ## 2026-07-19
 
+### Scroll Journey And Archive Consistency
+
+Corrected the interaction failures found during live review without rewriting
+story, character, or definition copy.
+
+- Rebuilt the hero's first frame around the complete original composition. A
+  visible eager-loaded source image now remains in place until all three aligned
+  parallax planes have loaded, preventing a blank or partially decoded opening.
+- Removed the reduced-motion early return that had disabled the hero effect.
+  Scroll now drives the background, balloon, foreground, and copy planes at
+  distinct rates; pointer movement remains gentler when reduced motion is set.
+- Unified `/cast`, `/defn`, and `/fragments` under one light, hard-edged archive
+  system with matching spacing, type scale, card geometry, and mobile columns.
+- Removed the requested fragment helper paragraph from rendered markup and
+  locale data. The equivalent archive-introduction paragraphs were also removed
+  from the Cast and Definitions headings without changing their source copy.
+- Replaced random entry delays with deterministic scroll reveals. Archive cards
+  now reveal by viewport row, and supporting accent lines draw as cards enter.
+- Verified a clean production build, all four primary routes at HTTP 200, no
+  horizontal overflow at an emulated 390-by-844 viewport, full hero-layer loads,
+  measurable layer separation after scrolling, and viewport-triggered card
+  reveals on `/fragments`.
+
 ### Light Surface And Physical Hero Layers
 
 Corrected the homepage after review showed that its structural surfaces still

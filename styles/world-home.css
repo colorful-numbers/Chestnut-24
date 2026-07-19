@@ -132,6 +132,7 @@ html {
   --hero-shift-background: 0px;
   --hero-shift-balloons: 0px;
   --hero-shift-foreground: 0px;
+  --hero-progress: 0;
   position: relative;
   isolation: isolate;
   width: 100%;
@@ -145,37 +146,54 @@ html {
 
 .world-hero__layers {
   position: absolute;
-  inset: -8% -4%;
+  inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
 }
 
+.world-hero__fallback,
 .world-hero__layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center 18%;
-  transform: translate3d(0, 0, 0) scale(1.08);
+  object-fit: contain;
+  object-position: center;
+  transform: translate3d(0, 0, 0);
   transform-origin: center;
   will-change: transform;
+  opacity: 0;
+}
+
+.world-hero__fallback {
+  z-index: 0;
+  object-fit: contain;
+  object-position: center;
+  opacity: 1;
+}
+
+.world-hero.is-layered .world-hero__layer {
+  opacity: 1;
+}
+
+.world-hero.is-layered .world-hero__fallback {
+  opacity: 0;
 }
 
 .world-hero__layer--background {
   z-index: 0;
-  transform: translate3d(0, var(--hero-shift-background), 0) scale(1.08);
+  transform: translate3d(0, var(--hero-shift-background), 0);
 }
 
 .world-hero__layer--balloons {
   z-index: 1;
-  transform: translate3d(0, var(--hero-shift-balloons), 0) scale(1.08);
+  transform: translate3d(0, var(--hero-shift-balloons), 0);
 }
 
 .world-hero__layer--foreground {
   z-index: 2;
-  transform: translate3d(0, var(--hero-shift-foreground), 0) scale(1.08);
+  transform: translate3d(0, var(--hero-shift-foreground), 0);
 }
 
 .world-hero::before {
@@ -194,9 +212,14 @@ html {
   top: 0;
   bottom: 0;
   left: clamp(1.25rem, 6vw, 6rem);
-  width: 1px;
+  width: 2px;
   z-index: 5;
-  background: rgba(17, 19, 17, 0.28);
+  background:
+    linear-gradient(
+      to bottom,
+      var(--game-signal) 0 calc(var(--hero-progress) * 100%),
+      rgba(17, 19, 17, 0.24) calc(var(--hero-progress) * 100%) 100%
+    );
   pointer-events: none;
 }
 

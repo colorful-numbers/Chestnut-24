@@ -23,13 +23,12 @@ export default function DefinitionsPage({ definitions }) {
       </Head>
       <Navbar />
       <main>
-        <section className="info-section defn-page">
+        <section className="info-section defn-page archive-page archive-page--definitions">
           <div className="section-heading section-heading--wide">
             <div>
               <span>{t.defn.label}</span>
               <h1>{t.defn.title}</h1>
             </div>
-            <p>{t.defn.body}</p>
           </div>
           <div className="defn-grid">
             {definitions.map((definition) => {

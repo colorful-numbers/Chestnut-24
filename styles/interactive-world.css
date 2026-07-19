@@ -29,6 +29,20 @@ body.nav-is-open {
   background: rgba(236, 234, 227, 0.94);
 }
 
+.info-site,
+.site-nav,
+.site-footer {
+  --site-bg: #efede6;
+  --site-bg-soft: #f7f5ee;
+  --site-panel: rgba(247, 245, 238, 0.9);
+  --site-line: rgba(17, 19, 17, 0.16);
+  --site-line-strong: rgba(17, 19, 17, 0.34);
+  --site-text: #111311;
+  --site-muted: #555952;
+  --site-accent: #111311;
+  --site-shadow: rgba(17, 19, 17, 0.12);
+}
+
 /* Cursor-responsive Sylph network. The geometry shifts with the pointer while
    its own slow drift keeps the page alive when the pointer is still. */
 .world-scene {
@@ -165,7 +179,7 @@ body.nav-is-open {
       calc(var(--hero-shift-background) + var(--hero-y-background)),
       0
     )
-    scale(1.08);
+    scale(1);
 }
 
 .world-hero__layer--balloons {
@@ -175,7 +189,7 @@ body.nav-is-open {
       calc(var(--hero-shift-balloons) + var(--hero-y-balloons)),
       0
     )
-    scale(1.08);
+    scale(1);
 }
 
 .world-hero__layer--foreground {
@@ -185,7 +199,7 @@ body.nav-is-open {
       calc(var(--hero-shift-foreground) + var(--hero-y-foreground)),
       0
     )
-    scale(1.08);
+    scale(1);
 }
 
 .world-hero__copy {
@@ -481,6 +495,7 @@ body.nav-is-open {
     top: auto;
     left: auto;
     width: 100%;
+    box-sizing: border-box;
     padding: 2rem 1.25rem 3.75rem;
     opacity: 1;
     transform: translate3d(0, var(--hero-copy-shift), 0);
@@ -593,13 +608,261 @@ body.nav-is-open {
     transition: none;
   }
 
-  .fx-depth-media {
-    transform: none !important;
-  }
-
   .card-hook {
     opacity: 1;
     clip-path: none;
     transform: none;
+  }
+}
+
+/* One light archive language for Cast, Definitions, and Fragments. */
+.archive-page {
+  width: min(1320px, calc(100% - 3rem));
+  min-height: calc(100svh - 68px);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 8vw, 8rem) 0 clamp(6rem, 10vw, 10rem);
+  background: transparent;
+  color: #111311;
+}
+
+.archive-page .section-heading,
+.archive-page .game-section-heading {
+  display: block;
+  margin-bottom: clamp(2.5rem, 5vw, 4.75rem);
+}
+
+.archive-page .section-heading > div > span,
+.archive-page .game-section-heading > div > span {
+  color: var(--game-signal);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.archive-page .section-heading h1,
+.archive-page .game-section-heading h1 {
+  max-width: 11ch;
+  margin: 0.65rem 0 0;
+  color: #111311;
+  font-size: clamp(3.75rem, 8vw, 7rem);
+  font-weight: 810;
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+}
+
+.archive-page .cast-dossiers,
+.archive-page .card-list,
+.archive-page .defn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  border: 0;
+}
+
+.archive-page .cast-dossier,
+.archive-page .card-list__item,
+.archive-page .defn-card {
+  position: relative;
+  min-height: 0;
+  border: 1px solid rgba(17, 19, 17, 0.2);
+  border-radius: 0;
+  background: rgba(247, 245, 238, 0.9);
+  color: #111311;
+  box-shadow: none;
+  overflow: hidden;
+  transition:
+    border-color 220ms ease,
+    background 220ms ease,
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.archive-page .cast-dossier::before,
+.archive-page .card-list__item::before,
+.archive-page .defn-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  z-index: 3;
+  width: 100%;
+  height: 3px;
+  background: var(--game-signal);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.archive-page .cast-dossier:hover,
+.archive-page .cast-dossier:focus-visible,
+.archive-page .card-list__item:hover,
+.archive-page .card-list__item:focus-visible {
+  border-color: rgba(17, 19, 17, 0.5);
+  background: #fffdf6;
+  transform: translateY(-6px);
+}
+
+.archive-page .cast-dossier {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+}
+
+.archive-page .cast-dossier__media,
+.archive-page .card-list__media {
+  min-height: 0;
+  aspect-ratio: 3 / 2;
+  background: #dedcd5;
+}
+
+.archive-page .cast-dossier__media img,
+.archive-page .card-list__media img {
+  object-fit: cover;
+  filter: saturate(0.78) contrast(1.03);
+}
+
+.archive-page .cast-dossier__copy,
+.archive-page .card-list__copy {
+  min-height: 250px;
+  padding: clamp(1.35rem, 2.5vw, 2.25rem);
+  border: 0;
+  border-top: 1px solid rgba(17, 19, 17, 0.16);
+}
+
+.archive-page .cast-dossier__copy {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.archive-page .cast-dossier__copy h2,
+.archive-page .card-list__copy h2,
+.archive-page .defn-card h2 {
+  color: #111311;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  font-weight: 760;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.archive-page .cast-dossier__copy h2 {
+  margin: 0;
+}
+
+.archive-page .cast-dossier__copy p,
+.archive-page .card-list__copy p,
+.archive-page .defn-card p {
+  display: -webkit-box;
+  margin: 1rem 0 0;
+  color: #555952;
+  line-height: 1.75;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.archive-page .cast-dossier__copy p,
+.archive-page .card-list__copy p {
+  -webkit-line-clamp: 2;
+}
+
+.archive-page .cast-dossier__cta,
+.archive-page .card-list__cta {
+  width: max-content;
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border: 0;
+  color: #111311;
+  font-size: 0.78rem;
+  font-weight: 720;
+}
+
+.archive-page .cast-dossier__cta svg,
+.archive-page .card-list__cta svg {
+  transition: transform 220ms ease;
+}
+
+.archive-page .cast-dossier:hover .cast-dossier__cta svg,
+.archive-page .cast-dossier:focus-visible .cast-dossier__cta svg,
+.archive-page .card-list__item:hover .card-list__cta svg,
+.archive-page .card-list__item:focus-visible .card-list__cta svg {
+  transform: translateX(6px);
+}
+
+.archive-page .card-list__item {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+}
+
+.archive-page .defn-card {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.archive-page .defn-card span {
+  color: #686b65;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.68rem;
+}
+
+.archive-page .defn-card h2 {
+  margin: 1.6rem 0 0;
+}
+
+.archive-page .defn-card p {
+  -webkit-line-clamp: 3;
+}
+
+@supports (animation-timeline: view()) {
+  .archive-page .cast-dossier::before,
+  .archive-page .card-list__item::before,
+  .archive-page .defn-card::before {
+    animation: archive-trace linear both;
+    animation-range: entry 0% cover 32%;
+    animation-timeline: view();
+  }
+}
+
+@keyframes archive-trace {
+  to { transform: scaleX(1); }
+}
+
+@media (max-width: 760px) {
+  .site-nav__mobile {
+    border-top-color: rgba(17, 19, 17, 0.14);
+    background: #f7f5ee;
+  }
+
+  .site-nav__mobile a {
+    border-bottom-color: rgba(17, 19, 17, 0.12);
+    color: #111311;
+  }
+
+  .archive-page {
+    width: calc(100% - 2rem);
+    padding: 4rem 0 6rem;
+  }
+
+  .archive-page .section-heading,
+  .archive-page .game-section-heading {
+    margin-bottom: 2.5rem;
+  }
+
+  .archive-page .section-heading h1,
+  .archive-page .game-section-heading h1 {
+    font-size: clamp(3.25rem, 17vw, 5rem);
+  }
+
+  .archive-page .cast-dossiers,
+  .archive-page .card-list,
+  .archive-page .defn-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .archive-page .cast-dossier__copy,
+  .archive-page .card-list__copy {
+    min-height: 220px;
+  }
+
+  .archive-page .cast-dossier__copy h2,
+  .archive-page .card-list__copy h2,
+  .archive-page .defn-card h2 {
+    font-size: clamp(2rem, 10vw, 3rem);
   }
 }
