@@ -21,19 +21,25 @@ const REVEAL_SELECTORS = [
   '.cast-dossier',
 ]
 
-// Repeated widgets that catch a cursor-following highlight.
-const LIGHT_SELECTORS = [
-  '.story-carousel__card',
-  '.card-list__item',
-  '.defn-card',
-  '.info-module-card',
-  '.character-card',
-  '.dev-note',
-  '.world-index__item',
-  '.cast-dossier',
+const PARALLAX_SELECTORS = [
+  '.story-carousel__card > img',
+  '.world-index__item > img',
+  '.card-list__media > img',
+  '.story-post__hero > img',
 ]
 
 const STAGGER_MAX_MS = 320
+const WORLD_NODES = [
+  { x: 8, y: 18, size: 6, delay: -2 },
+  { x: 18, y: 68, size: 3, delay: -8 },
+  { x: 31, y: 38, size: 5, delay: -4 },
+  { x: 43, y: 82, size: 4, delay: -11 },
+  { x: 57, y: 14, size: 3, delay: -6 },
+  { x: 66, y: 55, size: 7, delay: -1 },
+  { x: 78, y: 29, size: 4, delay: -9 },
+  { x: 88, y: 76, size: 5, delay: -5 },
+  { x: 95, y: 44, size: 3, delay: -12 },
+]
 
 function prefersReducedMotion() {
   return typeof window !== 'undefined'
@@ -88,45 +94,104 @@ export default function SiteEffects() {
     }
   }, [router.events])
 
-  // J: a soft point-light that follows the cursor (page-wide + per-widget sheen).
+  // J: move the world-field geometry with the pointer. This is intentionally
+  // directional rather than luminous, so it never behaves like a spotlight.
   useEffect(() => {
-    if (!EFFECTS.cursorLight || prefersReducedMotion()) return undefined
+    if (!EFFECTS.worldScene || prefersReducedMotion()) return undefined
 
     const root = document.documentElement
-    root.classList.add('fx-cursor-light')
-
-    const tagLights = () => {
-      LIGHT_SELECTORS.forEach((selector) => {
-        document.querySelectorAll(selector).forEach((el) => el.classList.add('fx-light'))
-      })
-    }
-    tagLights()
-    router.events.on('routeChangeComplete', tagLights)
-
     let frame = 0
     const onMove = (event) => {
       if (frame) return
       frame = window.requestAnimationFrame(() => {
         frame = 0
-        root.style.setProperty('--cursor-x', `${event.clientX}px`)
-        root.style.setProperty('--cursor-y', `${event.clientY}px`)
-        const card = event.target?.closest?.('.fx-light')
-        if (card) {
-          const rect = card.getBoundingClientRect()
-          card.style.setProperty('--lx', `${((event.clientX - rect.left) / rect.width) * 100}%`)
-          card.style.setProperty('--ly', `${((event.clientY - rect.top) / rect.height) * 100}%`)
-        }
+        const x = (event.clientX / window.innerWidth - 0.5) * 2
+        const y = (event.clientY / window.innerHeight - 0.5) * 2
+        root.style.setProperty('--world-x', `${(x * 22).toFixed(2)}px`)
+        root.style.setProperty('--world-y', `${(y * 16).toFixed(2)}px`)
+        root.style.setProperty('--world-x-inverse', `${(x * -13).toFixed(2)}px`)
+        root.style.setProperty('--world-y-inverse', `${(y * -9).toFixed(2)}px`)
       })
     }
 
     window.addEventListener('pointermove', onMove, { passive: true })
     return () => {
       window.removeEventListener('pointermove', onMove)
-      router.events.off('routeChangeComplete', tagLights)
       if (frame) window.cancelAnimationFrame(frame)
-      root.classList.remove('fx-cursor-light')
+      root.style.removeProperty('--world-x')
+      root.style.removeProperty('--world-y')
+      root.style.removeProperty('--world-x-inverse')
+      root.style.removeProperty('--world-y-inverse')
+    }
+  }, [])
+
+  // K: nearby media moves more slowly than the page, creating depth between
+  // each image and its frame without changing layout or intercepting input.
+  useEffect(() => {
+    if (!EFFECTS.mediaParallax || prefersReducedMotion()) return undefined
+
+    let media = []
+    let frame = 0
+
+    const collectMedia = () => {
+      media = PARALLAX_SELECTORS.flatMap((selector) => (
+        Array.from(document.querySelectorAll(selector))
+      ))
+      media.forEach((element) => element.classList.add('fx-depth-media'))
+      requestUpdate()
+    }
+
+    const updateMedia = () => {
+      frame = 0
+      const viewportCenter = window.innerHeight / 2
+      media.forEach((element) => {
+        const rect = element.getBoundingClientRect()
+        if (rect.bottom < -100 || rect.top > window.innerHeight + 100) return
+        const center = rect.top + rect.height / 2
+        const progress = Math.max(-1, Math.min(1, (viewportCenter - center) / window.innerHeight))
+        element.style.setProperty('--media-shift', `${(progress * 34).toFixed(2)}px`)
+      })
+    }
+
+    const requestUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateMedia)
+    }
+
+    const timer = window.setTimeout(collectMedia, 0)
+    window.addEventListener('scroll', requestUpdate, { passive: true })
+    window.addEventListener('resize', requestUpdate)
+    router.events.on('routeChangeComplete', collectMedia)
+
+    return () => {
+      window.clearTimeout(timer)
+      window.removeEventListener('scroll', requestUpdate)
+      window.removeEventListener('resize', requestUpdate)
+      router.events.off('routeChangeComplete', collectMedia)
+      if (frame) window.cancelAnimationFrame(frame)
     }
   }, [router.events])
 
-  return null
+  if (!EFFECTS.worldScene) return null
+
+  return (
+    <div className="world-scene" aria-hidden="true">
+      <div className="world-scene__grid" />
+      <div className="world-scene__orbit world-scene__orbit--one" />
+      <div className="world-scene__orbit world-scene__orbit--two" />
+      <div className="world-scene__path" />
+      <div className="world-scene__nodes">
+        {WORLD_NODES.map((node) => (
+          <span
+            key={`${node.x}-${node.y}`}
+            style={{
+              '--node-x': `${node.x}%`,
+              '--node-y': `${node.y}%`,
+              '--node-size': `${node.size}px`,
+              '--node-delay': `${node.delay}s`,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
 }

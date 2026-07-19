@@ -1,0 +1,47 @@
+/* =========================================================================
+   Experimental effects (toggled in lib/effects.js)
+   ========================================================================= */
+
+/* H + I: scroll-reveal. The .fx-reveal class is added by JS only, so without
+   JavaScript (or with reduced motion) content stays fully visible. The expand
+   is intentionally slow, like a graph easing open. */
+.fx-reveal {
+  opacity: 0;
+  transform: translateY(22px) scale(0.97);
+  transition:
+    opacity 1100ms ease,
+    transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.fx-reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Keep the redesigned footer above legacy page styles declared earlier. */
+.site-footer.site-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  background: #090a09;
+  color: #e9e8e2;
+}
+
+.site-footer.site-footer .site-footer__inner {
+  width: min(1320px, calc(100% - 3rem));
+  padding: 3.5rem 0;
+}
+
+@media (max-width: 760px) {
+  .site-footer.site-footer .site-footer__inner {
+    width: calc(100% - 2rem);
+  }
+}

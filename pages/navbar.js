@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Menu, Moon, Sun, X } from 'lucide-react'
-import { useTheme } from 'next-themes'
+import Link from 'next/link'
+import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { useRouter } from 'next/router'
 import { useI18n } from '../lib/i18n'
 
 function LanguageSwitch({ compact = false }) {
@@ -33,31 +34,9 @@ function LanguageSwitch({ compact = false }) {
   )
 }
 
-function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme()
-  const { t } = useI18n()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const isDark = mounted ? resolvedTheme !== 'light' : true
-
-  return (
-    <button
-      type="button"
-      className="site-nav__icon"
-      aria-label={t.nav.theme}
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
-    >
-      {isDark ? <Sun size={18} /> : <Moon size={18} />}
-    </button>
-  )
-}
-
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
   const { t } = useI18n()
   const navItems = [
     { href: '/cast', label: t.nav.system },
@@ -65,22 +44,38 @@ export default function Navbar() {
     { href: '/fragments', label: t.nav.notice },
   ]
 
+  useEffect(() => {
+    const closeMenu = () => setIsOpen(false)
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') closeMenu()
+    }
+
+    document.body.classList.toggle('nav-is-open', isOpen)
+    window.addEventListener('keydown', onKeyDown)
+    router.events.on('routeChangeComplete', closeMenu)
+
+    return () => {
+      document.body.classList.remove('nav-is-open')
+      window.removeEventListener('keydown', onKeyDown)
+      router.events.off('routeChangeComplete', closeMenu)
+    }
+  }, [isOpen, router.events])
+
   return (
-    <nav className="site-nav">
+    <nav className={`site-nav ${isOpen ? 'is-open' : ''}`}>
       <div className="site-nav__inner">
-        <a href="/" className="site-nav__brand">
+        <Link href="/" className="site-nav__brand" onClick={() => setIsOpen(false)}>
           <span>{t.brand}</span>
-        </a>
+        </Link>
 
         <div className="site-nav__links" aria-label="Primary navigation">
           {navItems.map((item) => (
-            <a key={item.href} href={item.href}>{item.label}</a>
+            <Link key={item.href} href={item.href}>{item.label}</Link>
           ))}
         </div>
 
         <div className="site-nav__actions">
           <LanguageSwitch />
-          <ThemeToggle />
           <button
             type="button"
             className="site-nav__menu"
@@ -96,10 +91,21 @@ export default function Navbar() {
 
       {isOpen && (
         <div className="site-nav__mobile" id="site-mobile-navigation">
-          {navItems.map((item) => (
-            <a key={item.href} href={item.href} onClick={() => setIsOpen(false)}>{item.label}</a>
-          ))}
-          <LanguageSwitch compact />
+          <div className="site-nav__mobile-links" aria-label="Mobile navigation">
+            {navItems.map((item, index) => (
+              <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)}>
+                <span>0{index + 1}</span>
+                <strong>{item.label}</strong>
+                <ArrowUpRight size={20} />
+              </Link>
+            ))}
+          </div>
+          <div className="site-nav__mobile-footer">
+            <LanguageSwitch compact />
+            <Link href="/" onClick={() => setIsOpen(false)}>
+              {t.brand}
+            </Link>
+          </div>
         </div>
       )}
     </nav>

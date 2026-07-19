@@ -1,5 +1,32 @@
 # Progress Log
 
+## 2026-07-19
+
+### Responsive Interaction And Light-Only Pass
+
+Reworked the current game-show UI around reliable mobile navigation, visible
+media, and scene-driven motion without changing story canon or source artwork.
+
+- Replaced the cramped mobile dropdown with a full-height, scroll-locked route
+  menu using large touch targets, clear numbering, Escape handling, and route
+  close behavior.
+- Corrected phone layouts to use the supplied media's landscape proportions and
+  `object-fit: contain`, keeping hero, character, definition, and fragment art
+  complete at narrow widths with no horizontal overflow.
+- Expanded the homepage hero into working multi-layer scroll and pointer
+  parallax. Sky, settlement, land, atmospheric geometry, and copy now move at
+  different rates with reduced-motion support.
+- Replaced the old page-wide cursor spotlight and per-card sheen with a subtle
+  cursor-responsive Sylph network field made from drifting nodes, orbit lines,
+  and a parallax grid. Story, world, and post media also receive scroll-linked
+  depth motion on larger viewports.
+- Removed the theme switch, `next-themes`, dark/system selection logic, dimming
+  sampler, and unused dark utility variants. The document now runs in an
+  explicit light color scheme while intentional dark story sections remain.
+- Split the oversized site stylesheet into core, homepage, content, list,
+  dialogue, and effects modules, with `world-archive.css` retained as the import
+  entry point.
+
 ## 2026-07-17
 
 ### Canon And Hero Correction

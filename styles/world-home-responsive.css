@@ -1,0 +1,270 @@
+@keyframes gateway-media-in {
+  from {
+    opacity: 0;
+    transform: scale(1.025);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gateway-scan {
+  0%, 100% { transform: translateY(-580px); opacity: 0; }
+  15%, 80% { opacity: 0.75; }
+  90% { transform: translateY(0); opacity: 0; }
+}
+
+@media (max-width: 1050px) {
+  .world-hero__copy {
+    left: 3rem;
+    width: 480px;
+  }
+
+  .character-gateway__stage {
+    grid-template-columns: 150px minmax(0, 1fr);
+  }
+
+  .character-gateway__media {
+    min-height: 600px;
+  }
+
+  .character-gateway__brief {
+    grid-column: 1 / -1;
+    min-height: 260px;
+    border-top: 1px solid var(--game-line-light);
+    border-left: 0;
+  }
+
+  .world-index__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .world-index__item {
+    min-height: 460px;
+  }
+}
+
+@media (max-width: 760px) {
+  .site-nav__inner {
+    width: min(100% - 1.5rem, 1320px);
+    grid-template-columns: 1fr auto;
+    min-height: 60px;
+  }
+
+  .site-nav__links,
+  .site-nav__actions > .language-switch {
+    display: none;
+  }
+
+  .site-nav__menu {
+    display: grid;
+  }
+
+  .site-nav__mobile {
+    display: grid;
+    padding: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    background: #101210;
+  }
+
+  .site-nav__mobile a {
+    padding: 0.9rem 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e8e7e1;
+  }
+
+  .site-nav__mobile .language-switch {
+    width: max-content;
+    margin-top: 0.75rem;
+  }
+
+  .world-hero {
+    height: auto;
+    min-height: calc(100svh - 128px);
+    max-height: none;
+  }
+
+  .world-hero__layer {
+    object-position: 28% 18%;
+  }
+
+  .world-hero__layer--settlement {
+    transform: translate3d(0, var(--hero-shift-settlement), 0) scale(1.08);
+  }
+
+  .world-hero::before {
+    background: rgba(235, 237, 235, 0.36);
+    box-shadow: inset 0 -260px 150px -130px rgba(10, 12, 11, 0.75);
+  }
+
+  .world-hero__copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    padding: 5.75rem 1.25rem 6.5rem;
+    transform: none;
+  }
+
+  .world-hero h1 {
+    font-size: 4.3rem;
+  }
+
+  .world-hero__subtitle {
+    max-width: 340px;
+    font-size: 1.25rem;
+  }
+
+  .world-hero__actions {
+    flex-direction: column;
+    max-width: 390px;
+  }
+
+  .game-primary-action {
+    min-width: 0;
+  }
+
+  .world-hero__secondary {
+    justify-content: flex-start;
+    width: max-content;
+    min-height: 44px;
+  }
+
+  .character-gateway,
+  .world-index,
+  .cast-archive {
+    padding: 4.5rem 1rem;
+  }
+
+  .character-gateway {
+    padding-top: 2.25rem;
+  }
+
+  .game-section-heading {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .game-section-heading h1,
+  .game-section-heading h2 {
+    font-size: 2.5rem;
+  }
+
+  .game-section-heading > p {
+    font-size: 0.86rem;
+  }
+
+  .character-gateway__stage {
+    display: block;
+  }
+
+  .character-gateway__tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-right: 0;
+    border-bottom: 1px solid var(--game-line-light);
+  }
+
+  .character-gateway__tabs button {
+    min-height: 104px;
+    border-right: 1px solid var(--game-line-light);
+    border-bottom: 0;
+  }
+
+  .character-gateway__tabs button:last-child {
+    border-right: 0;
+  }
+
+  .character-gateway__tabs button::before {
+    right: 0;
+    bottom: auto;
+    width: auto;
+    height: 3px;
+    transform: scaleX(0);
+  }
+
+  .character-gateway__tabs button.is-active::before {
+    transform: scaleX(1);
+  }
+
+  .character-gateway__media {
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+
+  .character-gateway__brief {
+    min-height: 0;
+    padding: 2rem 1rem;
+  }
+
+  .character-gateway__brief h3 {
+    font-size: 3rem;
+  }
+
+  .world-index__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .world-index__item {
+    min-height: 330px;
+  }
+
+  .story-carousel-section.info-section {
+    padding: 4.5rem 1rem;
+  }
+
+  .story-carousel-section .section-heading h2 {
+    font-size: 2.4rem;
+  }
+
+  .story-carousel-section .carousel-item {
+    flex-basis: 88vw;
+  }
+
+  .story-carousel-section .story-carousel__card {
+    aspect-ratio: 4 / 5;
+  }
+
+  .story-carousel-section .story-carousel__copy {
+    width: 100%;
+    padding: 1.25rem;
+  }
+
+  .cast-dossier {
+    display: block;
+  }
+
+  .cast-dossier__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .cast-dossier__copy {
+    min-height: 400px;
+    padding: 2rem 1rem 3rem;
+    border-top: 1px solid var(--game-line-light);
+    border-left: 0;
+  }
+
+  .cast-dossier__copy h2 {
+    font-size: 3.4rem;
+  }
+
+  .site-footer__inner {
+    width: calc(100% - 2rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-hero__layer {
+    will-change: auto;
+  }
+
+  .character-gateway__media img,
+  .character-gateway__scan,
+  .world-index__item img,
+  .cast-dossier__media img {
+    animation: none;
+    transition: none;
+  }
+}
