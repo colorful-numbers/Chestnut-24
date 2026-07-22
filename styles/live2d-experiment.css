@@ -1,0 +1,156 @@
+/* Developer-only Artifact101 motion study, enabled with ?live2d=1.
+   The normal expression image remains underneath as an automatic fallback. */
+.character-puppet {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  --puppet-look-x: 0px;
+  --puppet-look-y: 0px;
+  --puppet-look-angle: 0deg;
+  --puppet-eye-x: 0px;
+  --puppet-eye-y: 0px;
+}
+
+.character-puppet__fallback {
+  transition: opacity 180ms ease;
+}
+
+.character-puppet.is-active .character-puppet__fallback {
+  opacity: 0;
+}
+
+.character-puppet__rig {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 100%;
+  aspect-ratio: 2 / 3;
+  max-width: 100%;
+  opacity: 0;
+  transform: translate3d(calc(-50% + var(--puppet-look-x)), var(--puppet-look-y), 0)
+    rotate(var(--puppet-look-angle));
+  transform-origin: 50% 62%;
+  transition: opacity 180ms ease, transform 120ms linear;
+  will-change: transform;
+}
+
+.character-puppet.is-active .character-puppet__rig {
+  opacity: 1;
+}
+
+.character-puppet__breath {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 72%;
+  animation: artifact101Breath 4.8s ease-in-out infinite;
+}
+
+.character-puppet__art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  user-select: none;
+}
+
+.character-puppet__lid,
+.character-puppet__gaze,
+.character-puppet__mouth {
+  position: absolute;
+  display: block;
+}
+
+.character-puppet__lid {
+  top: 25.1%;
+  width: 9.2%;
+  height: 2.7%;
+  border-bottom: 1.5px solid rgba(35, 35, 35, 0.78);
+  border-radius: 50%;
+  background: rgba(244, 244, 242, 0.96);
+  opacity: 0;
+  transform-origin: 50% 100%;
+  animation: artifact101Blink 5.6s linear infinite;
+}
+
+.character-puppet__lid--left {
+  left: 39.8%;
+  transform: rotate(4deg);
+}
+
+.character-puppet__lid--right {
+  left: 54.5%;
+  transform: rotate(-4deg);
+}
+
+.character-puppet__gaze {
+  top: 26.2%;
+  width: 1.4%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(18, 18, 18, 0.3);
+  transform: translate3d(var(--puppet-eye-x), var(--puppet-eye-y), 0);
+  transition: transform 120ms linear;
+}
+
+.character-puppet__gaze--left {
+  left: 44.1%;
+}
+
+.character-puppet__gaze--right {
+  left: 58.7%;
+}
+
+.character-puppet__mouth {
+  left: 49.2%;
+  top: 33.3%;
+  width: 3.2%;
+  height: 0.8%;
+  border-radius: 50%;
+  background: rgba(34, 34, 34, 0.72);
+  opacity: 0;
+  transform-origin: 50% 50%;
+}
+
+.character-puppet.is-speaking .character-puppet__mouth {
+  animation: artifact101Mouth 360ms steps(2, end) infinite;
+}
+
+.character-puppet--tired .character-puppet__breath {
+  animation-duration: 6.2s;
+}
+
+@keyframes artifact101Breath {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-1px) scaleY(1.006); }
+}
+
+@keyframes artifact101Blink {
+  0%, 89%, 94%, 100% { opacity: 0; transform: scaleY(0.12); }
+  90%, 93% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes artifact101Mouth {
+  0%, 100% { opacity: 0; transform: scaleY(0.3); }
+  50% { opacity: 0.72; transform: scaleY(1.45); }
+}
+
+@media (max-width: 640px) {
+  .character-puppet__rig {
+    bottom: 17%;
+    width: 94%;
+    height: auto;
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .character-puppet__rig {
+    display: none;
+  }
+
+  .character-puppet__fallback {
+    opacity: 1;
+  }
+}

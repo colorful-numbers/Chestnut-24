@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Navbar from '../navbar'
 import CharacterDisplay from '../../components/CharacterDisplay'
 import { useI18n } from '../../lib/i18n'
@@ -23,6 +24,7 @@ export async function getStaticProps({ params }) {
 }
 
 export default function CharacterPage({ character, definitions }) {
+  const router = useRouter()
   const { locale, t } = useI18n()
 
   if (!character) return null
@@ -46,6 +48,7 @@ export default function CharacterPage({ character, definitions }) {
           autoOpen
           fullscreen
           backHref="/cast"
+          experimentalPuppet={router.isReady && router.query.live2d === '1'}
         />
       </main>
     </div>

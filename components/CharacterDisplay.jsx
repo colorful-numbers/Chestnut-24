@@ -14,7 +14,6 @@ const WHEEL_COOLDOWN = 220
 const MAX_VISIBLE_CHOICES = 3
 // Sentinel sprite value meaning "render nothing"; matches lib/characters.js.
 const EMPTY_EXPRESSION = 'EMPTY'
-const ENABLE_LIGHTWEIGHT_PUPPET = true
 
 // Configurable typing speed (ms per character). `instant` reveals the whole line.
 const TYPING_SPEEDS = { slow: 52, normal: 28, fast: 12, instant: 0 }
@@ -70,6 +69,7 @@ export default function CharacterDisplay({
   autoOpen = false,
   fullscreen = false,
   backHref,
+  experimentalPuppet = false,
 }) {
   const copy = character.locales?.[locale] || character.locales?.zh
   const graph = copy.graph || {}
@@ -162,8 +162,9 @@ export default function CharacterDisplay({
   const expressionSrc = hideSprite
     ? ''
     : (rawExpression || copy.defaultExpressionSrc || character.mainCg)
-  const puppetSrc = copy.defaultExpressionSrc || character.mainCg
-  const puppetMood = moodFromExpression(rawExpression)
+  const puppetEnabled = experimentalPuppet && character.id === 'artifact101'
+  const puppetSrc = expressionSrc
+  const puppetMood = moodFromExpression(expressionSrc)
 
   // Resolve how the node's choices are presented, rolled once per node visit
   // (keyed on stateId) so the outcome stays stable while the node's lines play.
@@ -534,15 +535,17 @@ export default function CharacterDisplay({
         </div>
 
         <div className="character-stage__sprite-layer" aria-hidden="true">
-          {ENABLE_LIGHTWEIGHT_PUPPET && !hideSprite && puppetSrc && (
+          {puppetEnabled && !hideSprite && puppetSrc && (
             <LightweightCharacterPuppet
-              key={`puppet-${character.id}`}
+              key={`puppet-${character.id}-${puppetSrc}`}
               src={puppetSrc}
               alt={copy.mainAlt}
               mood={puppetMood}
+              expression={puppetSrc}
+              speaking={!lineDone && Boolean(currentText.trim())}
             />
           )}
-          {!ENABLE_LIGHTWEIGHT_PUPPET && ENABLE_SPRITE_TRANSITION && prevExpression && prevExpression !== expressionSrc && (
+          {!puppetEnabled && ENABLE_SPRITE_TRANSITION && prevExpression && prevExpression !== expressionSrc && (
             <img
               key={`sprite-prev-${prevExpression}`}
               className="character-display__main character-stage__sprite character-stage__sprite--prev"
@@ -552,7 +555,7 @@ export default function CharacterDisplay({
               draggable="false"
             />
           )}
-          {!ENABLE_LIGHTWEIGHT_PUPPET && !hideSprite && expressionSrc && (
+          {!puppetEnabled && !hideSprite && expressionSrc && (
             <img
               key={`sprite-${expressionSrc}`}
               className={`character-display__main character-stage__sprite ${ENABLE_SPRITE_TRANSITION ? 'character-stage__sprite--next' : ''}`}
