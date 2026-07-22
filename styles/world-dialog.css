@@ -605,6 +605,14 @@
     inset: 56px 0 0 0;
   }
 
+  /* Keep expressive hand poses visible above the dialogue band on narrow
+     screens instead of enlarging the portrait until only the face remains. */
+  .character-stage .character-stage__sprite {
+    bottom: 17%;
+    height: 78%;
+    max-width: 94%;
+  }
+
   .bgm-player__panel {
     width: min(300px, 82vw);
   }
@@ -623,4 +631,3 @@
     width: min(440px, 86%);
   }
 }
-
