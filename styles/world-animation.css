@@ -1,0 +1,452 @@
+.character-corridor,
+.seamless-corridor,
+.animation-container {
+  position: relative;
+  width: 100%;
+}
+
+.info-site main {
+  overflow: clip;
+}
+
+.character-corridor {
+  background: #f7f7f4;
+  color: #111311;
+}
+
+.animation-container {
+  --animation-progress: 0;
+  --pointer-x: 0;
+  --pointer-y: 0;
+  height: var(--animation-height, 360svh);
+}
+
+.animation-container__sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.cast-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background: #f7f7f4;
+}
+
+.cast-scene__art,
+.cast-scene__wash,
+.cast-scene__layer,
+.cast-scene__whiteout,
+.corridor-field {
+  position: absolute;
+  inset: 0;
+}
+
+.cast-scene__wash {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0) 0 24%, #f7f7f4 66%),
+    #f7f7f4;
+  opacity: clamp(0, calc(1 - (var(--animation-progress) * 5)), 1);
+}
+
+.cast-scene__art {
+  z-index: 2;
+}
+
+.cast-scene__layer {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform, opacity, filter;
+}
+
+.cast-scene__layer--far {
+  opacity: clamp(0, calc((var(--animation-progress) - 0.16) * 6.5), 1);
+  transform:
+    translate3d(
+      calc(var(--pointer-x) * -7px),
+      calc((0.5 - var(--animation-progress)) * 5vh + var(--pointer-y) * -5px),
+      0
+    )
+    scale(calc(1.09 - var(--animation-progress) * 0.04));
+  filter: contrast(0.94);
+}
+
+.cast-scene__layer--origin {
+  z-index: 2;
+  object-fit: contain;
+  object-position: center bottom;
+  opacity: clamp(0, calc(1 - ((var(--animation-progress) - 0.22) * 16)), 1);
+  transform:
+    translate3d(
+      calc(var(--pointer-x) * 10px),
+      calc((0.12 - var(--animation-progress)) * 8vh),
+      0
+    )
+    scale(calc(0.83 + var(--animation-progress) * 0.18));
+  filter:
+    contrast(calc(0.82 + var(--animation-progress) * 0.2))
+    blur(calc(clamp(0, calc(0.08 - var(--animation-progress)), 0.08) * 10px));
+}
+
+.cast-scene__layer--mid {
+  z-index: 3;
+  opacity: clamp(0, calc((var(--animation-progress) - 0.3) * 8), 1);
+  transform:
+    translate3d(
+      calc(var(--pointer-x) * 8px),
+      calc((0.54 - var(--animation-progress)) * 3.8vh + var(--pointer-y) * 4px),
+      0
+    )
+    scale(calc(1.075 - var(--animation-progress) * 0.03));
+}
+
+.cast-scene__layer--near {
+  z-index: 4;
+  opacity: clamp(0, calc((var(--animation-progress) - 0.58) * 5.4), 1);
+  transform:
+    translate3d(
+      calc((0.72 - var(--animation-progress)) * -5vw + var(--pointer-x) * 18px),
+      calc((0.72 - var(--animation-progress)) * 7vh + var(--pointer-y) * 12px),
+      0
+    )
+    scale(calc(0.9 + var(--animation-progress) * 0.22))
+    rotate(calc((var(--animation-progress) - 0.58) * -2deg));
+  filter: contrast(0.96);
+}
+
+.cast-scene--tower .cast-scene__layer--origin {
+  object-position: 58% bottom;
+  transform:
+    translate3d(
+      calc(8vw + var(--pointer-x) * 10px),
+      calc((0.12 - var(--animation-progress)) * 7vh),
+      0
+    )
+    scale(calc(0.78 + var(--animation-progress) * 0.17));
+}
+
+.cast-scene--tower .cast-scene__layer--mid {
+  object-fit: contain;
+  object-position: 62% bottom;
+  transform:
+    translate3d(
+      calc(8vw + var(--pointer-x) * 9px),
+      calc((0.5 - var(--animation-progress)) * 4vh),
+      0
+    )
+    scale(calc(0.8 + var(--animation-progress) * 0.05));
+}
+
+.cast-scene--tower .cast-scene__layer--near {
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  opacity: clamp(0, calc((var(--animation-progress) - 0.57) * 3.8), 0.68);
+  transform:
+    translate3d(
+      calc((0.7 - var(--animation-progress)) * 18vw),
+      calc((0.7 - var(--animation-progress)) * -12vh),
+      0
+    )
+    scale(calc(1.2 + var(--animation-progress) * 0.2))
+    rotate(calc((var(--animation-progress) - 0.57) * 8deg));
+}
+
+.corridor-field {
+  z-index: 1;
+  overflow: hidden;
+  opacity: clamp(0, calc((var(--animation-progress) - 0.08) * 3.8), 0.64);
+  pointer-events: none;
+}
+
+.corridor-field i {
+  --drift: calc(var(--animation-progress) - 0.5);
+  position: absolute;
+  top: calc(5% + var(--corridor-index) * 14%);
+  left: calc(-8% + var(--corridor-index) * 19%);
+  width: clamp(110px, 16vw, 300px);
+  aspect-ratio: 0.82;
+  border: 1px solid rgba(75, 82, 83, 0.18);
+  border-radius: 43% 57% 49% 51% / 58% 42% 60% 40%;
+  background:
+    radial-gradient(circle at 35% 24%, rgba(255, 255, 255, 0.82), transparent 26%),
+    linear-gradient(145deg, rgba(217, 224, 222, 0.2), rgba(88, 100, 102, 0.04));
+  box-shadow:
+    inset -18px -28px 45px rgba(72, 82, 82, 0.08),
+    0 24px 70px rgba(61, 69, 69, 0.05);
+  transform:
+    translate3d(
+      calc(var(--drift) * (var(--corridor-index) + 1) * -5vw),
+      calc(var(--drift) * (var(--corridor-index) - 2) * 7vh),
+      0
+    )
+    rotate(calc(var(--animation-progress) * (22deg + var(--corridor-index) * 9deg)))
+    scaleX(calc(0.82 + var(--animation-progress) * 0.28))
+    scaleY(calc(1.12 - var(--animation-progress) * 0.18));
+  backdrop-filter: blur(4px);
+  will-change: transform;
+}
+
+.cast-scene__copy {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  width: min(100%, 1600px);
+  margin: 0 auto;
+  padding: clamp(5rem, 9vh, 8rem) clamp(1.25rem, 7vw, 8rem);
+  pointer-events: none;
+}
+
+.cast-scene__section-title,
+.cast-scene__title,
+.cast-scene__hook {
+  position: absolute;
+  margin: 0;
+}
+
+.cast-scene__section-title {
+  top: clamp(5rem, 11vh, 8rem);
+  left: clamp(1.25rem, 7vw, 8rem);
+  color: rgba(17, 19, 17, 0.58);
+  font: 600 clamp(0.68rem, 0.82vw, 0.8rem) / 1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.cast-scene__title {
+  left: clamp(1.25rem, 7vw, 8rem);
+  bottom: clamp(7rem, 14vh, 10rem);
+  max-width: min(52vw, 760px);
+  font-size: clamp(4rem, 10vw, 10rem);
+  font-weight: 780;
+  line-height: 0.8;
+  letter-spacing: -0.075em;
+  color: rgba(17, 19, 17, 0.86);
+  mix-blend-mode: multiply;
+}
+
+.cast-scene__hook {
+  right: clamp(4rem, 8vw, 9rem);
+  bottom: clamp(9rem, 21vh, 14rem);
+  width: min(28rem, 34vw);
+  color: rgba(17, 19, 17, 0.72);
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+  line-height: 1.7;
+  text-align: right;
+}
+
+.animated-text {
+  display: block;
+}
+
+.animated-text__character {
+  --character-progress: clamp(
+    0,
+    calc(
+      (var(--animation-progress) - var(--text-start) - (var(--character-index) * 0.006))
+      * 14
+    ),
+    1
+  );
+  display: inline-block;
+  opacity: var(--character-progress);
+  transform:
+    translate3d(
+      calc((1 - var(--character-progress)) * -0.18em),
+      calc((1 - var(--character-progress)) * 1.1em),
+      0
+    )
+    rotate(calc((1 - var(--character-progress)) * 5deg));
+  filter: blur(calc((1 - var(--character-progress)) * 7px));
+  will-change: transform, opacity, filter;
+}
+
+.cast-scene__enter {
+  --enter-progress: clamp(0, calc((var(--animation-progress) - 0.72) * 8), 1);
+  position: absolute;
+  right: clamp(1.25rem, 7vw, 8rem);
+  bottom: clamp(3rem, 7vh, 5rem);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 0 0.45rem;
+  color: #111311;
+  font-size: 0.82rem;
+  font-weight: 720;
+  opacity: var(--enter-progress);
+  pointer-events: auto;
+  transform: translateY(calc((1 - var(--enter-progress)) * 1rem));
+}
+
+.cast-scene__enter::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(var(--enter-progress));
+  transform-origin: right;
+}
+
+.cast-scene__enter .animated-text {
+  display: inline-block;
+}
+
+.cast-scene__enter svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.seamless-corridor__controls {
+  position: absolute;
+  inset: 50% clamp(0.65rem, 2vw, 2.5rem) auto;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.seamless-corridor__controls button {
+  display: grid;
+  width: clamp(2.8rem, 4vw, 4rem);
+  height: clamp(3.8rem, 7vw, 7rem);
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(17, 19, 17, 0.52);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.seamless-corridor__controls button:hover,
+.seamless-corridor__controls button:focus-visible {
+  color: #111311;
+  transform: scale(1.16);
+}
+
+.seamless-corridor__controls svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 0.7;
+}
+
+.cast-scene__whiteout {
+  z-index: 9;
+  background: #fff;
+  opacity: clamp(0, calc((var(--animation-progress) - 0.9) * 12), 1);
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .animation-container {
+    height: calc(var(--animation-height, 360svh) * 0.88);
+  }
+
+  .cast-scene__layer {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .cast-scene__layer--far {
+    transform:
+      translate3d(
+        calc(var(--pointer-x) * -4px),
+        calc((0.5 - var(--animation-progress)) * 2.5vh),
+        0
+      )
+      scale(calc(1.02 - var(--animation-progress) * 0.01));
+  }
+
+  .cast-scene__layer--origin,
+  .cast-scene--tower .cast-scene__layer--origin {
+    object-position: center bottom;
+    transform:
+      translate3d(0, calc((0.12 - var(--animation-progress)) * 5vh), 0)
+      scale(calc(0.8 + var(--animation-progress) * 0.14));
+  }
+
+  .cast-scene__layer--mid,
+  .cast-scene--tower .cast-scene__layer--mid {
+    object-position: center;
+    transform:
+      translate3d(0, calc((0.54 - var(--animation-progress)) * 2.5vh), 0)
+      scale(calc(1.01 - var(--animation-progress) * 0.01));
+  }
+
+  .cast-scene--tower .cast-scene__layer--mid {
+    object-position: center bottom;
+    transform:
+      translate3d(0, calc((0.54 - var(--animation-progress)) * 2.5vh), 0)
+      scale(calc(0.76 + var(--animation-progress) * 0.04));
+  }
+
+  .cast-scene__layer--near {
+    transform:
+      translate3d(
+        calc((0.72 - var(--animation-progress)) * -2vw),
+        calc((0.72 - var(--animation-progress)) * 4vh),
+        0
+      )
+      scale(calc(0.96 + var(--animation-progress) * 0.1));
+  }
+
+  .cast-scene__copy {
+    padding: 5rem 1.25rem 3rem;
+  }
+
+  .cast-scene__section-title {
+    top: 5rem;
+    left: 1.25rem;
+  }
+
+  .cast-scene__title {
+    right: 1.25rem;
+    bottom: 8rem;
+    left: 1.25rem;
+    max-width: none;
+    font-size: clamp(3.5rem, 19vw, 6rem);
+  }
+
+  .cast-scene__hook {
+    right: 1.25rem;
+    bottom: 5.2rem;
+    width: min(78vw, 25rem);
+    font-size: 0.82rem;
+  }
+
+  .cast-scene__enter {
+    right: 1.25rem;
+    bottom: 2rem;
+  }
+
+  .seamless-corridor__controls {
+    inset: 46% 0.2rem auto;
+  }
+
+  .corridor-field i {
+    width: clamp(90px, 32vw, 170px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cast-scene__layer,
+  .animated-text__character,
+  .corridor-field i,
+  .cast-scene__enter {
+    will-change: auto;
+  }
+}

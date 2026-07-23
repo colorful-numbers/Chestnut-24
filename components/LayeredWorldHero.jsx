@@ -88,8 +88,8 @@ export default function LayeredWorldHero({ copy }) {
   return (
     <section id="overview" className="world-hero" ref={heroRef}>
       <div className="world-hero__layers" aria-hidden="true">
-        <img className="world-hero__fallback" src={copy.image} alt="" loading="eager" fetchPriority="high" decoding="sync" />
-        <img className="world-hero__layer world-hero__layer--background" src={copy.layers?.background || copy.image} alt="" loading="eager" fetchPriority="high" decoding="sync" />
+        <img className="world-hero__fallback" src={copy.image} alt="" loading="eager" fetchpriority="high" decoding="sync" />
+        <img className="world-hero__layer world-hero__layer--background" src={copy.layers?.background || copy.image} alt="" loading="eager" fetchpriority="high" decoding="sync" />
         <img className="world-hero__layer world-hero__layer--balloons" src={copy.layers?.balloons || copy.image} alt="" loading="eager" decoding="sync" />
         <img className="world-hero__layer world-hero__layer--foreground" src={copy.layers?.foreground || copy.image} alt="" loading="eager" decoding="sync" />
         <div className="world-hero__haze" />
