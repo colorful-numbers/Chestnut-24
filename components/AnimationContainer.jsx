@@ -7,6 +7,7 @@ export default function AnimationContainer({
   className = '',
   height = 360,
   labelledBy,
+  onProgress,
 }) {
   const rootRef = useRef(null)
   const frameRef = useRef(0)
@@ -21,6 +22,7 @@ export default function AnimationContainer({
       const scrollRange = Math.max(root.offsetHeight - window.innerHeight, 1)
       const progress = clamp(-bounds.top / scrollRange, 0, 1)
       root.style.setProperty('--animation-progress', progress.toFixed(4))
+      onProgress?.(progress)
     }
 
     const requestRender = () => {
@@ -37,7 +39,7 @@ export default function AnimationContainer({
       window.removeEventListener('resize', requestRender)
       if (frameRef.current) window.cancelAnimationFrame(frameRef.current)
     }
-  }, [])
+  }, [onProgress])
 
   const handlePointerMove = (event) => {
     const root = rootRef.current

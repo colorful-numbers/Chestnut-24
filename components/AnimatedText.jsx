@@ -11,14 +11,20 @@ export default function AnimatedText({
   children,
   className = '',
   start = 0,
+  step = 0.006,
+  ...rest
 }) {
   const text = String(children ?? '')
   const characters = segmentText(text)
 
   return (
     <Tag
+      {...rest}
       className={`animated-text ${className}`.trim()}
-      style={{ '--text-start': start }}
+      style={{
+        '--text-start': start,
+        '--character-step': step,
+      }}
       aria-label={text}
     >
       {characters.map((character, index) => (

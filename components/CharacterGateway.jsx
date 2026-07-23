@@ -25,7 +25,7 @@ export default function CharacterGateway({ copy, locale, characters }) {
             <AnimationContainer
               key={item.id}
               className={`animation-container--${item.id}`}
-              height={380}
+              height={220}
             >
               <CharacterAnimationScene
                 character={item}

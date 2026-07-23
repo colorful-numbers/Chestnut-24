@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { useI18n } from '../lib/i18n'
 
 const VERSION = process.env.NEXT_PUBLIC_APP_VERSION || ''
@@ -7,9 +8,36 @@ const VERSION = process.env.NEXT_PUBLIC_APP_VERSION || ''
 export default function Footer() {
   const { t } = useI18n()
   const year = new Date().getFullYear()
+  const footerRef = useRef(null)
+
+  useEffect(() => {
+    const footer = footerRef.current
+    if (!footer) return undefined
+
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const rect = footer.getBoundingClientRect()
+      const range = Math.max(window.innerHeight * 0.7, 1)
+      const progress = Math.min(Math.max((window.innerHeight - rect.top) / range, 0), 1)
+      footer.style.setProperty('--footer-progress', progress.toFixed(4))
+    }
+    const requestUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', requestUpdate, { passive: true })
+    window.addEventListener('resize', requestUpdate)
+    return () => {
+      window.removeEventListener('scroll', requestUpdate)
+      window.removeEventListener('resize', requestUpdate)
+      if (frame) window.cancelAnimationFrame(frame)
+    }
+  }, [])
 
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" ref={footerRef}>
       <div className="site-footer__inner">
         <div>
           <span>{t.brand}</span>

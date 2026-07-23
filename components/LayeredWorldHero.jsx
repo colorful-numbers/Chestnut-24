@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { ArrowDown, ArrowRight } from 'lucide-react'
+import AnimatedText from './AnimatedText'
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
 
@@ -33,7 +34,10 @@ export default function LayeredWorldHero({ copy }) {
       frame = 0
       const rect = hero.getBoundingClientRect()
       const progress = clamp(-rect.top / Math.max(rect.height, 1), 0, 1)
+      const textProgress = clamp(0.34 + progress * 0.66, 0, 1)
 
+      hero.style.setProperty('--animation-progress', textProgress.toFixed(4))
+      hero.style.setProperty('--hero-progress', progress.toFixed(4))
       hero.style.setProperty('--hero-shift-background', `${progress * -18}px`)
       hero.style.setProperty('--hero-shift-balloons', `${progress * -74}px`)
       hero.style.setProperty('--hero-shift-foreground', `${progress * -138}px`)
@@ -96,20 +100,27 @@ export default function LayeredWorldHero({ copy }) {
       </div>
 
       <div className="world-hero__copy">
-        <span className="world-hero__kicker">{copy.kicker}</span>
-        <h1>{copy.title}</h1>
-        <p className="world-hero__subtitle">{copy.subtitle}</p>
+        <AnimatedText as="span" className="world-hero__kicker" start={0.01}>
+          {copy.kicker}
+        </AnimatedText>
+        <AnimatedText as="h1" start={0.035} step={0.009}>
+          {copy.title}
+        </AnimatedText>
+        <AnimatedText as="p" className="world-hero__subtitle" start={0.1} step={0.004}>
+          {copy.subtitle}
+        </AnimatedText>
         <div className="world-hero__actions">
           <Link href={copy.primaryHref || '/fragments'} className="game-primary-action">
-            <span>{copy.primary}</span>
+            <AnimatedText start={0.16} step={0.004}>{copy.primary}</AnimatedText>
             <ArrowRight size={20} />
           </Link>
           <a href={copy.secondaryHref || '#cast-entry'} className="world-hero__secondary">
-            {copy.secondary}
+            <AnimatedText start={0.19} step={0.004}>{copy.secondary}</AnimatedText>
             <ArrowDown size={17} />
           </a>
         </div>
       </div>
+      <div className="world-hero__soft-exit" aria-hidden="true" />
     </section>
   )
 }

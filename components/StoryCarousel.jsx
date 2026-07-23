@@ -1,60 +1,26 @@
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import Carousel from './Carousel'
-
-function pickRandomStories(stories, count) {
-  const shuffled = [...stories]
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1))
-    ;[shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]]
-  }
-  return shuffled.slice(0, Math.min(count, shuffled.length))
-}
+import LayeredArchiveTimeline from './LayeredArchiveTimeline'
 
 export default function StoryCarousel({ title, locale, stories, hooks = {}, maxItems = 5, moreLabel, moreHref = '/fragments' }) {
-  const [selectedStories, setSelectedStories] = useState(() => stories.slice(0, maxItems))
-
-  useEffect(() => {
-    setSelectedStories(pickRandomStories(stories, maxItems))
-  }, [maxItems, stories])
+  const items = stories.slice(0, maxItems).map((story) => {
+    const storyCopy = story[locale] || story.zh
+    return {
+      key: story.id,
+      href: `/fragments/${story.id}`,
+      title: storyCopy.title,
+      hook: hooks[story.id],
+      media: story.media,
+    }
+  })
 
   return (
-    <section id="notice" className="info-section story-carousel-section">
-      <div className="section-heading section-heading--linked">
-        <div>
-          <h2>{title}</h2>
-        </div>
-        {moreLabel && (
-          <Link className="section-heading__more" href={moreHref}>{moreLabel}</Link>
-        )}
-      </div>
-      <Carousel
-        ariaLabel={title}
-        items={selectedStories}
-        className="story-carousel"
-        renderItem={(story, _index, isClone) => {
-          const storyCopy = story[locale] || story.zh
-          return (
-            <Link
-              href={`/fragments/${story.id}`}
-              className="story-carousel__card"
-              tabIndex={isClone ? -1 : undefined}
-              draggable="false"
-            >
-              <img
-                src={story.media}
-                alt=""
-                loading={isClone ? 'eager' : 'lazy'}
-                draggable="false"
-              />
-              <div className="story-carousel__copy">
-                <h3>{storyCopy.title}</h3>
-                {hooks[story.id] && <p className="card-hook">{hooks[story.id]}</p>}
-              </div>
-            </Link>
-          )
-        }}
-      />
-    </section>
+    <LayeredArchiveTimeline
+      id="notice"
+      variant="stories"
+      title={title}
+      items={items}
+      moreLabel={moreLabel}
+      moreHref={moreHref}
+      height={175}
+    />
   )
 }

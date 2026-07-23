@@ -6,16 +6,24 @@ const ART = {
   artifact101: {
     theme: 'tide',
     far: '/animation/cast/artifact101/bus-stop-far.png',
-    mid: '/animation/cast/artifact101/bus-stop-mid.png',
-    character: '/characters/artifact101/expression-neutral.png',
+    frames: [
+      '/animation/cast/artifact101/turn-01.png',
+      '/animation/cast/artifact101/turn-02.png',
+      '/animation/cast/artifact101/turn-03.png',
+      '/animation/cast/artifact101/turn-04.png',
+    ],
     near: '/animation/cast/artifact101/gulls-near.png',
   },
   qi: {
-    theme: 'tower',
-    far: '/characters/qi/bg-tower.png',
-    character: '/characters/qi/expression-neutral.png',
-    mid: '/characters/qi/expression-neutral.png',
-    near: '/characters/qi/bg-blade.png',
+    theme: 'monument',
+    far: '/animation/cast/qi/monument-far.png',
+    frames: [
+      '/animation/cast/qi/monument-01.png',
+      '/animation/cast/qi/monument-02.png',
+      '/animation/cast/qi/monument-03.png',
+      '/animation/cast/qi/monument-04.png',
+    ],
+    near: '/animation/cast/qi/flowers-near.png',
   },
 }
 
@@ -38,7 +46,7 @@ export default function CharacterAnimationScene({
   const art = ART[character.id] || {
     theme: 'fallback',
     far: character.mainCg,
-    mid: characterCopy.defaultExpressionSrc || character.mainCg,
+    frames: [characterCopy.defaultExpressionSrc || character.mainCg],
     near: character.mainCg,
   }
   const hook = copy.hooks?.[character.id]
@@ -49,10 +57,31 @@ export default function CharacterAnimationScene({
       <CorridorField />
 
       <div className="cast-scene__art" aria-hidden="true">
-        <img className="cast-scene__layer cast-scene__layer--far" src={art.far} alt="" />
-        <img className="cast-scene__layer cast-scene__layer--origin" src={art.character} alt="" />
-        <img className="cast-scene__layer cast-scene__layer--mid" src={art.mid} alt="" />
-        <img className="cast-scene__layer cast-scene__layer--near" src={art.near} alt="" />
+        <div className="cast-scene__plane cast-scene__plane--far">
+          <img src={art.far} alt="" />
+        </div>
+        <div className="cast-scene__plane cast-scene__plane--mid">
+          {art.frames.map((frame, index) => {
+            const isFirst = index === 0
+            const isLast = index === art.frames.length - 1
+            const position = art.frames.length > 1 ? index / (art.frames.length - 1) : 0
+            return (
+              <img
+                key={frame}
+                className="cast-scene__frame"
+                src={frame}
+                alt=""
+                style={{
+                  '--frame-start': isFirst ? -0.1 : position - 0.16,
+                  '--frame-end': isLast ? 1.1 : position + 0.25,
+                }}
+              />
+            )
+          })}
+        </div>
+        <div className="cast-scene__plane cast-scene__plane--near">
+          <img src={art.near} alt="" />
+        </div>
       </div>
 
       <div className="cast-scene__copy">

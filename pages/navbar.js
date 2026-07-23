@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -36,6 +36,8 @@ function LanguageSwitch({ compact = false }) {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isHidden, setIsHidden] = useState(false)
+  const lastScrollY = useRef(0)
   const router = useRouter()
   const { t } = useI18n()
   const navItems = [
@@ -61,8 +63,34 @@ export default function Navbar() {
     }
   }, [isOpen, router.events])
 
+  useEffect(() => {
+    lastScrollY.current = window.scrollY
+    if (isOpen) {
+      setIsHidden(false)
+      return undefined
+    }
+
+    const onScroll = () => {
+      const currentY = window.scrollY
+      const delta = currentY - lastScrollY.current
+
+      if (currentY < 28) {
+        setIsHidden(false)
+      } else if (delta > 6) {
+        setIsHidden(true)
+      } else if (delta < -4) {
+        setIsHidden(false)
+      }
+
+      lastScrollY.current = currentY
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [isOpen])
+
   return (
-    <nav className={`site-nav ${isOpen ? 'is-open' : ''}`}>
+    <nav className={`site-nav ${isOpen ? 'is-open' : ''} ${isHidden ? 'is-hidden' : ''}`}>
       <div className="site-nav__inner">
         <Link href="/" className="site-nav__brand" onClick={() => setIsOpen(false)}>
           <span>{t.brand}</span>
