@@ -7,10 +7,8 @@ const ART = {
     theme: 'tide',
     far: '/animation/cast/artifact101/bus-stop-far.png',
     frames: [
-      '/animation/cast/artifact101/turn-01.png',
-      '/animation/cast/artifact101/turn-02.png',
-      '/animation/cast/artifact101/turn-03.png',
-      '/animation/cast/artifact101/turn-04.png',
+      '/animation/cast/artifact101/bus-stop-transition.png',
+      '/animation/cast/artifact101/bus-stop-mid.png',
     ],
     near: '/animation/cast/artifact101/gulls-near.png',
   },
@@ -20,8 +18,7 @@ const ART = {
     frames: [
       '/animation/cast/qi/monument-01.png',
       '/animation/cast/qi/monument-02.png',
-      '/animation/cast/qi/monument-03.png',
-      '/animation/cast/qi/monument-04.png',
+      '/animation/cast/qi/monument-04-left.png',
     ],
     near: '/animation/cast/qi/flowers-near.png',
   },
@@ -65,6 +62,7 @@ export default function CharacterAnimationScene({
             const isFirst = index === 0
             const isLast = index === art.frames.length - 1
             const position = art.frames.length > 1 ? index / (art.frames.length - 1) : 0
+            const segment = art.frames.length > 1 ? 1 / (art.frames.length - 1) : 1
             return (
               <img
                 key={frame}
@@ -72,8 +70,8 @@ export default function CharacterAnimationScene({
                 src={frame}
                 alt=""
                 style={{
-                  '--frame-start': isFirst ? -0.1 : position - 0.16,
-                  '--frame-end': isLast ? 1.1 : position + 0.25,
+                  '--frame-start': isFirst ? -0.1 : position - segment * 0.64,
+                  '--frame-end': isLast ? 1.1 : position + segment * 0.64,
                 }}
               />
             )

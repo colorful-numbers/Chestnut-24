@@ -20,7 +20,7 @@ export default function StoryCarousel({ title, locale, stories, hooks = {}, maxI
       items={items}
       moreLabel={moreLabel}
       moreHref={moreHref}
-      height={175}
+      height={Math.max(300, items.length * 300)}
     />
   )
 }

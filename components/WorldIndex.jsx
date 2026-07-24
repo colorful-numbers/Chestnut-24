@@ -32,7 +32,7 @@ export default function WorldIndex({ copy, locale, definitions }) {
       items={items}
       moreLabel={copy.more || copy.title}
       moreHref="/defn"
-      height={190}
+      height={Math.max(300, items.length * 300)}
     />
   )
 }

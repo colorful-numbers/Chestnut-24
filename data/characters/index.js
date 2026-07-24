@@ -137,8 +137,16 @@ function loadLocaleDialogue(characterDir, lang, id) {
   }
 
   const legacyFile = path.join(characterDir, `${lang}.md`)
-  if (!fs.existsSync(legacyFile)) return null
-  return parseCharacterMarkdown(fs.readFileSync(legacyFile, 'utf8'), { id, bgmMap: BGM })
+  if (fs.existsSync(legacyFile)) {
+    return parseCharacterMarkdown(fs.readFileSync(legacyFile, 'utf8'), { id, bgmMap: BGM })
+  }
+
+  const rootIndex = path.join(characterDir, 'index.md')
+  if (lang === 'zh' && fs.existsSync(rootIndex)) {
+    return parseCharacterMarkdown(fs.readFileSync(rootIndex, 'utf8'), { id, bgmMap: BGM })
+  }
+
+  return null
 }
 
 // Pick the still used by cast cards and previews (everything outside the live

@@ -16,6 +16,7 @@
 
 .animation-container {
   --animation-progress: 0;
+  --text-time-progress: 0;
   --pointer-x: 0;
   --pointer-y: 0;
   height: var(--animation-height, 220svh);
@@ -118,6 +119,11 @@
   );
   filter: contrast(1.015);
   will-change: opacity;
+}
+
+.cast-scene--tide .cast-scene__frame {
+  object-fit: cover;
+  object-position: center;
 }
 
 .cast-scene__plane--near {
@@ -239,7 +245,7 @@
   --character-progress: clamp(
     0,
     calc(
-      (var(--animation-progress) - var(--text-start) - (var(--character-index) * var(--character-step, 0.006)))
+      (var(--text-time-progress, var(--animation-progress)) - var(--text-start) - (var(--character-index) * var(--character-step, 0.006)))
       * 14
     ),
     1
@@ -258,7 +264,7 @@
 }
 
 .cast-scene__enter {
-  --enter-progress: clamp(0, calc((var(--animation-progress) - 0.72) * 8), 1);
+  --enter-progress: clamp(0, calc((var(--text-time-progress, var(--animation-progress)) - 0.72) * 8), 1);
   position: absolute;
   right: clamp(1.25rem, 7vw, 8rem);
   bottom: clamp(3rem, 7vh, 5rem);
@@ -339,10 +345,6 @@
 }
 
 @media (max-width: 760px) {
-  .animation-container {
-    height: calc(var(--animation-height, 220svh) * 0.9);
-  }
-
   .cast-scene__plane--far {
     transform:
       translate3d(0, calc((0.5 - var(--animation-progress)) * 2.5vh), 0)

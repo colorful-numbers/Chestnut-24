@@ -29,7 +29,7 @@ export default function SeamlessCorridor({
 
   const previousItem = scenes[(activeIndex - 1 + scenes.length) % scenes.length]
   const nextItem = scenes[(activeIndex + 1) % scenes.length]
-  const controls = (
+  const controls = scenes.length > 1 ? (
     <div className="seamless-corridor__controls" aria-label={selectLabel}>
       <button type="button" onClick={() => select(-1)} aria-label={getItemLabel(previousItem)}>
         <ChevronLeft aria-hidden="true" />
@@ -38,7 +38,7 @@ export default function SeamlessCorridor({
         <ChevronRight aria-hidden="true" />
       </button>
     </div>
-  )
+  ) : null
 
   return (
     <div ref={rootRef} className="seamless-corridor" data-active-index={activeIndex}>
