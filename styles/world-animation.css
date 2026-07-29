@@ -16,6 +16,7 @@
 
 .animation-container {
   --animation-progress: 0;
+  --scene-time-progress: 0;
   --text-time-progress: 0;
   --pointer-x: 0;
   --pointer-y: 0;

@@ -9,12 +9,14 @@ export default function SeamlessCorridor({
 }) {
   const rootRef = useRef(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [direction, setDirection] = useState(1)
   const scenes = Array.isArray(items) ? items : []
   const activeItem = scenes[activeIndex]
 
   const select = (direction) => {
     if (scenes.length < 2) return
     const nextIndex = (activeIndex + direction + scenes.length) % scenes.length
+    setDirection(direction)
     setActiveIndex(nextIndex)
 
     window.requestAnimationFrame(() => {
@@ -41,11 +43,19 @@ export default function SeamlessCorridor({
   ) : null
 
   return (
-    <div ref={rootRef} className="seamless-corridor" data-active-index={activeIndex}>
+    <div
+      ref={rootRef}
+      className="seamless-corridor"
+      data-active-index={activeIndex}
+      data-direction={direction > 0 ? 'forward' : 'backward'}
+    >
       {children({
         item: activeItem,
         index: activeIndex,
         controls,
+        direction,
+        previousItem,
+        nextItem,
       })}
     </div>
   )

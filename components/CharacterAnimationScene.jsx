@@ -18,7 +18,6 @@ const ART = {
     frames: [
       '/animation/cast/qi/monument-01.png',
       '/animation/cast/qi/monument-02.png',
-      '/animation/cast/qi/monument-04-left.png',
     ],
     near: '/animation/cast/qi/flowers-near.png',
   },

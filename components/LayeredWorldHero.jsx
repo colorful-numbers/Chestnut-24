@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import AnimatedText from './AnimatedText'
+import { createAnimationClock } from '../lib/animationClock'
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
 
@@ -16,6 +17,12 @@ export default function LayeredWorldHero({ copy }) {
 
     let frame = 0
     let mounted = true
+    const textClock = createAnimationClock(hero, {
+      property: '--text-time-progress',
+      enterDuration: 1800,
+      exitDuration: 520,
+      initialValue: 0.08,
+    })
     const layerImages = Array.from(hero.querySelectorAll('.world-hero__layer'))
     const waitForLayer = (image) => {
       if (image.complete) {
@@ -33,16 +40,30 @@ export default function LayeredWorldHero({ copy }) {
     const updateLayers = () => {
       frame = 0
       const rect = hero.getBoundingClientRect()
-      const progress = clamp(-rect.top / Math.max(rect.height, 1), 0, 1)
-      const textProgress = clamp(0.34 + progress * 0.66, 0, 1)
+      const scrollRange = Math.max(rect.height - window.innerHeight, 1)
+      const progress = clamp(-rect.top / scrollRange, 0, 1)
+      const easedProgress = progress * progress * (3 - 2 * progress)
+      const copyFade = 1 - clamp((progress - 0.32) / 0.34, 0, 1)
+      const artFade = 1 - clamp((progress - 0.72) / 0.24, 0, 1)
+      const whiteout = clamp((progress - 0.66) / 0.3, 0, 1)
+      const baseFocusY = window.innerWidth / window.innerHeight > 1.6 ? 66 : 58
+      const isActive = rect.top < window.innerHeight * 0.8
+        && rect.bottom > window.innerHeight * 0.2
 
-      hero.style.setProperty('--animation-progress', textProgress.toFixed(4))
+      hero.style.setProperty('--animation-progress', progress.toFixed(4))
       hero.style.setProperty('--hero-progress', progress.toFixed(4))
-      hero.style.setProperty('--hero-shift-background', `${progress * -18}px`)
-      hero.style.setProperty('--hero-shift-balloons', `${progress * -74}px`)
-      hero.style.setProperty('--hero-shift-foreground', `${progress * -138}px`)
-      hero.style.setProperty('--hero-copy-shift', `${progress * -84}px`)
-      hero.style.setProperty('--hero-fade', `${1 - progress * 0.82}`)
+      hero.style.setProperty('--hero-shift-background', `${easedProgress * -24}px`)
+      hero.style.setProperty('--hero-shift-balloons', `${easedProgress * -108}px`)
+      hero.style.setProperty('--hero-shift-foreground', `${easedProgress * -196}px`)
+      hero.style.setProperty('--hero-scale-background', (1.08 - easedProgress * 0.055).toFixed(4))
+      hero.style.setProperty('--hero-scale-balloons', (1.1 + easedProgress * 0.04).toFixed(4))
+      hero.style.setProperty('--hero-scale-foreground', (1.08 + easedProgress * 0.11).toFixed(4))
+      hero.style.setProperty('--hero-focus-y', `${baseFocusY + easedProgress * 7}%`)
+      hero.style.setProperty('--hero-copy-shift', `${easedProgress * -108}px`)
+      hero.style.setProperty('--hero-copy-opacity', copyFade.toFixed(4))
+      hero.style.setProperty('--hero-art-opacity', artFade.toFixed(4))
+      hero.style.setProperty('--hero-whiteout', whiteout.toFixed(4))
+      textClock.setTarget(isActive ? 1 : 0)
     }
 
     const requestUpdate = () => {
@@ -86,41 +107,44 @@ export default function LayeredWorldHero({ copy }) {
       hero.removeEventListener('pointermove', onPointerMove)
       hero.removeEventListener('pointerleave', resetPointer)
       if (frame) window.cancelAnimationFrame(frame)
+      textClock.destroy()
     }
   }, [])
 
   return (
     <section id="overview" className="world-hero" ref={heroRef}>
-      <div className="world-hero__layers" aria-hidden="true">
-        <img className="world-hero__fallback" src={copy.image} alt="" loading="eager" fetchpriority="high" decoding="sync" />
-        <img className="world-hero__layer world-hero__layer--background" src={copy.layers?.background || copy.image} alt="" loading="eager" fetchpriority="high" decoding="sync" />
-        <img className="world-hero__layer world-hero__layer--balloons" src={copy.layers?.balloons || copy.image} alt="" loading="eager" decoding="sync" />
-        <img className="world-hero__layer world-hero__layer--foreground" src={copy.layers?.foreground || copy.image} alt="" loading="eager" decoding="sync" />
-        <div className="world-hero__haze" />
-      </div>
-
-      <div className="world-hero__copy">
-        <AnimatedText as="span" className="world-hero__kicker" start={0.01}>
-          {copy.kicker}
-        </AnimatedText>
-        <AnimatedText as="h1" start={0.035} step={0.009}>
-          {copy.title}
-        </AnimatedText>
-        <AnimatedText as="p" className="world-hero__subtitle" start={0.1} step={0.004}>
-          {copy.subtitle}
-        </AnimatedText>
-        <div className="world-hero__actions">
-          <Link href={copy.primaryHref || '/fragments'} className="game-primary-action">
-            <AnimatedText start={0.16} step={0.004}>{copy.primary}</AnimatedText>
-            <ArrowRight size={20} />
-          </Link>
-          <a href={copy.secondaryHref || '#cast-entry'} className="world-hero__secondary">
-            <AnimatedText start={0.19} step={0.004}>{copy.secondary}</AnimatedText>
-            <ArrowDown size={17} />
-          </a>
+      <div className="world-hero__sticky">
+        <div className="world-hero__layers" aria-hidden="true">
+          <img className="world-hero__fallback" src={copy.image} alt="" loading="eager" fetchpriority="high" decoding="sync" />
+          <img className="world-hero__layer world-hero__layer--background" src={copy.layers?.background || copy.image} alt="" loading="eager" fetchpriority="high" decoding="sync" />
+          <img className="world-hero__layer world-hero__layer--balloons" src={copy.layers?.balloons || copy.image} alt="" loading="eager" decoding="sync" />
+          <img className="world-hero__layer world-hero__layer--foreground" src={copy.layers?.foreground || copy.image} alt="" loading="eager" decoding="sync" />
+          <div className="world-hero__haze" />
         </div>
+
+        <div className="world-hero__copy">
+          <AnimatedText as="span" className="world-hero__kicker" start={0.01}>
+            {copy.kicker}
+          </AnimatedText>
+          <AnimatedText as="h1" start={0.035} step={0.009}>
+            {copy.title}
+          </AnimatedText>
+          <AnimatedText as="p" className="world-hero__subtitle" start={0.1} step={0.004}>
+            {copy.subtitle}
+          </AnimatedText>
+          <div className="world-hero__actions">
+            <Link href={copy.primaryHref || '/fragments'} className="game-primary-action">
+              <AnimatedText start={0.16} step={0.004}>{copy.primary}</AnimatedText>
+              <ArrowRight size={20} />
+            </Link>
+            <a href={copy.secondaryHref || '#cast-entry'} className="world-hero__secondary">
+              <AnimatedText start={0.19} step={0.004}>{copy.secondary}</AnimatedText>
+              <ArrowDown size={17} />
+            </a>
+          </div>
+        </div>
+        <div className="world-hero__soft-exit" aria-hidden="true" />
       </div>
-      <div className="world-hero__soft-exit" aria-hidden="true" />
     </section>
   )
 }
