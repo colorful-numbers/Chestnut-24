@@ -3,7 +3,7 @@ export const locales = ['zh', 'en']
 export const siteCopy = {
   zh: {
     metaTitle: '栗世界',
-    metaDescription: '一部关于奇迹之后、精灵回廊与生活意义的交互式视觉小说。',
+    metaDescription: '一部关于奇迹之后、人们如何生活的交互式视觉小说。',
     brand: '栗世界',
     nav: {
       overview: '开始探索',
@@ -18,7 +18,7 @@ export const siteCopy = {
       kicker: 'INTERACTIVE VISUAL FICTION',
       title: '栗世界',
       subtitle: '在无限智能之后，人们如何确认自己仍然真实地活着。',
-      body: '二十一世纪中叶的【奇迹】之后，绝大多数人类进入平流层中的【精灵回廊】。气象气球组成新的天空网络，冬眠舱保留肉体，自动化维持城市，而少数醒着的人在过于安逸的世界里继续寻找生活的意义。',
+      body: '二十一世纪中叶的【奇迹】之后，绝大多数人类进入平流层中的【精灵回廊】。气象气球组成新的天空网络，冬眠舱保留肉体，自动化维持城市，而少数醒着的人在过于安逸的世界里继续寻找生活。',
       primary: '阅读随机碎片',
       primaryHref: '/fragments',
       secondary: '查看角色',
@@ -33,7 +33,7 @@ export const siteCopy = {
     defn: {
       label: 'DEFINITIONS',
       title: '定义',
-      body: '从设定文档自动解析出的术语表。正文中被【】标记的术语会链接到这里。',
+      body: '从设定文档自动解析出的术语表。正文中被【】标记的术语在这里得到定义。',
       hooks: {
         miracle: '从失去尺度的那一天开始。',
         'sylph-corridor': '抬头。天空仍在运转。',
@@ -54,10 +54,10 @@ export const siteCopy = {
       back: '返回全部碎片',
       hooks: {
         'miracle-measure': '当答案不再稀缺。',
-        'sylph-corridor': '去听高空的回声。',
-        'ten-year-waking': '十年之后，谁先开口？',
-        'silent-city': '灯还亮着。人在哪里？',
-        'white-blade': '她只问了一个问题。',
+        'sylph-corridor': '当意识不再醒来。',
+        'ten-year-waking': '当文明不再存续。',
+        'silent-city': '当人们不再生活',
+        'white-blade': '当她不再提问。',
       },
     },
     system: {
@@ -65,13 +65,13 @@ export const siteCopy = {
       title: '角色',
       body: '醒来的人、被记忆养大的 AI、便利店里等待的人，以及是否继续前往未来的选择。',
       more: '查看全部角色',
-      pageBody: '故事里出场的角色。点击任意角色进入独立的对话页面，按自己的选择推进剧情。',
-      enter: '进入对话',
+      pageBody: '故事里出场的角色。点击任意角色进入独立的对话页面，按自己的选择预览剧情。',
+      enter: '开始回忆',
       back: '返回全部角色',
       selectLabel: '选择角色',
       hooks: {
-        artifact101: '先听她说完第一句话。',
-        qi: '她的记忆，等你确认。',
+        artifact101: '如果记忆只是在梦结束后醒来。',
+        qi: '如果轮回只是一场永不停歇的游戏。',
       },
     },
     privacy: {
