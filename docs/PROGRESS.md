@@ -1,5 +1,44 @@
 # Progress Log
 
+## 2026-09-06
+
+### Live2D Branch Merge And Motion Toggle
+
+Merged the two diverged `live2d` lines. The redesign line (spatial homepage
+corridors, layered hero, archive timeline) was kept as the current content; from
+the older line only the genuinely new work was carried over, namely the Qi
+layered bone rig. The remote line's earlier homepage and copy revisions were
+superseded rather than reapplied.
+
+The puppets are no longer the unconditional renderer. `CharacterDisplay` keeps
+the original still-image renderer and its expression crossfade as the default,
+and mounts a puppet only when one exists for the character, the reader has
+switched motion on, and the device gate passes:
+
+- `PUPPET_BY_CHARACTER` maps a character id to its renderer, so characters
+  without one never show the setting and never leave the still path.
+- A "立绘动态（实验）" on/off control sits in the dialogue shortcuts panel and is
+  saved per device under `chestnut-character-motion`. It is off by default.
+- `lib/puppetSupport.js` holds the shared capability gate (pointer events,
+  reduced motion, coarse pointer, core count, transform support). Both puppets
+  use it, and both report back through `onUnavailable` so a failed gate or a
+  broken image swaps the still renderer back in instead of stalling.
+
+The Qi rig CSS moved into `styles/live2d-experiment.css` to match this line's
+split stylesheet layout.
+
+Verified with a production build and a CDP-driven browser pass over `/cast/qi`
+and `/cast/artifact101`: still art by default, `layered-bone-css` and
+`artifact101-stage1-css` after enabling motion, still art again after disabling,
+the preference surviving a reload, and the still renderer under both
+reduced-motion and coarse-pointer emulation with no horizontal overflow at
+390×844.
+
+Touched files: `components/CharacterDisplay.jsx`,
+`components/LightweightCharacterPuppet.jsx`, `components/QiLayeredPuppet.jsx`,
+`lib/puppetSupport.js`, `data/characters/index.js`,
+`styles/live2d-experiment.css`, `docs/LIVE2D_EXPERIMENT.md`, and this log.
+
 ## 2026-07-19
 
 ### Scroll Journey And Archive Consistency
@@ -108,6 +147,41 @@ Touched files: `components/CharacterGateway.jsx`,
 `data/siteContent.js`, `pages/cast/index.js`, `pages/index.js`,
 `pages/navbar.js`, `styles/world-archive.css`, deleted experimental definitions,
 deleted generated hero layers, and this progress log.
+
+### Live2D Feasibility Branch
+
+Created `live2d` from the deployable `codex/game-show-redesign` checkpoint
+`4d2bb73`. Research found that Cubism Web is suitable only after a layered PSD
+has been meshed and rigged, while single-image neural animation currently needs
+GPU-oriented Python inference. The branch therefore adds a zero-dependency
+compositor puppet to `CharacterDisplay`: one neutral transparent raster,
+requestAnimationFrame-throttled gaze, CSS breathing, expression-derived mood
+parameters, and reduced-motion/coarse-pointer fallbacks. The original still
+renderer remains behind a feature constant for comparison. Full research and
+the recommended hybrid asset pipeline are recorded in
+`docs/LIVE2D_EXPERIMENT.md`.
+
+Touched files on this branch: `components/LightweightCharacterPuppet.jsx`,
+`components/CharacterDisplay.jsx`, `styles/world-archive.css`,
+`docs/LIVE2D_EXPERIMENT.md`, and this progress log.
+
+### Qi Layered Bone Pass
+
+Codex (GPT-5) inspected Qi's main CG and existing transparent neutral portrait.
+Because the approved neutral asset already matches the character and is suitable
+for compositing, no replacement character art was generated. A new
+`QiLayeredPuppet` renders that image as three aligned planes bound to a simple
+lower-body/torso/head hierarchy. The head follows fine-pointer movement, the
+torso breathes on the compositor, and coarse-pointer plus reduced-motion modes
+stay static. Other characters continue to use the one-plane fallback.
+
+Browser verification confirmed the `layered-bone-css` runtime, three active
+planes using the approved local asset, independent head and torso transforms,
+and no horizontal overflow at desktop or mobile sizes.
+
+Touched files: `components/QiLayeredPuppet.jsx`,
+`components/CharacterDisplay.jsx`, `styles/world-archive.css`,
+`docs/LIVE2D_EXPERIMENT.md`, and this progress log.
 
 ### Rejected Layered Surface Experiment
 

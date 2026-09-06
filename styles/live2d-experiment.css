@@ -154,3 +154,113 @@
     opacity: 1;
   }
 }
+
+/* Qi uses three clipped copies of the approved transparent portrait. The planes
+   share one coordinate system, so the browser can articulate a small bone
+   hierarchy without loading a canvas or a model runtime. */
+.qi-rig {
+  --qi-head-x: 0px;
+  --qi-head-y: 0px;
+  --qi-head-angle: 0deg;
+  --qi-torso-x: 0px;
+  --qi-mood-y: 0px;
+  --qi-mood-angle: 0deg;
+  --qi-breath-duration: 6.4s;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  contain: layout paint style;
+}
+
+.qi-rig__bone {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.qi-rig__bone--lower {
+  z-index: 1;
+  clip-path: inset(62% 0 0 0);
+}
+
+.qi-rig__bone--torso {
+  z-index: 2;
+  clip-path: inset(34% 0 31% 0);
+  transform-origin: 50% 68%;
+  animation: qi-rig-breathe var(--qi-breath-duration) ease-in-out infinite;
+}
+
+.qi-rig__bone--head {
+  z-index: 3;
+  clip-path: inset(0 0 59% 0);
+  transform-origin: 50% 38%;
+  transform:
+    translate3d(var(--qi-head-x), calc(var(--qi-head-y) + var(--qi-mood-y)), 0)
+    rotateZ(calc(var(--qi-head-angle) + var(--qi-mood-angle)));
+  transition: transform 140ms ease-out;
+}
+
+.qi-rig--open {
+  --qi-mood-y: -1px;
+  --qi-mood-angle: -0.2deg;
+}
+
+.qi-rig--focused {
+  --qi-mood-angle: 0.15deg;
+  --qi-breath-duration: 7s;
+}
+
+.qi-rig--tired {
+  --qi-mood-y: 3px;
+  --qi-mood-angle: 0.35deg;
+  --qi-breath-duration: 7.6s;
+}
+
+.qi-rig--uncertain {
+  --qi-mood-y: 1px;
+  --qi-mood-angle: -0.45deg;
+  --qi-breath-duration: 7.1s;
+}
+
+.qi-rig--reserved {
+  --qi-mood-y: 2px;
+  --qi-mood-angle: 0.25deg;
+  --qi-breath-duration: 7.4s;
+}
+
+.character-puppet__ground {
+  position: absolute;
+  right: 33%;
+  bottom: 4%;
+  left: 33%;
+  z-index: 0;
+  height: 4%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.26);
+  filter: blur(16px);
+  opacity: 0.5;
+  transform: scaleX(0.92);
+}
+
+@keyframes qi-rig-breathe {
+  0%,
+  100% {
+    transform: translate3d(var(--qi-torso-x), 0, 0) scaleY(1);
+  }
+  50% {
+    transform: translate3d(var(--qi-torso-x), -2px, 0) scaleY(1.004);
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .qi-rig__bone--torso {
+    animation: none;
+  }
+
+  .qi-rig__bone--head {
+    transform: translateY(var(--qi-mood-y)) rotateZ(var(--qi-mood-angle));
+    transition: none;
+  }
+}

@@ -62,15 +62,54 @@ The branch uses `LightweightCharacterPuppet` as an intentionally small baseline:
 - pointer gaze updates throttled through `requestAnimationFrame`;
 - pointer tracking disabled for coarse pointers and reduced-motion users;
 - no idle JavaScript loop; the browser owns the CSS animation;
-- the existing still-image renderer remains in `CharacterDisplay` behind a
-  feature constant for direct comparison.
+- the existing still-image renderer stays the default; the puppet is opt-in from
+  the dialogue settings panel and falls back to the still renderer whenever the
+  device, the user's motion preference, or the image load says no.
 
 This is not presented as real Cubism. It measures how much presence the site can
 gain before accepting Cubism's authoring and licensing costs.
 
+### Renderer Toggle and Fallback
+
+`CharacterDisplay` exposes a "character motion" on/off setting in the shortcuts
+panel, persisted per device in `localStorage` under `chestnut-character-motion`.
+It is off by default, and the toggle only appears for characters that actually
+have a puppet.
+
+The still renderer is never removed from the component, so every path that is
+not an explicitly enabled, working puppet lands on artwork that is known to
+work. Characters with no puppet, coarse pointers, reduced-motion users, low-core
+devices, and any puppet image that fails to load all render the plain expression
+image and keep the expression crossfade.
+
+### Qi Layered Bone Prototype
+
+Qi now has a second, character-specific prototype built from the existing
+approved `expression-neutral.png`. The main CG was used to verify identity,
+costume, and silhouette, but no new character art was generated: the transparent
+neutral portrait already supplies a cleaner source than a regenerated copy.
+
+`QiLayeredPuppet` draws the same source in three clipped, aligned planes:
+
+- lower body, kept fixed as the root;
+- torso, with a low-amplitude CSS breathing cycle;
+- head and upper hair, with pointer-driven translation and rotation.
+
+The planes form a simple root/torso/head hierarchy in one shared coordinate
+system. Pointer updates are requestAnimationFrame-throttled, coarse pointers do
+not track, and reduced-motion removes both breathing and tracking. The dialogue
+stage exposes `data-puppet-runtime="layered-bone-css"` so browser tests can
+distinguish this path from the one-plane fallback.
+
+This prototype does not provide independent eyes, mouth, hands, coat, or hair
+tails. Those require real source-layer separation and clean hidden artwork under
+each moving joint. The three-plane version establishes the rendering and input
+contract before investing in that asset work.
+
 ## Recommended Pipeline
 
-1. Generate one neutral, upright, transparent full-body image per character.
+1. Prefer an existing approved neutral transparent portrait when one is already
+   available; generate a replacement only when the source cannot be rigged.
 2. Use this branch's compositor puppet as the default low-resource renderer.
 3. For important characters, separate the same approved art into a layered PSD,
    rig it once in Cubism Editor, and export a `.model3.json` package.

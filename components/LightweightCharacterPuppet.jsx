@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { supportsPuppet } from '../lib/puppetSupport'
 
 const MOOD_BY_NAME = [
   ['happy', 'happy'],
@@ -14,30 +15,33 @@ export function moodFromExpression(expression = '') {
   return MOOD_BY_NAME.find(([name]) => normalized.includes(name))?.[1] || 'neutral'
 }
 
-function supportsExperiment() {
-  if (typeof window === 'undefined') return false
-  if (!window.PointerEvent || !window.requestAnimationFrame) return false
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
-  if (window.matchMedia('(pointer: coarse)').matches) return false
-  if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) return false
-  return window.CSS?.supports?.('transform', 'translate3d(0, 0, 0)') ?? false
-}
-
+// `onUnavailable` lets the dialogue stage drop back to the plain still-image
+// renderer (and its expression crossfade) when the rig art cannot be shown.
 export default function LightweightCharacterPuppet({
   src,
   alt = '',
   mood = 'neutral',
   expression = '',
   speaking = false,
+  onUnavailable,
 }) {
   const puppetRef = useRef(null)
-  const [supported, setSupported] = useState(false)
+  const [supported, setSupported] = useState(null)
   const [ready, setReady] = useState(false)
   const [failed, setFailed] = useState(false)
 
+  // Reported to the parent so it can fall back to the still renderer. Kept in a
+  // ref so an inline arrow prop cannot re-trigger the report effect.
+  const reportRef = useRef(onUnavailable)
+  reportRef.current = onUnavailable
+
   useEffect(() => {
-    setSupported(supportsExperiment())
+    setSupported(supportsPuppet())
   }, [])
+
+  useEffect(() => {
+    if (supported === false || failed) reportRef.current?.()
+  }, [failed, supported])
 
   useEffect(() => {
     if (!supported || failed) return undefined

@@ -6,6 +6,7 @@ import RichText from './RichText'
 import DefinitionText from './DefinitionText'
 import BgmPlayer from './BgmPlayer'
 import LightweightCharacterPuppet, { moodFromExpression } from './LightweightCharacterPuppet'
+import QiLayeredPuppet from './QiLayeredPuppet'
 import { EFFECTS } from '../lib/effects'
 
 const AUTO_DELAY = 1100
@@ -15,10 +16,19 @@ const MAX_VISIBLE_CHOICES = 3
 // Sentinel sprite value meaning "render nothing"; matches lib/characters.js.
 const EMPTY_EXPRESSION = 'EMPTY'
 
+// Which experimental puppet renderer (if any) a character can use. Characters
+// absent from this map only ever render the still expression images, and the
+// motion toggle is hidden for them. See docs/LIVE2D_EXPERIMENT.md.
+const PUPPET_BY_CHARACTER = {
+  qi: QiLayeredPuppet,
+  artifact101: LightweightCharacterPuppet,
+}
+
 // Configurable typing speed (ms per character). `instant` reveals the whole line.
 const TYPING_SPEEDS = { slow: 52, normal: 28, fast: 12, instant: 0 }
 const SPEED_ORDER = ['slow', 'normal', 'fast', 'instant']
 const SPEED_STORAGE_KEY = 'chestnut-dialogue-speed'
+const MOTION_STORAGE_KEY = 'chestnut-character-motion'
 const PROGRESS_STORAGE_PREFIX = 'chestnut-dialogue-progress-v2'
 
 // Expression-change crossfade. Toggle with EFFECTS.expressionTransition. Tune the
@@ -87,6 +97,10 @@ export default function CharacterDisplay({
   const [showHints, setShowHints] = useState(false)
   const [hideUi, setHideUi] = useState(false)
   const [speedKey, setSpeedKey] = useState('normal')
+  // Opt-in experimental motion. Off on the server and on first paint so the
+  // still images are always what renders until the reader asks for more.
+  const [motionOn, setMotionOn] = useState(false)
+  const [puppetFailed, setPuppetFailed] = useState(false)
   const [progressReady, setProgressReady] = useState(false)
   const [prevBackground, setPrevBackground] = useState(copy.defaultBackground || '')
   const [prevExpression, setPrevExpression] = useState('')
@@ -103,6 +117,23 @@ export default function CharacterDisplay({
   const chooseSpeed = (key) => {
     setSpeedKey(key)
     if (typeof window !== 'undefined') window.localStorage.setItem(SPEED_STORAGE_KEY, key)
+  }
+
+  // Restore the saved motion preference once on mount, then persist on change.
+  useEffect(() => {
+    const saved = typeof window !== 'undefined' && window.localStorage.getItem(MOTION_STORAGE_KEY)
+    if (saved === 'on') setMotionOn(true)
+  }, [])
+
+  const toggleMotion = () => {
+    setMotionOn((current) => {
+      const next = !current
+      if (next) setPuppetFailed(false)
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(MOTION_STORAGE_KEY, next ? 'on' : 'off')
+      }
+      return next
+    })
   }
 
   // Restore the current position and full backlog for this character/locale.
@@ -162,7 +193,12 @@ export default function CharacterDisplay({
   const expressionSrc = hideSprite
     ? ''
     : (rawExpression || copy.defaultExpressionSrc || character.mainCg)
-  const puppetEnabled = experimentalPuppet && character.id === 'artifact101'
+  // A puppet is only ever used when the character has one, the reader has turned
+  // motion on (or the page asked for it), and the puppet has not failed to load.
+  // Everything else falls through to the still expression images below.
+  const Puppet = PUPPET_BY_CHARACTER[character.id] || null
+  const puppetOffered = Boolean(Puppet)
+  const puppetEnabled = puppetOffered && (motionOn || experimentalPuppet) && !puppetFailed
   const puppetSrc = expressionSrc
   const puppetMood = moodFromExpression(expressionSrc)
 
@@ -536,13 +572,14 @@ export default function CharacterDisplay({
 
         <div className="character-stage__sprite-layer" aria-hidden="true">
           {puppetEnabled && !hideSprite && puppetSrc && (
-            <LightweightCharacterPuppet
+            <Puppet
               key={`puppet-${character.id}-${puppetSrc}`}
               src={puppetSrc}
               alt={copy.mainAlt}
               mood={puppetMood}
               expression={puppetSrc}
               speaking={!lineDone && Boolean(currentText.trim())}
+              onUnavailable={() => setPuppetFailed(true)}
             />
           )}
           {!puppetEnabled && ENABLE_SPRITE_TRANSITION && prevExpression && prevExpression !== expressionSrc && (
@@ -769,6 +806,27 @@ export default function CharacterDisplay({
                   ))}
                 </div>
               </div>
+              {puppetOffered && (
+                <div className="dialog-hints__speed">
+                  <span>{hints.motion}</span>
+                  <div className="dialog-hints__speed-options">
+                    <button
+                      type="button"
+                      className={!motionOn ? 'is-active' : ''}
+                      onClick={() => { if (motionOn) toggleMotion() }}
+                    >
+                      {hints.motionOff}
+                    </button>
+                    <button
+                      type="button"
+                      className={motionOn ? 'is-active' : ''}
+                      onClick={() => { if (!motionOn) toggleMotion() }}
+                    >
+                      {hints.motionOn}
+                    </button>
+                  </div>
+                </div>
+              )}
               <p className="dialog-hints__note">{hints.save}</p>
             </div>
           </div>
