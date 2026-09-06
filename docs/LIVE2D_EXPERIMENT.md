@@ -54,20 +54,50 @@ Sources:
 
 ## Branch Prototype
 
-The branch uses `LightweightCharacterPuppet` as an intentionally small baseline:
+`LayeredCharacterPuppet` is the single renderer for every character. It draws the
+current expression image as three masked planes bound to a
+lower-body / torso / head hierarchy:
 
-- one neutral transparent PNG per character;
+- the expression images already in the repo; no new art, no per-frame CGs;
 - no canvas, WebGL, WASM, neural weights, or new package dependency;
-- breathing and mood changes through compositor transforms and filters;
-- pointer gaze updates throttled through `requestAnimationFrame`;
-- pointer tracking disabled for coarse pointers and reduced-motion users;
-- no idle JavaScript loop; the browser owns the CSS animation;
+- breathing and pointer-driven head motion through compositor transforms only;
+- pointer updates throttled through `requestAnimationFrame` and eased, so a fast
+  cursor cannot snap the neck;
+- no idle JavaScript loop; the browser owns the breathing animation;
 - the existing still-image renderer stays the default; the puppet is opt-in from
   the dialogue settings panel and falls back to the still renderer whenever the
   device, the user's motion preference, or the image load says no.
 
 This is not presented as real Cubism. It measures how much presence the site can
 gain before accepting Cubism's authoring and licensing costs.
+
+### Plane Masks And Joints
+
+The joint geometry per character lives in `lib/puppetRigs.js` as percentages of
+the rendered sprite height, measured off the artwork rather than guessed. A
+character with no entry there has no puppet at all, and its motion toggle is
+hidden.
+
+Two properties make the decomposition hold together:
+
+**Complementary alpha masks, not hard clips.** Each plane is cut with a
+`linear-gradient` mask, and the ramps are complementary — wherever the head plane
+fades out, the torso plane beneath it has already faded in. At rest the three
+planes recompose the source image exactly, with no visible seam and no
+double-drawn band. Hard `clip-path` edges cannot do this: they tear the moment a
+joint moves, which is what forces clipped rigs to use amplitudes too small to
+see.
+
+**Pivots inside the blend bands.** Each plane rotates about a pivot placed in the
+middle of its blend band. Rotation produces zero displacement at the pivot and
+grows with distance from it, so the crossfade region sees almost no relative
+motion while the visible swing happens out at the top of the head, where there is
+no plane underneath to ghost against. Translation is deliberately kept small,
+because unlike rotation it displaces the joint too.
+
+Amplitudes are expressed as fractions of the measured character height, published
+by the component as `--puppet-h`, so the rig reads the same on a narrow stage and
+a wide one instead of being tuned for one viewport.
 
 ### Renderer Toggle and Fallback
 
@@ -82,29 +112,26 @@ work. Characters with no puppet, coarse pointers, reduced-motion users, low-core
 devices, and any puppet image that fails to load all render the plain expression
 image and keep the expression crossfade.
 
-### Qi Layered Bone Prototype
+### What The Rig Does And Does Not Do
 
-Qi now has a second, character-specific prototype built from the existing
-approved `expression-neutral.png`. The main CG was used to verify identity,
-costume, and silhouette, but no new character art was generated: the transparent
-neutral portrait already supplies a cleaner source than a regenerated copy.
+The three planes give posture: the character breathes, and the head leads the
+cursor and settles back. Every plane draws the same expression image, so a change
+of expression is still a change of source art, exactly as before.
 
-`QiLayeredPuppet` draws the same source in three clipped, aligned planes:
+The rig deliberately does **not** synthesise facial features. An earlier version
+painted CSS ellipses over the art for eyelids, pupils, and a mouth; measured
+against the actual illustrations those landed on the cheeks and chin, because
+hardcoded percentages cannot track where a given character's features sit. Eyes,
+mouth, hands, coat, and hair tails need real source-layer separation with clean
+artwork hidden under each moving joint — not overlays guessed in CSS.
 
-- lower body, kept fixed as the root;
-- torso, with a low-amplitude CSS breathing cycle;
-- head and upper hair, with pointer-driven translation and rotation.
+The stage exposes `data-puppet-runtime="layered-bone-css"` so browser tests can
+distinguish the rig from the still-image fallback.
 
-The planes form a simple root/torso/head hierarchy in one shared coordinate
-system. Pointer updates are requestAnimationFrame-throttled, coarse pointers do
-not track, and reduced-motion removes both breathing and tracking. The dialogue
-stage exposes `data-puppet-runtime="layered-bone-css"` so browser tests can
-distinguish this path from the one-plane fallback.
-
-This prototype does not provide independent eyes, mouth, hands, coat, or hair
-tails. Those require real source-layer separation and clean hidden artwork under
-each moving joint. The three-plane version establishes the rendering and input
-contract before investing in that asset work.
+Measured on the 1440x900 production build, with the character rendered 741px
+tall: breathing moves the torso ~6.4px, and a full-width pointer sweep moves the
+head ~20px horizontally and ~47px vertically. The predecessor rig moved ~2px,
+which is why it read as static.
 
 ## Recommended Pipeline
 

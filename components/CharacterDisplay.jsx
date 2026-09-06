@@ -5,8 +5,8 @@ import Typing from './Typing'
 import RichText from './RichText'
 import DefinitionText from './DefinitionText'
 import BgmPlayer from './BgmPlayer'
-import LightweightCharacterPuppet, { moodFromExpression } from './LightweightCharacterPuppet'
-import QiLayeredPuppet from './QiLayeredPuppet'
+import LayeredCharacterPuppet, { moodFromExpression } from './LayeredCharacterPuppet'
+import { PUPPET_RIGS } from '../lib/puppetRigs'
 import { EFFECTS } from '../lib/effects'
 
 const AUTO_DELAY = 1100
@@ -15,14 +15,6 @@ const WHEEL_COOLDOWN = 220
 const MAX_VISIBLE_CHOICES = 3
 // Sentinel sprite value meaning "render nothing"; matches lib/characters.js.
 const EMPTY_EXPRESSION = 'EMPTY'
-
-// Which experimental puppet renderer (if any) a character can use. Characters
-// absent from this map only ever render the still expression images, and the
-// motion toggle is hidden for them. See docs/LIVE2D_EXPERIMENT.md.
-const PUPPET_BY_CHARACTER = {
-  qi: QiLayeredPuppet,
-  artifact101: LightweightCharacterPuppet,
-}
 
 // Configurable typing speed (ms per character). `instant` reveals the whole line.
 const TYPING_SPEEDS = { slow: 52, normal: 28, fast: 12, instant: 0 }
@@ -193,11 +185,10 @@ export default function CharacterDisplay({
   const expressionSrc = hideSprite
     ? ''
     : (rawExpression || copy.defaultExpressionSrc || character.mainCg)
-  // A puppet is only ever used when the character has one, the reader has turned
-  // motion on (or the page asked for it), and the puppet has not failed to load.
+  // A puppet is only ever used when the character has a measured rig, the reader
+  // has turned motion on (or the page asked for it), and the rig has not failed.
   // Everything else falls through to the still expression images below.
-  const Puppet = PUPPET_BY_CHARACTER[character.id] || null
-  const puppetOffered = Boolean(Puppet)
+  const puppetOffered = Boolean(PUPPET_RIGS[character.id])
   const puppetEnabled = puppetOffered && (motionOn || experimentalPuppet) && !puppetFailed
   const puppetSrc = expressionSrc
   const puppetMood = moodFromExpression(expressionSrc)
@@ -572,12 +563,12 @@ export default function CharacterDisplay({
 
         <div className="character-stage__sprite-layer" aria-hidden="true">
           {puppetEnabled && !hideSprite && puppetSrc && (
-            <Puppet
+            <LayeredCharacterPuppet
               key={`puppet-${character.id}-${puppetSrc}`}
               src={puppetSrc}
               alt={copy.mainAlt}
               mood={puppetMood}
-              expression={puppetSrc}
+              characterId={character.id}
               speaking={!lineDone && Boolean(currentText.trim())}
               onUnavailable={() => setPuppetFailed(true)}
             />

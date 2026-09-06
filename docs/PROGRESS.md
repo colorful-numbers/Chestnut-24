@@ -1,5 +1,55 @@
 # Progress Log
 
+## 2026-09-07
+
+### Rebuilt The Character Puppet So The Motion Is Actually Visible
+
+The merged puppets rendered, but read as static art. Debugged against the
+production build in a real browser (CDP), which found three separate faults:
+
+1. **The motion was sub-pixel.** Measured over a full breath cycle the torso
+   moved 2px with `scaleY` 1.004 — 0.27% of a 741px-tall character — and head
+   tracking was ±3px. Correct code, invisible result.
+2. **The planes did not composite.** The three `clip-path` bands overlapped
+   (head 0-41%, torso 34-69%, lower 62-100%), so the art was double-drawn in the
+   overlaps and the hard `inset()` edges tore as soon as anything moved. That is
+   why the amplitudes had been made too small to see.
+3. **Artifact101's synthetic face was misaligned.** Tinting the CSS overlays and
+   photographing them showed the "eyelids" on her cheeks, the pupils below her
+   eyes, and the "mouth" on her chin. The percentages had been authored against
+   different art.
+
+Rebuilt as one `LayeredCharacterPuppet` for both characters, replacing
+`LightweightCharacterPuppet` and `QiLayeredPuppet`:
+
+- Joint geometry moved to `lib/puppetRigs.js`, measured off each illustration by
+  sampling its alpha and luminance profile rather than guessed. Presence in that
+  table is now what decides whether a character has a puppet at all.
+- Hard clips replaced with **complementary alpha-gradient masks**, so the planes
+  recompose the source image exactly at rest and a joint bends instead of tearing.
+- Rotation pivots placed **inside the blend bands**, where relative motion between
+  planes is near zero. This is what allows a visible swing: the movement happens
+  at the top of the head, not at the seam. Translation is kept small because it
+  displaces the joint as well.
+- Amplitudes expressed as fractions of the measured character height
+  (`--puppet-h`), so the rig reads the same at any stage size.
+- The synthetic eyes/mouth were dropped rather than re-tuned; they need real
+  layer separation, not better-guessed CSS coordinates.
+
+Result on the 1440x900 build: torso travel 6.4px, head sweep ~20px horizontal /
+~47px vertical, up from ~2px. Verified no seam at rest and no collar ghosting at
+forced maximum deflection, at 2.2x magnification on the neck joint.
+
+Fallbacks re-verified end to end: toggle off, reduced-motion, coarse pointer
+390×844 (no horizontal overflow), and image failure each land on the original
+still renderer with its expression crossfade. No page errors.
+
+Touched files: `components/LayeredCharacterPuppet.jsx` (new),
+`lib/puppetRigs.js` (new), `components/CharacterDisplay.jsx`,
+`styles/live2d-experiment.css`, `docs/LIVE2D_EXPERIMENT.md`, and this log.
+Removed: `components/LightweightCharacterPuppet.jsx`,
+`components/QiLayeredPuppet.jsx`.
+
 ## 2026-09-06
 
 ### Live2D Branch Merge And Motion Toggle
